@@ -166,10 +166,21 @@ iframe {
   width: 100%;
   font-family: Raleway-Black;
   font-size: 30px;
+  font-weight: bold;
   color: #333;
   line-height: 1.2;
   text-align: left;
   padding-bottom: 32px;
+}
+.contact100-form-subtitle {
+  display: block;
+  width: 100%;
+  font-family: Raleway-Black;
+  font-size: 20px;
+  color: #333;
+  line-height: 1.2;
+  text-align: left;
+  padding-bottom: 16px;
 }
 .wrap-input100 {
   width: 100%;

@@ -9,82 +9,71 @@
 
     <link rel="icon" type="image/png" href="XXXXXXXXXXXXXXXXXXX.ico" />
 
-    <link rel="stylesheet" type="text/css" href="./assets/main.css" />
+    <link rel="stylesheet" href="./assets/main.css" />
   </head>
   <body>
     <div
       class="container-contact100"
-      style="background-image: url(&#39;images/bg-01.jpg&#39;)"
+      style="
+        background-image: url(https://images.unsplash.com/photo-1607457561901-e6ec3a6d16cf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGlua3xlbnwwfHwwfHw%3D&w=1000&q=80;);
+      "
     >
       <div class="wrap-contact100">
-
-
         <form class="contact100-form validate-form">
-          <span class="contact100-form-title">
-            BNO Validity Checking Tool
-          </span>
+          <span class="contact100-form-title">BNO Validity Checking Tool</span>
+          <span class="contact100-form-subtitle"
+            >Please enter the day your BNO starts</span
+          >
           <div
             class="wrap-input100 validate-input"
             data-validate="Name is required"
           >
-            <span class="label-input100">Enter your BNO start date *</span>
-            <input
-              class="input100"
-              type="date"
-              name="bnoStart"
-            />
+            <span class="label-input100">BNO start date *</span>
+            <input class="input100" type="date" name="bnoStart" />
           </div>
+
+          <span class="contact100-form-subtitle"
+            >Please enter all intervals of time when you are not in the UK (after BNO start date)</span
+          >
           
-          
+          <!-- DATESECTION -->
           <div
             class="wrap-input100 rs1-wrap-input100 validate-input"
             data-validate="Please enter your first day outside of the UK for this period, or delete this block"
           >
-            <span class="label-input100">Enter your first day outside of the UK for this period *</span>
-            <input
-              class="input100"
-              type="date"
-              name="leaveStart"+String(1)
-            />
+            <span class="label-input100"
+              >First day outside of the UK for this interval of time *</span
+            >
+            <input class="input100" type="date" name="leaveStart" +String(1) />
           </div>
           <div
             class="wrap-input100 rs1-wrap-input100 validate-input"
             data-validate="Please enter your last day outside of the UK for this period, or delete this block"
           >
-            <span class="label-input100">Enter your last day outside of the UK for this period *</span>
+            <span class="label-input100"
+              >Last day outside of the UK for this interval of time *</span
+            >
+            <input class="input100" type="date" name="leaveEnd" +String(1) />
+          </div>
+          
+          <!-- DATESECTION -->
+          
+          
+          
+          <p id="myElement" style="width:100%;">THIS IS MY HTML ELEMENT</p>
+
+          <p id="myPlaceholder" style="outline:4px solid red; width:100%">PLACEHOLDER</p>
+          <script src="assets/main.js"></script>
+
+          <div>
             <input
-              class="input100"
-              type="date"
-              name="leaveEnd"+String(1)
-            />
+            type="image"
+            src="images/add-button.svg"
+            alt="Add A Period"
+            width="5%"
+          />
           </div>
 
-          <button style="outline: 2px solid red;">
-            this is a button
-          </button>
-
-
-          <div class="wrap-input100">
-            <span class="label-input100">Your Website</span>
-            <input
-              class="input100"
-              type="text"
-              name="web"
-              placeholder="http://"
-            />
-          </div>
-          <div
-            class="wrap-input100 validate-input"
-            data-validate="Message is required"
-          >
-            <span class="label-input100">Message</span>
-            <textarea
-              class="input100"
-              name="message"
-              placeholder="Your message here..."
-              spellcheck="false"
-            ></textarea>
-          </div>
           <div class="container-contact100-form-btn">
             <div class="wrap-contact100-form-btn">
               <div class="contact100-form-bgbtn"></div>
@@ -92,8 +81,6 @@
             </div>
           </div>
         </form>
-
-        
       </div>
     </div>
   </body>
