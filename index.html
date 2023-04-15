@@ -35,44 +35,21 @@
           <span class="contact100-form-subtitle"
             >Please enter all intervals of time when you are not in the UK (after BNO start date)</span
           >
-          
-          <!-- DATESECTION -->
-          <div
-            class="wrap-input100 rs1-wrap-input100 validate-input"
-            data-validate="Please enter your first day outside of the UK for this period, or delete this block"
-          >
-            <span class="label-input100"
-              >First day outside of the UK for this interval of time *</span
-            >
-            <input class="input100" type="date" name="leaveStart" +String(1) />
-          </div>
-          <div
-            class="wrap-input100 rs1-wrap-input100 validate-input"
-            data-validate="Please enter your last day outside of the UK for this period, or delete this block"
-          >
-            <span class="label-input100"
-              >Last day outside of the UK for this interval of time *</span
-            >
-            <input class="input100" type="date" name="leaveEnd" +String(1) />
-          </div>
-          
-          <!-- DATESECTION -->
-          
-          
-          
-          <p id="myElement" style="width:100%;">THIS IS MY HTML ELEMENT</p>
 
-          <p id="myPlaceholder" style="outline:4px solid red; width:100%">PLACEHOLDER</p>
+          <p id="myPlaceholder" style="display:none; outline:4px solid red; width:100%">PLACEHOLDER</p> <!-- hidden element-->
           <script src="assets/main.js"></script>
+          
 
           <div>
-            <input
-            type="image"
-            src="images/add-button.svg"
-            alt="Add A Period"
-            width="5%"
-          />
+            <button class="addminus add">
+              <strong>&#43</strong> &nbsp Add a Time Interval
+            </button>
+            <button class="addminus minus">
+              <strong>&#8722</strong> &nbsp Remove a Time Interval
+            </button>
           </div>
+
+
 
           <div class="container-contact100-form-btn">
             <div class="wrap-contact100-form-btn">

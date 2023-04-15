@@ -124,6 +124,38 @@ button {
 button:hover {
   cursor: pointer;
 }
+button.addminus{
+  display:block;
+  text-align:left;
+  width: 100%;
+  padding:10px;
+  margin-bottom:6px;
+  vertical-align: middle;
+  font-family: "Raleway-Bold";
+  font-size:16px;
+  color: #fff;
+  background-color: #000000; /* default to be overridden */
+  border:none; 
+  border-radius: 2px;
+}
+button.add{background-color: #4CAF50}
+button.minus{background-color: #fb3b1e}
+
+button.add:hover {background-color: #3e8e41;}
+button.add:active {background-color: #3e8e41;}
+
+button.minus:hover {background-color: #c61a09;}
+button.minus:active {background-color: #c61a09;}
+
+button.addminus img{
+  width:8%;
+  vertical-align: middle;
+}
+button.addminus strong{
+  font-size:large;
+}
+
+
 iframe {
   border: none !important;
 }
