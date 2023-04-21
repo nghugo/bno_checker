@@ -31,6 +31,7 @@ var isFeb29;
 
 var abroadCounter;
 var abroadCounterRHS;
+var abroadCounts_projectionUptoR;
 var isValid;
 var firstInvalid;
 var lastInvalidPlusOne;

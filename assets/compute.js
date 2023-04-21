@@ -94,8 +94,6 @@ export function validILR(inUK, isFeb29, projection) {
   // if Feb29 not in window, then windowSize=365
   // maxAbroad=180
 
-  
-
   //initialize window, counter, firstInvalid, projectionIndex
   abroadCounter = 0;
   abroadCounterRHS = 0;
@@ -105,15 +103,13 @@ export function validILR(inUK, isFeb29, projection) {
 
   var projectionIndex;
 
-  if (projectionValue!="") {
+  if (projectionValue != "") {
     projectionDate = new Date(projection.value);
     projectionIndex = daysBetween(ilrStartDate, projectionDate);
     console.log(`projectionIndex is ${projectionIndex}`);
   }
-  
 
   
-
   // l, r slicers
   var l = 0;
   var rDate = new Date(ilrStartValue);
@@ -126,13 +122,17 @@ export function validILR(inUK, isFeb29, projection) {
       abroadCounter += 1;
       abroadCounterRHS += 1;
     }
-    if (projectionValue!="") {
-      if (i == projectionIndex) {
-        remainingAbsences = 180 - abroadCounter;
-      }
-    }
-    // console.log(`i, projectionIndex are ${i}, ${projectionIndex} and do they match? ${i==projectionIndex}`)
   }
+
+  abroadCounts_projectionUptoR = 0;
+  for (i = projectionIndex; i < r; i++) {
+    if (inUK[i] == 0) {
+      abroadCounts_projectionUptoR += 1;
+    }
+    remainingAbsences = 180 - abroadCounts_projectionUptoR;
+  }
+  
+  // console.log(`i, projectionIndex are ${i}, ${projectionIndex} and do they match? ${i==projectionIndex}`)
 
   console.log(`l initialized as ${l}`);
   console.log(`r initialized as ${r}`);
@@ -165,12 +165,12 @@ export function validILR(inUK, isFeb29, projection) {
 
   // at each step: check counter and slide window
   while (r < inUK.length) {
-    if (projectionValue!="") {
+    if (projectionValue != "") {
       if (r == projectionIndex) {
         remainingAbsences = 180 - abroadCounter;
       }
     }
-    
+
     if (abroadCounter > 180) {
       // check abroadCounter to update the 2 invalid dates
       isValid = false;
@@ -225,10 +225,10 @@ export function validILR(inUK, isFeb29, projection) {
       lastInvalidPlusOneDate.getDate() + lastInvalidPlusOne
     ); // plus lastInvalidPlusOne days
   }
-  
+
   console.log(`finally, l is ${l}`);
   console.log(`finally, r is ${r}`);
-  console.log(`finally, remainingAbsences is ${remainingAbsences}`)
+  console.log(`finally, remainingAbsences is ${remainingAbsences}`);
 
   return [isValid, firstInvalid, lastInvalidPlusOne, remainingAbsences];
 }

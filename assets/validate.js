@@ -32,7 +32,7 @@ form.addEventListener("submit", (event) => {
       if (projectionValue!="") {
         document.getElementById(
           "displaySection"
-        ).innerHTML += `<br>On projection date ${projectionDate.toDateString()}, you have ${remainingAbsences} remaining whole day absences.`;
+        ).innerHTML += `<br>On projection date ${projectionDate.toDateString()}, you have ${remainingAbsences} remaining whole day absence(s).`;
       } else {
         document.getElementById(
           "displaySection"
