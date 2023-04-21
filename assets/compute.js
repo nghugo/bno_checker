@@ -94,7 +94,7 @@ export function validILR(inUK, isFeb29, projection) {
   // if Feb29 not in window, then windowSize=365
   // maxAbroad=180
 
-  projectionDate = new Date(projection.value);
+  
 
   //initialize window, counter, firstInvalid, projectionIndex
   abroadCounter = 0;
@@ -102,9 +102,17 @@ export function validILR(inUK, isFeb29, projection) {
   isValid = true;
   firstInvalid = null;
   lastInvalidPlusOne = null;
-  const projectionIndex = daysBetween(ilrStartDate, projectionDate);
 
-  console.log(`projectionIndex is ${projectionIndex}`);
+  var projectionIndex;
+
+  if (projectionValue!="") {
+    projectionDate = new Date(projection.value);
+    projectionIndex = daysBetween(ilrStartDate, projectionDate);
+    console.log(`projectionIndex is ${projectionIndex}`);
+  }
+  
+
+  
 
   // l, r slicers
   var l = 0;
@@ -118,8 +126,10 @@ export function validILR(inUK, isFeb29, projection) {
       abroadCounter += 1;
       abroadCounterRHS += 1;
     }
-    if (i == projectionIndex) {
-      remainingAbsences = 180 - abroadCounter;
+    if (projectionValue!="") {
+      if (i == projectionIndex) {
+        remainingAbsences = 180 - abroadCounter;
+      }
     }
     // console.log(`i, projectionIndex are ${i}, ${projectionIndex} and do they match? ${i==projectionIndex}`)
   }
@@ -155,9 +165,12 @@ export function validILR(inUK, isFeb29, projection) {
 
   // at each step: check counter and slide window
   while (r < inUK.length) {
-    if (r == projectionIndex) {
-      remainingAbsences = 180 - abroadCounter;
+    if (projectionValue!="") {
+      if (r == projectionIndex) {
+        remainingAbsences = 180 - abroadCounter;
+      }
     }
+    
     if (abroadCounter > 180) {
       // check abroadCounter to update the 2 invalid dates
       isValid = false;

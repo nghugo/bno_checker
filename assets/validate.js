@@ -28,17 +28,24 @@ form.addEventListener("submit", (event) => {
     if (isValid) {
       document.getElementById(
         "displaySection"
-      ).innerHTML = `Your 5 year count towards Indefinite Leave to Remain is valid.`;
-      document.getElementById(
-        "displaySection"
-      ).innerHTML += `<br>On projection date ${projectionDate.toDateString()}, you have ${remainingAbsences} remaining absences.`;
+      ).innerHTML = `Your 5-year count towards Indefinite Leave to Remain is valid.`;
+      if (projectionValue!="") {
+        document.getElementById(
+          "displaySection"
+        ).innerHTML += `<br>On projection date ${projectionDate.toDateString()}, you have ${remainingAbsences} remaining whole day absences.`;
+      } else {
+        document.getElementById(
+          "displaySection"
+        ).innerHTML += `<br>Since you have not provided a projection date, no remaining whole day absences calculation has been done.`;
+      }
+      
     } else {
       document.getElementById(
         "displaySection"
-      ).innerHTML = `Your 5 year count towards Indefinite Leave to Remain is invalid, hence remaining absences cannot be computed.`;
+      ).innerHTML = `Your 5-year count towards Indefinite Leave to Remain is invalid, hence remaining absences cannot be computed.`;
       document.getElementById(
         "displaySection"
-      ).innerHTML += `<br>The earliest date you can restart your 5 year count towards a valid Indefinite Leave To Remain is ${lastInvalidPlusOneDate.toDateString()}. You begin with 0 remaining absences. (Note: this earliest restart date calculation does not look past the 5 year window.)`;
+      ).innerHTML += `<br>The earliest date you can restart your 5-year count towards a valid Indefinite Leave To Remain is ${lastInvalidPlusOneDate.toDateString()}. You begin with 0 remaining absences. (Note: this earliest restart date calculation does not look past the 5-year window.)`;
     }
   } else {
     document.getElementById(
@@ -117,33 +124,35 @@ const validateInputs = () => {
   }
 
   // validate projection date
-  if (projectionValue == "") {
-    setError(projection, "Projection date is required");
-  } else if (
-    new Date(projectionValue) < new Date("1970-01-01") ||
-    new Date(projectionValue) > new Date("9999-12-31")
-  ) {
-    setError(
-      projection,
-      "Projection date must be between 01-Jan-1970 and 31-Dec-9999"
-    );
-  } else if (new Date(projectionValue) < new Date(ilrStartValue)) {
-    setError(
-      projection,
-      "Projection date must be within 5 years after ILR start date"
-    );
-  } else if (
-    new Date(projectionValue) >
-    new Date(
-      new Date(ilrStartValue).setFullYear(
-        new Date().getFullYear(ilrStartValue) + 5
+  if (projectionValue != "") {
+    if (
+      new Date(projectionValue) < new Date("1970-01-01") ||
+      new Date(projectionValue) > new Date("9999-12-31")
+    ) {
+      setError(
+        projection,
+        "Projection date must be between 01-Jan-1970 and 31-Dec-9999"
+      );
+    } else if (new Date(projectionValue) < new Date(ilrStartValue)) {
+      setError(
+        projection,
+        "Projection date must be within 5-years after ILR start date"
+      );
+    } else if (
+      new Date(projectionValue) >
+      new Date(
+        new Date(ilrStartValue).setFullYear(
+          new Date().getFullYear(ilrStartValue) + 5
+        )
       )
-    )
-  ) {
-    setError(
-      projection,
-      "Projection date must be within 5 years after ILR start date"
-    );
+    ) {
+      setError(
+        projection,
+        "Projection date must be within 5-years after ILR start date"
+      );
+    } else {
+      setSuccess(projection);
+    }
   } else {
     setSuccess(projection);
   }
