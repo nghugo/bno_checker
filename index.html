@@ -3,62 +3,97 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Contact V11</title>
-
+    <title>Check Indefinite Leave to Remain</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <link rel="icon" type="image/png" href="XXXXXXXXXXXXXXXXXXX.ico" />
+     
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
 
     <link rel="stylesheet" href="./assets/main.css" />
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    
+    <script src="assets/global-vars.js"></script>
+    <script src="./assets/jquery-3.2.1.min.js"></script>
+    
+    <script defer src="assets/datesection.js"></script>
+    <script defer src="assets/validate.js" type="module"></script>
+    <script defer src="assets/compute.js" type="module"></script>
+    
   </head>
   <body>
     <div
-      class="container-contact100"
-      style="
-        background-image: url(https://images.unsplash.com/photo-1607457561901-e6ec3a6d16cf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGlua3xlbnwwfHwwfHw%3D&w=1000&q=80;);
-      "
+      class="container"
+      
     >
-      <div class="wrap-contact100">
-        <form class="contact100-form validate-form">
-          <span class="contact100-form-title">BNO Validity Checking Tool</span>
-          <span class="contact100-form-subtitle"
-            >Please enter the day your BNO starts</span
+      <div class="wrap">
+        <form id="form" class="form validate-form">
+          <span class="form-title">Indefinite Leave To Remain Validity</span>
+
+          
+          <span class="form-subtitle"
+            >Please enter the date to start the 5-year window calculation</span
           >
           <div
-            class="wrap-input100 validate-input"
-            data-validate="Name is required"
+            class="wrap-input validateInput"
+            invalidInputMessage="Valid ILR start date is required"
           >
-            <span class="label-input100">BNO start date *</span>
-            <input class="input100" type="date" name="bnoStart" />
+            <span class="label-input">ILR start date *</span>
+            <input
+              id="ilrStart"
+              class="input" 
+              type="date" 
+              name="ilrStart"
+              max="9999-12-31"
+            />
+            <div class="error"></div>
           </div>
-
-          <span class="contact100-form-subtitle"
-            >Please enter all intervals of time when you are not in the UK (after BNO start date)</span
+          
+          <span class="form-subtitle"> 
+            Please enter all time intervals of your whole day absences from the UK&nbsp
+            <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/939345/calculating-continuous-period-v22.0ext.pdf#page=9&zoom=100,93,728" target="_blank">
+              (see definition)
+            </a>
+            &nbspwithin the 5-year window from your start date
+            </span
           >
 
           <p id="myPlaceholder" style="display:none; outline:4px solid red; width:100%">PLACEHOLDER</p> <!-- hidden element-->
-          <script src="assets/main.js"></script>
-          
-
-          <div>
-            <button class="addminus add">
+                    
+          <div class="addminus-button-group">
+            <button class="addminus add" onclick="addDateSection()" type="button">
               <strong>&#43</strong> &nbsp Add a Time Interval
             </button>
-            <button class="addminus minus">
+            <button class="addminus minus" onclick="removeDateSection()" type="button">  <!-- disabled="disabled"-->
               <strong>&#8722</strong> &nbsp Remove a Time Interval
             </button>
           </div>
-
-
-
-          <div class="container-contact100-form-btn">
-            <div class="wrap-contact100-form-btn">
-              <div class="contact100-form-bgbtn"></div>
-              <button class="contact100-form-btn">Submit</button>
-            </div>
+          
+          <span class="form-subtitle"
+            >Please enter the date to project your remaining whole day absences</span
+          >
+          <div
+            class="wrap-input validateInput"
+            invalidInputMessage="Valid projection date is required and needs to be after ILR start date"
+          >
+            <span class="label-input">Projection date *</span>
+            <input id="projection" class="input" type="date" name="projection" max="9999-12-31"/>
+            <div class="error"></div>
+          </div>
+          
+          <div id="submitsection">
+            <button class="submit" id="submit-button" type="submit">Submit</button>
           </div>
         </form>
+        
+        <div id="displayContainer">
+          <p>Results:</p>
+          <p id="displaySection">Please fill out the form and press submit</p>
+        </div>
+        
+
       </div>
     </div>
+
   </body>
 </html>
