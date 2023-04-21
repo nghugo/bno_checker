@@ -124,6 +124,10 @@ export function validILR(inUK, isFeb29, projection) {
     }
   }
 
+  if (abroadCounter>180) {
+    isValid = false
+  }
+
   abroadCounts_projectionUptoR = 0;
   for (i = projectionIndex; i < r; i++) {
     if (inUK[i] == 0) {
