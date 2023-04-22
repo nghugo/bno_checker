@@ -173,6 +173,7 @@ export function validILR(inUK, isFeb29, projection) {
         firstInvalid = r-1;  // -1 to convert slicer to index
       }
       lastInvalid = r-1;  // -1 to convert slicer to index
+      earliestRestart = l
     }
 
     if (isFeb29[l]) {
@@ -193,16 +194,20 @@ export function validILR(inUK, isFeb29, projection) {
     ); // plus lastInvalid days
     
     console.log(`lastInvalidDate is ${lastInvalidDate}`)
-
-    lastInvalidPlus1Date = new Date(ilrStartValue);
-    lastInvalidPlus1Date.setDate(lastInvalidPlus1Date.getDate() + lastInvalid + 1); // plus lastInvalid days + 1
   }
 
-  
+  if (earliestRestart) {
+    earliestRestart += 1  //+1 since the last window is invalid, but the very next is valid
+    earliestRestartDate = new Date(ilrStartValue);
+    earliestRestartDate.setDate(
+      earliestRestartDate.getDate() + earliestRestart
+    ); // plus lastInvalid days
+  }
 
   console.log(`finally, l is ${l}`);
   console.log(`finally, r is ${r}`);
   console.log(`finally, remainingAbsences is ${remainingAbsences}`);
+  console.log(`finally, earliestRestart is ${earliestRestart}`);
 
-  return [isValid, firstInvalid, lastInvalidPlus1Date, remainingAbsences];
+  return [isValid, firstInvalid, earliestRestartDate, remainingAbsences];
 }

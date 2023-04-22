@@ -17,11 +17,11 @@ var check;
 var inUK;
 var isFeb29;
 var isValid;
-var firstInvalid;
-var lastInvalid;
-var remainingAbsences;
-
 var abroadCounter;
 
+var firstInvalid;
+var lastInvalid;
 var lastInvalidDate;
-var lastInvalidPlus1Date;
+var remainingAbsences;
+var earliestRestart;
+var earliestRestartDate;
