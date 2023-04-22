@@ -96,18 +96,16 @@ export function validILR(inUK, isFeb29, projection) {
 
   //initialize window, counter, firstInvalid, projectionIndex
   abroadCounter = 0;
-  abroadCounterRHS = 0;
   isValid = true;
   firstInvalid = null;
-  lastInvalidPlusOne = null;
+  lastInvalid = null;
 
   var projectionIndex;
-
   if (projectionValue != "") {
     projectionDate = new Date(projection.value);
     projectionIndex = daysBetween(ilrStartDate, projectionDate);
     console.log(`projectionIndex is ${projectionIndex}`);
-  }
+  };
 
   
   // l, r slicers
@@ -120,20 +118,19 @@ export function validILR(inUK, isFeb29, projection) {
   for (var i = 0; i < r; i++) {
     if (inUK[i] == 0) {
       abroadCounter += 1;
-      abroadCounterRHS += 1;
+    }
+    if (abroadCounter>180) {
+      if (isValid) {  // execute once only
+        isValid = false
+      }
+      if (firstInvalid) {
+        firstInvalid = i
+      }
     }
   }
 
-  if (abroadCounter>180) {
-    isValid = false
-  }
-
-  abroadCounts_projectionUptoR = 0;
-  for (i = projectionIndex; i < r; i++) {
-    if (inUK[i] == 0) {
-      abroadCounts_projectionUptoR += 1;
-    }
-    remainingAbsences = 180 - abroadCounts_projectionUptoR;
+  if (projectionValue!="" && projectionIndex<r) {
+    remainingAbsences = Math.max(0, 180-abroadCounter)
   }
   
   // console.log(`i, projectionIndex are ${i}, ${projectionIndex} and do they match? ${i==projectionIndex}`)
@@ -143,96 +140,69 @@ export function validILR(inUK, isFeb29, projection) {
   console.log(`abroadCounter initialized as ${abroadCounter}`);
 
   // sliding window
-  function increment_l(l, abroadCounter, abroadCounterRHS, lastInvalidPlusOne) {
+  function increment_l(l, abroadCounter, lastInvalid) {
     l += 1;
     if (inUK[l - 1] == 0) {
       // -1 because we want to look at previous pointer
       abroadCounter -= 1;
-      if (lastInvalidPlusOne == null) {
-        abroadCounterRHS -= 1;
-      } else if (lastInvalidPlusOne && lastInvalidPlusOne < l) {
-        abroadCounterRHS -= 1;
-      }
     }
-    return [l, abroadCounter, abroadCounterRHS];
+    return [l, abroadCounter];
   }
 
-  function increment_r(r, abroadCounter, abroadCounterRHS) {
+  function increment_r(r, abroadCounter) {
     r += 1;
     if (inUK[r - 1] == 0) {
       // -1 to convert right slicer to right pointer
       abroadCounter += 1;
-      abroadCounterRHS += 1;
     }
-    return [r, abroadCounter, abroadCounterRHS];
+    return [r, abroadCounter];
   }
 
   // at each step: check counter and slide window
   while (r < inUK.length) {
     if (projectionValue != "") {
-      if (r == projectionIndex) {
-        remainingAbsences = 180 - abroadCounter;
+      if (r-1 == projectionIndex) {  // convert slicer to index, so -1
+        remainingAbsences = Math.max(0, 180-abroadCounter);
       }
     }
 
     if (abroadCounter > 180) {
       // check abroadCounter to update the 2 invalid dates
       isValid = false;
-      if (firstInvalid == null) {
-        // updated once  only
-        firstInvalid = l;
+      if (firstInvalid == null) {  // updated once only
+        firstInvalid = r-1;  // -1 to convert slicer to index
       }
-      if (lastInvalidPlusOne == null) {
-        lastInvalidPlusOne = l - 1;
-      }
-      while (abroadCounterRHS > 180) {
-        // ie when 181, keep incrementing lastInvalidPlusOne until 180
-        lastInvalidPlusOne += 1;
-        if (inUK[lastInvalidPlusOne - 1] == 0) {
-          abroadCounterRHS -= 1;
-        }
-      }
+      lastInvalid = r-1;  // -1 to convert slicer to index
     }
 
     if (isFeb29[l]) {
-      [l, abroadCounter, abroadCounterRHS] = increment_l(
-        l,
-        abroadCounter,
-        abroadCounterRHS,
-        lastInvalidPlusOne
-      );
+      [l, abroadCounter] = increment_l(l, abroadCounter);
     }
     if (isFeb29[r]) {
-      [r, abroadCounter, abroadCounterRHS] = increment_r(
-        r,
-        abroadCounter,
-        abroadCounterRHS
-      );
+      [r, abroadCounter] = increment_r(r, abroadCounter);
     }
 
-    [l, abroadCounter, abroadCounterRHS] = increment_l(
-      l,
-      abroadCounter,
-      abroadCounterRHS,
-      lastInvalidPlusOne
-    );
-    [r, abroadCounter, abroadCounterRHS] = increment_r(
-      r,
-      abroadCounter,
-      abroadCounterRHS
-    );
+    [l, abroadCounter] = increment_l(l, abroadCounter);
+    [r, abroadCounter] = increment_r(r, abroadCounter);
   }
 
-  if (lastInvalidPlusOne != null) {
-    lastInvalidPlusOneDate = new Date(ilrStartValue);
-    lastInvalidPlusOneDate.setDate(
-      lastInvalidPlusOneDate.getDate() + lastInvalidPlusOne
-    ); // plus lastInvalidPlusOne days
+  if (lastInvalid != null) {
+    lastInvalidDate = new Date(ilrStartValue);
+    lastInvalidDate.setDate(
+      lastInvalidDate.getDate() + lastInvalid
+    ); // plus lastInvalid days
+    
+    console.log(`lastInvalidDate is ${lastInvalidDate}`)
+
+    lastInvalidPlus1Date = new Date(ilrStartValue);
+    lastInvalidPlus1Date.setDate(lastInvalidPlus1Date.getDate() + lastInvalid + 1); // plus lastInvalid days + 1
   }
+
+  
 
   console.log(`finally, l is ${l}`);
   console.log(`finally, r is ${r}`);
   console.log(`finally, remainingAbsences is ${remainingAbsences}`);
 
-  return [isValid, firstInvalid, lastInvalidPlusOne, remainingAbsences];
+  return [isValid, firstInvalid, lastInvalidPlus1Date, remainingAbsences];
 }

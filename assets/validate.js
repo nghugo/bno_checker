@@ -20,7 +20,7 @@ form.addEventListener("submit", (event) => {
       leaveStartValues,
       leaveEndValues
     );
-    [isValid, firstInvalid, lastInvalidPlusOne, remainingAbsences] = validILR(
+    [isValid, firstInvalid, lastInvalidPlus1Date, remainingAbsences] = validILR(
       inUK,
       isFeb29,
       projection
@@ -45,7 +45,7 @@ form.addEventListener("submit", (event) => {
       ).innerHTML = `Your 5-year count towards Indefinite Leave to Remain is invalid, hence remaining absences cannot be computed.`;
       document.getElementById(
         "displaySection"
-      ).innerHTML += `<br>The earliest date you can restart your 5-year count towards a valid Indefinite Leave To Remain is ${lastInvalidPlusOneDate.toDateString()}. You begin with 0 remaining absences. (Note: this earliest restart date calculation does not look past the 5-year window.)`;
+      ).innerHTML += `<br>The earliest date you can restart your 5-year count towards a valid Indefinite Leave To Remain is ${lastInvalidPlus1Date.toDateString()}. You begin with 0 remaining absences. (Note: this earliest restart date calculation does not look beyond the 5-year window.)`;
     }
   } else {
     document.getElementById(
