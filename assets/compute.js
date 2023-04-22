@@ -129,8 +129,14 @@ export function validILR(inUK, isFeb29, projection) {
     }
   }
 
-  if (projectionValue!="" && projectionIndex<r) {
-    remainingAbsences = Math.max(0, 180-abroadCounter)
+  if (projectionValue!="" && projectionIndex<r-1) {
+    remainingAbsences = 180
+    for (i=0; i<projectionIndex; i++) {
+      if (inUK[i]==0) {
+        remainingAbsences = Math.max(0, remainingAbsences-1)
+      }
+    }
+    
   }
   
   // console.log(`i, projectionIndex are ${i}, ${projectionIndex} and do they match? ${i==projectionIndex}`)

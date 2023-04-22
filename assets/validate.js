@@ -45,7 +45,7 @@ form.addEventListener("submit", (event) => {
       ).innerHTML = `Your 5-year qualifying period towards Indefinite Leave to Remain is invalid, hence remaining absences cannot be computed.`;
       document.getElementById(
         "displaySection"
-      ).innerHTML += `<br>The earliest date you can restart another 5-year qualifying period towards a valid Indefinite Leave To Remain is ${earliestRestartDate.toDateString()}. You begin with 0 remaining absences. (Note: this earliest restart date calculation does not look beyond the 5-year qualifying period.)`;
+      ).innerHTML += `<br>According to your specified whole day absences, the earliest date you can restart another 5-year qualifying period towards a valid Indefinite Leave To Remain is ${earliestRestartDate.toDateString()}. (Note: this earliest restart date calculation does not look beyond the original 5-year qualifying period.)`;
     }
   } else {
     document.getElementById(
