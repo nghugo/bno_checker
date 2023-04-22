@@ -99,6 +99,7 @@ export function validILR(inUK, isFeb29, projection) {
   isValid = true;
   firstInvalid = null;
   lastInvalid = null;
+  earliestRestart = null;
 
   var projectionIndex;
   if (projectionValue != "") {
@@ -124,8 +125,10 @@ export function validILR(inUK, isFeb29, projection) {
         isValid = false
       }
       if (firstInvalid) {
-        firstInvalid = i
+        firstInvalid = 0;
       }
+      lastInvalid = 0;
+      earliestRestart = 0;  // base case OR WRONG???/ (Try screenshotted inputs)
     }
   }
 
@@ -179,7 +182,7 @@ export function validILR(inUK, isFeb29, projection) {
         firstInvalid = r-1;  // -1 to convert slicer to index
       }
       lastInvalid = r-1;  // -1 to convert slicer to index
-      earliestRestart = l
+      earliestRestart = l;
     }
 
     if (isFeb29[l]) {
@@ -202,12 +205,12 @@ export function validILR(inUK, isFeb29, projection) {
     console.log(`lastInvalidDate is ${lastInvalidDate}`)
   }
 
-  if (earliestRestart) {
+  if (earliestRestart!==null) {
     earliestRestart += 1  //+1 since the last window is invalid, but the very next is valid
     earliestRestartDate = new Date(ilrStartValue);
-    earliestRestartDate.setDate(
-      earliestRestartDate.getDate() + earliestRestart
-    ); // plus lastInvalid days
+    earliestRestartDate.setDate(earliestRestartDate.getDate() + earliestRestart) 
+  } else {
+    earliestRestartDate = null
   }
 
   console.log(`finally, l is ${l}`);
