@@ -128,7 +128,7 @@ export function validILR(inUK, isFeb29, projection) {
         firstInvalid = 0;
       }
       lastInvalid = 0;
-      earliestRestart = 0;  // base case OR WRONG???/ (Try screenshotted inputs)
+      earliestRestart = 0; 
     }
   }
 
