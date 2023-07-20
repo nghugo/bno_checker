@@ -3,6 +3,14 @@ import { validILR } from "./compute.js";
 
 const form = document.getElementById("form");
 
+function addPNodeDisplay(textMessage) {
+  var para = document.createElement("p");
+  var text = document.createTextNode(textMessage);
+  para.appendChild(text);
+  var displaySection = document.getElementById("displaySection");
+  displaySection.append(para);
+}
+
 form.addEventListener("submit", (event) => {
   event.preventDefault(); // always prevent default submission (page reload)
 
@@ -10,6 +18,10 @@ form.addEventListener("submit", (event) => {
   projection = document.getElementById("projection");
   leaveStartCollection = document.getElementsByClassName("leaveStart");
   leaveEndCollection = document.getElementsByClassName("leaveEnd");
+
+  // clear display section
+  var displaySection = document.getElementById("displaySection");
+  displaySection.innerHTML="";
 
   check = true;
   validateInputs();
@@ -26,34 +38,36 @@ form.addEventListener("submit", (event) => {
       projection
     );
     if (isValid) {
-      document.getElementById(
-        "displaySection"
-      ).innerHTML = `Your 5-year qualifying period towards Indefinite Leave to Remain is valid.`;
-      if (projectionValue!="") {
-        document.getElementById(
-          "displaySection"
-        ).innerHTML += `<br>On projection date ${projectionDate.toDateString()}, you have ${remainingAbsences} remaining whole day absence(s).`;
+      addPNodeDisplay(
+        `Your 5-year qualifying period towards Indefinite Leave to Remain is valid.`
+      );
+
+      if (projectionValue != "") {
+        addPNodeDisplay(
+          `On projection date ${projectionDate.toDateString()}, you have ${remainingAbsences} remaining whole day absence(s).`
+        );
       } else {
-        document.getElementById(
-          "displaySection"
-        ).innerHTML += `<br>Since you have not provided a projection date, no remaining whole day absences calculation has been carried out.`;
+        addPNodeDisplay(
+          `Since you have not provided a projection date, no remaining whole day absences calculation has been carried out.`
+        );
       }
-      
     } else {
-      document.getElementById(
-        "displaySection"
-      ).innerHTML = `Your 5-year qualifying period towards Indefinite Leave to Remain is invalid, hence remaining absences cannot be computed.`;
-      document.getElementById(
-        "displaySection"
-      ).innerHTML += `<br>According to your specified whole day absences, the earliest date you can restart another 5-year qualifying period towards a valid Indefinite Leave To Remain is ${earliestRestartDate.toDateString()}. (Note: this earliest restart date calculation does not look beyond the original 5-year qualifying period.)`;
+      addPNodeDisplay(
+        `Your 5-year qualifying period towards Indefinite Leave to Remain is invalid, hence remaining absences cannot be computed.`
+      );
+      addPNodeDisplay(
+        `According to your specified whole day absences, the earliest date you can restart another 5-year qualifying period towards a valid Indefinite Leave To Remain is ${earliestRestartDate.toDateString()}. You can check for the the new qualifying period to ILR by entering the new start date in the above form.`
+      );
     }
   } else {
-    document.getElementById(
-      "displaySection"
-    ).innerHTML = `Please submit again with valid input values.`;
+    addPNodeDisplay(`Please submit again with valid input values.`);
   }
-
-  1;
+  
+  console.log("******************")
+  console.log(displaySection.innerHTML==="")
+  if (displaySection.innerHTML==="") {
+    addPNodeDisplay("Please fill out the form and press submit")
+  }
 });
 
 const setError = (element, message) => {
@@ -204,10 +218,6 @@ const validateInputs = () => {
     (a, b) => new Date(unsortedPairs[a][0]) - new Date(unsortedPairs[b][0])
   );
 
-  // document.getElementById("displaySection").innerHTML += `<br>`;
-  // document.getElementById("displaySection").innerHTML += `<br>unsortedPairs is  ${unsortedPairs}`;
-  // document.getElementById("displaySection").innerHTML += `<br>sortedPairs is  ${sortedPairs}`;
-  // document.getElementById("displaySection").innerHTML += `<br>sortedToOriginal is  ${sortedToOriginal}`;
 
   for (var i = 1; i < sortedPairs.length; i++) {
     // begin with i=1 to allow for i-1
@@ -227,6 +237,4 @@ const validateInputs = () => {
       ); // +1 for 1-based indexing
     }
   }
-
-  // document.getElementById("displaySection").innerHTML += `<br>leaveStartValues[0] type is  ${typeof leaveStartValues[0]}`;
 };
