@@ -11,6 +11,8 @@ function addPNodeDisplay(textMessage) {
   displaySection.append(para);
 }
 
+var validInputs;
+
 form.addEventListener("submit", (event) => {
   event.preventDefault(); // always prevent default submission (page reload)
 
@@ -23,21 +25,21 @@ form.addEventListener("submit", (event) => {
   var displaySection = document.getElementById("displaySection");
   displaySection.innerHTML="";
 
-  check = true;
+  validInputs = true;
   validateInputs();
 
-  if (check) {
+  if (validInputs) {
     [inUK, isFeb29] = getArrays(
       ilrStartValue,
       leaveStartValues,
       leaveEndValues
     );
-    [isValid, firstInvalid, earliestRestartDate, remainingAbsences] = validILR(
+    [validPeriod, firstInvalid, earliestRestartDate, remainingAbsences] = validILR(
       inUK,
       isFeb29,
       projection
     );
-    if (isValid) {
+    if (validPeriod) {
       addPNodeDisplay(
         `Your 5-year qualifying period towards Indefinite Leave to Remain is valid.`
       );
@@ -63,8 +65,6 @@ form.addEventListener("submit", (event) => {
     addPNodeDisplay(`Please submit again with valid input values.`);
   }
   
-  console.log("******************")
-  console.log(displaySection.innerHTML==="")
   if (displaySection.innerHTML==="") {
     addPNodeDisplay("Please fill out the form and press submit")
   }
@@ -73,7 +73,7 @@ form.addEventListener("submit", (event) => {
 const setError = (element, message) => {
   const validateInput = element.parentElement;
   const errorDisplay = validateInput.querySelector(".error");
-  check = false; // change the nonlocal variable to false
+  validInputs = false; // change the nonlocal variable to false
   errorDisplay.innerText = message;
   validateInput.classList.add("error");
   validateInput.classList.remove("success");

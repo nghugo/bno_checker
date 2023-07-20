@@ -96,7 +96,7 @@ export function validILR(inUK, isFeb29, projection) {
 
   //initialize window, counter, firstInvalid, projectionIndex
   abroadCounter = 0;
-  isValid = true;
+  validPeriod = true;
   firstInvalid = null;
   lastInvalid = null;
   earliestRestart = null;
@@ -121,8 +121,8 @@ export function validILR(inUK, isFeb29, projection) {
       abroadCounter += 1;
     }
     if (abroadCounter>180) {
-      if (isValid) {  // execute once only
-        isValid = false
+      if (validPeriod) {  // execute once only
+        validPeriod = false
       }
       if (firstInvalid) {
         firstInvalid = 0;
@@ -177,7 +177,7 @@ export function validILR(inUK, isFeb29, projection) {
 
     if (abroadCounter > 180) {
       // check abroadCounter to update the 2 invalid dates
-      isValid = false;
+      validPeriod = false;
       if (firstInvalid == null) {  // updated once only
         firstInvalid = r-1;  // -1 to convert slicer to index
       }
@@ -218,5 +218,5 @@ export function validILR(inUK, isFeb29, projection) {
   console.log(`finally, remainingAbsences is ${remainingAbsences}`);
   console.log(`finally, earliestRestart is ${earliestRestart}`);
 
-  return [isValid, firstInvalid, earliestRestartDate, remainingAbsences];
+  return [validPeriod, firstInvalid, earliestRestartDate, remainingAbsences];
 }

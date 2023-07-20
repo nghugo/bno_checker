@@ -16,7 +16,7 @@ var projectionDate;
 var check;
 var inUK;
 var isFeb29;
-var isValid;
+var validPeriod;
 var abroadCounter;
 
 var firstInvalid;
