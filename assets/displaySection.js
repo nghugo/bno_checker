@@ -1,6 +1,6 @@
 import { getArrays } from "./compute.js";
 import { validBNO } from "./compute.js";
-
+ 
 export function updateDisplaySection(
   validInputs_bool,
   bnoStartValue,
