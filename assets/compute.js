@@ -8,33 +8,33 @@ function daysBetween(firstDate, secondDate) {
 }
 
 export function getArrays(
-  ilrStartValue,
+  bnoStartValue,
   absentStartCollectionValues,
   absentEndCollectionValues
 ) {
-  const ilrStartDate = new Date(ilrStartValue);
-  const ilrEndDate = new Date(ilrStartValue);
-  ilrEndDate.setFullYear(ilrEndDate.getFullYear() + 5); // add 5 years
-  ilrEndDate.setDate(ilrEndDate.getDate() - 1); // minus 1 day
+  const bnoStartDate = new Date(bnoStartValue);
+  const bnoEndDate = new Date(bnoStartValue);
+  bnoEndDate.setFullYear(bnoEndDate.getFullYear() + 5); // add 5 years
+  bnoEndDate.setDate(bnoEndDate.getDate() - 1); // minus 1 day
 
-  const windowSize = daysBetween(ilrStartDate, ilrEndDate);
-  console.log(`ilrStart is ${ilrStart}`);
-  console.log(`ilrStartValue is ${ilrStartValue}`);
-  console.log(`ilrStartDate is ${ilrStartDate}`);
-  console.log(`ilrEndDate is ${ilrEndDate}`);
+  const windowSize = daysBetween(bnoStartDate, bnoEndDate);
+  console.log(`bnoStart is ${bnoStart}`);
+  console.log(`bnoStartValue is ${bnoStartValue}`);
+  console.log(`bnoStartDate is ${bnoStartDate}`);
+  console.log(`bnoEndDate is ${bnoEndDate}`);
   console.log(`windowSize is ${windowSize}`);
   const inUK = Array(windowSize).fill(1);
   const isFeb29 = Array(windowSize).fill(false);
 
   // create isFeb29 array to handle leap years
-  const irlStartYear = Number(ilrStartDate.getFullYear());
+  const irlStartYear = Number(bnoStartDate.getFullYear());
   for (let y = Number(irlStartYear); y < irlStartYear + 5; y++) {
     if (
       y % 4 == 0 &&
-      new Date(`${y}-02-29`) >= ilrStartDate &&
-      new Date(`${y}-02-29`) < ilrEndDate
+      new Date(`${y}-02-29`) >= bnoStartDate &&
+      new Date(`${y}-02-29`) < bnoEndDate
     ) {
-      var distanceFeb29 = daysBetween(ilrStartDate, new Date(`${y}-02-29`));
+      var distanceFeb29 = daysBetween(bnoStartDate, new Date(`${y}-02-29`));
       isFeb29[distanceFeb29] = true;
       console.log(
         `in year ${y}, marked index ${distanceFeb29} as true in isFeb29`
@@ -86,14 +86,14 @@ export function getArrays(
   });
 
   for (let zippedValue of zippedValues) {
-    var distanceStart = daysBetween(ilrStartDate, new Date(zippedValue[0])); // zippedValue[0] corresponds to absentStart
-    var distanceEnd = daysBetween(ilrStartDate, new Date(zippedValue[1])) + 1; // zippedValue[1] corresponds to absentEnd, +1 for right inclusive
+    var distanceStart = daysBetween(bnoStartDate, new Date(zippedValue[0])); // zippedValue[0] corresponds to absentStart
+    var distanceEnd = daysBetween(bnoStartDate, new Date(zippedValue[1])) + 1; // zippedValue[1] corresponds to absentEnd, +1 for right inclusive
     markLeave(distanceStart, distanceEnd, inUK);
   }
   return [inUK, isFeb29];
 }
 
-export function validILR(inUK, isFeb29, ilrStartValue, projectionValue) {
+export function validBNO(inUK, isFeb29, bnoStartValue, projectionValue) {
   // if Feb29 in window, then windowSize=366
   // if Feb29 not in window, then windowSize=365
   // maxAbroad=180
@@ -107,19 +107,19 @@ export function validILR(inUK, isFeb29, ilrStartValue, projectionValue) {
   var remainingAbsences = 180;
 
   var projectionIndex;
-  const ilrStartDate = new Date(ilrStartValue);
+  const bnoStartDate = new Date(bnoStartValue);
   if (projectionValue != "") {
     const projectionDate = new Date(projectionValue);
-    const projectionIndex = daysBetween(ilrStartDate, projectionDate);
+    const projectionIndex = daysBetween(bnoStartDate, projectionDate);
     console.log(`projectionIndex is ${projectionIndex}`);
   }
 
   // l, r slicers
   var l = 0;
-  var rDate = new Date(ilrStartValue);
+  var rDate = new Date(bnoStartValue);
   rDate.setFullYear(rDate.getFullYear() + 1); // add 1 year
   rDate.setDate(rDate.getDate() - 1); // minus 1 day
-  var r = daysBetween(ilrStartDate, rDate) + 1; // +1 since slicer
+  var r = daysBetween(bnoStartDate, rDate) + 1; // +1 since slicer
 
   for (var i = 0; i < r; i++) {
     if (inUK[i] == 0) {
@@ -204,7 +204,7 @@ export function validILR(inUK, isFeb29, ilrStartValue, projectionValue) {
   }
 
   if (lastInvalid != null) {
-    var lastInvalidDate = new Date(ilrStartValue);
+    var lastInvalidDate = new Date(bnoStartValue);
     lastInvalidDate.setDate(lastInvalidDate.getDate() + lastInvalid); // plus lastInvalid days
 
     console.log(`lastInvalidDate is ${lastInvalidDate}`);
@@ -213,7 +213,7 @@ export function validILR(inUK, isFeb29, ilrStartValue, projectionValue) {
   var earliestRestartDate
   if (earliestRestart !== null) {
     earliestRestart += 1; //+1 since the last window is invalid, but the very next is valid
-    earliestRestartDate = new Date(ilrStartValue);
+    earliestRestartDate = new Date(bnoStartValue);
     earliestRestartDate.setDate(
       earliestRestartDate.getDate() + earliestRestart
     );

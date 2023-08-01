@@ -1,12 +1,12 @@
 export function setInputValidationMessages(
   // inject CSS classes via setError vs setSuccess to each input field, depending on validation
   // return boolean indicator of whether all inputs are valid
-  ilrStart,
+  bnoStart,
   projection,
   absentStartCollection,
   absentEndCollection
 ) {
-  const ilrStartValue = ilrStart.value;
+  const bnoStartValue = bnoStart.value;
   const projectionValue = projection.value;
   const absentStartCollectionValues = Array.from(absentStartCollection).map(
     (element) => element.value
@@ -16,8 +16,8 @@ export function setInputValidationMessages(
   );
 
   // These each return bool and inject CSS class to the input fields (via setError or setSuccess)
-  const start_bool = ilrStartDateExists(ilrStart, ilrStartValue);
-  const proj_bool = ilrProjectionDateInRangeIfExists(projection, ilrStartValue, projectionValue);
+  const start_bool = bnoStartDateExists(bnoStart, bnoStartValue);
+  const proj_bool = bnoProjectionDateInRangeIfExists(projection, bnoStartValue, projectionValue);
   const startAbs_bool = absentStartDateExistsAllIntervals(absentStartCollection, absentStartCollectionValues);
   const endAbs_bool = absentEndDateExistsAllIntervalsAndAfterStart(absentEndCollection, absentStartCollectionValues, absentEndCollectionValues);
   const startEndAbs_bool = absendStartEndDateIntervalsNoOverlap(absentStartCollection, absentEndCollection, absentStartCollectionValues, absentEndCollectionValues);
@@ -26,7 +26,7 @@ export function setInputValidationMessages(
 
   return [
     validInputs,
-    ilrStartValue,
+    bnoStartValue,
     projectionValue,
     absentStartCollectionValues,
     absentEndCollectionValues,
@@ -51,30 +51,30 @@ function setSuccess(element)  {
   validateInput.classList.remove("error");
 };
 
-function ilrStartDateExists(ilrStart, ilrStartValue) {
-  // validate ILR start date exists and in range
+function bnoStartDateExists(bnoStart, bnoStartValue) {
+  // validate BNO start date exists and in range
   var res = true;
-  if (ilrStartValue == "") {
-    setError(ilrStart, "ILR start date is required");
+  if (bnoStartValue == "") {
+    setError(bnoStart, "BNO start date is required");
     res = false;
   } else if (
-    new Date(ilrStartValue) < new Date("1970-01-01") ||
-    new Date(ilrStartValue) > new Date("9999-12-31")
+    new Date(bnoStartValue) < new Date("1970-01-01") ||
+    new Date(bnoStartValue) > new Date("9999-12-31")
   ) {
     setError(
-      ilrStart,
-      "ILR start date must be between 01-Jan-1970 and 31-Dec-9999"
+      bnoStart,
+      "BNO start date must be between 01-Jan-1970 and 31-Dec-9999"
     );
     res = false;
   } else {
-    setSuccess(ilrStart);
+    setSuccess(bnoStart);
   }
   return res;
 }
 
-function ilrProjectionDateInRangeIfExists(
+function bnoProjectionDateInRangeIfExists(
   projection,
-  ilrStartValue,
+  bnoStartValue,
   projectionValue
 ) {
   // validate projection date in range if exists
@@ -89,23 +89,10 @@ function ilrProjectionDateInRangeIfExists(
         "Projection date must be between 01-Jan-1970 and 31-Dec-9999"
       );
       res = false;
-    } else if (new Date(projectionValue) < new Date(ilrStartValue)) {
+    } else if (new Date(projectionValue) < new Date(bnoStartValue)) {
       setError(
         projection,
-        "Projection date must be within 5-years after ILR start date"
-      );
-      res = false;
-    } else if (
-      new Date(projectionValue) >
-      new Date(
-        new Date(ilrStartValue).setFullYear(
-          new Date().getFullYear(ilrStartValue) + 5
-        )
-      )
-    ) {
-      setError(
-        projection,
-        "Projection date must be within 5-years after ILR start date"
+        "Projection date must be within 5-years after BNO start date"
       );
       res = false;
     } else {

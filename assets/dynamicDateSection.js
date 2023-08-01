@@ -23,7 +23,7 @@ function addDateSection() {
   <div
     class="wrap-input rs1-wrap-input validateInput"
     id="dateSectionLeft${counter}"
-    invalid-input-message="First day outside of the UK is required and needs to be after ILR start date"
+    invalid-input-message="First day outside of the UK is required and needs to be after BNO start date"
   >
     <span class="label-input"
       >First day outside of the UK (interval ${counter}) *</span
@@ -34,7 +34,7 @@ function addDateSection() {
   <div
     class="wrap-input rs1-wrap-input validateInput"
     id="dateSectionRight${counter}"
-    invalid-input-message="Last day outside of the UK is required and needs to be after 1. ILR start date and 2. first day outside of the UK"
+    invalid-input-message="Last day outside of the UK is required and needs to be after 1. BNO start date and 2. first day outside of the UK"
   >
     <span class="label-input"
       >Last day outside of the UK (interval ${counter}) *</span

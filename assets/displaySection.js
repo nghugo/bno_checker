@@ -1,9 +1,9 @@
 import { getArrays } from "./compute.js";
-import { validILR } from "./compute.js";
+import { validBNO } from "./compute.js";
 
 export function updateDisplaySection(
   validInputs_bool,
-  ilrStartValue,
+  bnoStartValue,
   projectionValue,
   absentStartCollectionValues,
   absentEndCollectionValues
@@ -25,14 +25,14 @@ export function updateDisplaySection(
     addPNode(`Please submit again with valid input values.`);
   } else {
     const res = getArrays(
-      ilrStartValue,
+      bnoStartValue,
       absentStartCollectionValues,
       absentEndCollectionValues
     );
     const inUK = res[0];
     const isFeb29 = res[1];
 
-    const res2 = validILR(inUK, isFeb29, ilrStartValue, projectionValue);
+    const res2 = validBNO(inUK, isFeb29, bnoStartValue, projectionValue);
     const validPeriod = res2[0];
     const firstInvalid = res2[1];
     const earliestRestartDate = res2[2];
@@ -58,7 +58,7 @@ export function updateDisplaySection(
         `Your 5-year qualifying period towards Indefinite Leave to Remain is invalid, hence remaining absences cannot be computed.`
       );
       addPNode(
-        `According to your specified whole day absences, the earliest date you can restart another 5-year qualifying period towards a valid Indefinite Leave To Remain is ${earliestRestartDate.toDateString()}. You can check for the the new qualifying period to ILR by entering the new start date in the above form.`
+        `According to your specified whole day absences, the earliest date you can restart another 5-year qualifying period towards a valid Indefinite Leave To Remain is ${earliestRestartDate.toDateString()}. You can check for the the new qualifying period to BNO by entering the new start date in the above form.`
       );
     }
   }
