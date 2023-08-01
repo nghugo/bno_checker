@@ -1,1 +1,1 @@
-https://nghugo.github.io/ilr_checker/
+https://nghugo.github.io/bno_checker/
