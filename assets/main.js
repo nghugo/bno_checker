@@ -1,18 +1,18 @@
-import { updateDisplaySection } from "./displaySection.js";
 import { setInputValidationMessages } from "./inputValidationMessages.js";
+import { updateDisplaySection } from "./displaySection.js";
 
 const form = document.getElementById("form");
 
 form.addEventListener("submit", (event) => {
   event.preventDefault(); // prevent default submission (page reload)
 
-  var ilrStart = document.getElementById("ilrStart");
-  var projection = document.getElementById("projection");
-  var absentStartCollection = document.getElementsByClassName("absentStart");
-  var absentEndCollection = document.getElementsByClassName("absentEnd");
+  const ilrStart = document.getElementById("ilrStart");
+  const projection = document.getElementById("projection");
+  const absentStartCollection = document.getElementsByClassName("absentStart");
+  const absentEndCollection = document.getElementsByClassName("absentEnd");
 
   // add validation messages to input fields by injecting CSS classes
-  // and return boolean validInputs_boolean indicator
+  // and return boolean validInputs_bool indicator
   const res = setInputValidationMessages(
     ilrStart,
     projection,
@@ -20,7 +20,7 @@ form.addEventListener("submit", (event) => {
     absentEndCollection
   );
 
-  const validInputs_boolean = res[0];
+  const validInputs_bool = res[0];
   const ilrStartValue = res[1];
   const projectionValue = res[2];
   const absentStartCollectionValues = res[3];
@@ -28,7 +28,7 @@ form.addEventListener("submit", (event) => {
 
   // add text to display section for user feedback
   updateDisplaySection(
-    validInputs_boolean,
+    validInputs_bool,
     ilrStartValue,
     projectionValue,
     absentStartCollectionValues,

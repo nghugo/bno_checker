@@ -2,17 +2,17 @@ import { getArrays } from "./compute.js";
 import { validILR } from "./compute.js";
 
 export function updateDisplaySection(
-  validInputs_boolean,
+  validInputs_bool,
   ilrStartValue,
   projectionValue,
   absentStartCollectionValues,
   absentEndCollectionValues
 ) {
   function addPNode(textMessage) {
-    var para = document.createElement("p");
-    var text = document.createTextNode(textMessage);
+    const para = document.createElement("p");
+    const text = document.createTextNode(textMessage);
     para.appendChild(text);
-    var displaySection = document.getElementById("displaySection");
+    const displaySection = document.getElementById("displaySection");
     displaySection.append(para);
   }
 
@@ -21,7 +21,7 @@ export function updateDisplaySection(
   displaySection.innerHTML = "";
 
   // step 2: add messages to display section
-  if (!validInputs_boolean) {
+  if (!validInputs_bool) {
     addPNode(`Please submit again with valid input values.`);
   } else {
     const res = getArrays(

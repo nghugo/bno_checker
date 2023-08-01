@@ -81,7 +81,7 @@ export function getArrays(
     console.log(`absentEndValue received as ${absentEndValue}`);
   }
 
-  var zippedValues = absentStartCollectionValues.map(function (entry, i) {
+  const zippedValues = absentStartCollectionValues.map(function (entry, i) {
     return [entry, absentEndCollectionValues[i]];
   });
 
