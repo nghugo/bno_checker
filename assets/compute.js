@@ -7,9 +7,13 @@ function daysBetween(firstDate, secondDate) {
   return diff;
 }
 
-export function getArrays(ilrStartValue, leaveStartValues, leaveEndValues) {
-  ilrStartDate = new Date(ilrStartValue);
-  ilrEndDate = new Date(ilrStartValue);
+export function getArrays(
+  ilrStartValue,
+  absentStartCollectionValues,
+  absentEndCollectionValues
+) {
+  const ilrStartDate = new Date(ilrStartValue);
+  const ilrEndDate = new Date(ilrStartValue);
   ilrEndDate.setFullYear(ilrEndDate.getFullYear() + 5); // add 5 years
   ilrEndDate.setDate(ilrEndDate.getDate() - 1); // minus 1 day
 
@@ -19,11 +23,11 @@ export function getArrays(ilrStartValue, leaveStartValues, leaveEndValues) {
   console.log(`ilrStartDate is ${ilrStartDate}`);
   console.log(`ilrEndDate is ${ilrEndDate}`);
   console.log(`windowSize is ${windowSize}`);
-  inUK = Array(windowSize).fill(1);
-  isFeb29 = Array(windowSize).fill(false);
+  const inUK = Array(windowSize).fill(1);
+  const isFeb29 = Array(windowSize).fill(false);
 
   // create isFeb29 array to handle leap years
-  var irlStartYear = Number(ilrStartDate.getFullYear());
+  const irlStartYear = Number(ilrStartDate.getFullYear());
   for (let y = Number(irlStartYear); y < irlStartYear + 5; y++) {
     if (
       y % 4 == 0 &&
@@ -69,46 +73,47 @@ export function getArrays(ilrStartValue, leaveStartValues, leaveEndValues) {
     );
   }
 
-  for (var leaveStartValue of leaveStartValues) {
-    console.log(`leaveStartValue received as ${leaveStartValue}`);
+  for (var absentStartValue of absentStartCollectionValues) {
+    console.log(`absentStartValue received as ${absentStartValue}`);
   }
 
-  for (var leaveEndValue of leaveEndValues) {
-    console.log(`leaveEndValue received as ${leaveEndValue}`);
+  for (var absentEndValue of absentEndCollectionValues) {
+    console.log(`absentEndValue received as ${absentEndValue}`);
   }
 
-  var zippedValues = leaveStartValues.map(function (entry, i) {
-    return [entry, leaveEndValues[i]];
+  var zippedValues = absentStartCollectionValues.map(function (entry, i) {
+    return [entry, absentEndCollectionValues[i]];
   });
 
   for (let zippedValue of zippedValues) {
-    var distanceStart = daysBetween(ilrStartDate, new Date(zippedValue[0])); // zippedValue[0] corresponds to leaveStart
-    var distanceEnd = daysBetween(ilrStartDate, new Date(zippedValue[1])) + 1; // zippedValue[1] corresponds to leaveEnd, +1 for right inclusive
+    var distanceStart = daysBetween(ilrStartDate, new Date(zippedValue[0])); // zippedValue[0] corresponds to absentStart
+    var distanceEnd = daysBetween(ilrStartDate, new Date(zippedValue[1])) + 1; // zippedValue[1] corresponds to absentEnd, +1 for right inclusive
     markLeave(distanceStart, distanceEnd, inUK);
   }
   return [inUK, isFeb29];
 }
 
-export function validILR(inUK, isFeb29, projection) {
+export function validILR(inUK, isFeb29, ilrStartValue, projectionValue) {
   // if Feb29 in window, then windowSize=366
   // if Feb29 not in window, then windowSize=365
   // maxAbroad=180
 
   //initialize window, counter, firstInvalid, projectionIndex
-  abroadCounter = 0;
-  validPeriod = true;
-  firstInvalid = null;
-  lastInvalid = null;
-  earliestRestart = null;
+  var abroadCounter = 0;
+  var validPeriod = true;
+  var firstInvalid = null;
+  var lastInvalid = null;
+  var earliestRestart = null;
+  var remainingAbsences = 180;
 
   var projectionIndex;
+  const ilrStartDate = new Date(ilrStartValue);
   if (projectionValue != "") {
-    projectionDate = new Date(projection.value);
-    projectionIndex = daysBetween(ilrStartDate, projectionDate);
+    const projectionDate = new Date(projectionValue);
+    const projectionIndex = daysBetween(ilrStartDate, projectionDate);
     console.log(`projectionIndex is ${projectionIndex}`);
-  };
+  }
 
-  
   // l, r slicers
   var l = 0;
   var rDate = new Date(ilrStartValue);
@@ -120,28 +125,28 @@ export function validILR(inUK, isFeb29, projection) {
     if (inUK[i] == 0) {
       abroadCounter += 1;
     }
-    if (abroadCounter>180) {
-      if (validPeriod) {  // execute once only
-        validPeriod = false
+    if (abroadCounter > 180) {
+      if (validPeriod) {
+        // execute once only
+        validPeriod = false;
       }
       if (firstInvalid) {
         firstInvalid = 0;
       }
       lastInvalid = 0;
-      earliestRestart = 0; 
+      earliestRestart = 0;
     }
   }
 
-  if (projectionValue!="" && projectionIndex<r-1) {
-    remainingAbsences = 180
-    for (i=0; i<projectionIndex; i++) {
-      if (inUK[i]==0) {
-        remainingAbsences = Math.max(0, remainingAbsences-1)
+  if (projectionValue != "" && projectionIndex < r - 1) {
+    remainingAbsences = 180;
+    for (i = 0; i < projectionIndex; i++) {
+      if (inUK[i] == 0) {
+        remainingAbsences = Math.max(0, remainingAbsences - 1);
       }
     }
-    
   }
-  
+
   // console.log(`i, projectionIndex are ${i}, ${projectionIndex} and do they match? ${i==projectionIndex}`)
 
   console.log(`l initialized as ${l}`);
@@ -170,18 +175,20 @@ export function validILR(inUK, isFeb29, projection) {
   // at each step: check counter and slide window
   while (r < inUK.length) {
     if (projectionValue != "") {
-      if (r-1 == projectionIndex) {  // convert slicer to index, so -1
-        remainingAbsences = Math.max(0, 180-abroadCounter);
+      if (r - 1 == projectionIndex) {
+        // convert slicer to index, so -1
+        remainingAbsences = Math.max(0, 180 - abroadCounter);
       }
     }
 
     if (abroadCounter > 180) {
       // check abroadCounter to update the 2 invalid dates
       validPeriod = false;
-      if (firstInvalid == null) {  // updated once only
-        firstInvalid = r-1;  // -1 to convert slicer to index
+      if (firstInvalid == null) {
+        // updated once only
+        firstInvalid = r - 1; // -1 to convert slicer to index
       }
-      lastInvalid = r-1;  // -1 to convert slicer to index
+      lastInvalid = r - 1; // -1 to convert slicer to index
       earliestRestart = l;
     }
 
@@ -197,20 +204,21 @@ export function validILR(inUK, isFeb29, projection) {
   }
 
   if (lastInvalid != null) {
-    lastInvalidDate = new Date(ilrStartValue);
-    lastInvalidDate.setDate(
-      lastInvalidDate.getDate() + lastInvalid
-    ); // plus lastInvalid days
-    
-    console.log(`lastInvalidDate is ${lastInvalidDate}`)
+    var lastInvalidDate = new Date(ilrStartValue);
+    lastInvalidDate.setDate(lastInvalidDate.getDate() + lastInvalid); // plus lastInvalid days
+
+    console.log(`lastInvalidDate is ${lastInvalidDate}`);
   }
 
-  if (earliestRestart!==null) {
-    earliestRestart += 1  //+1 since the last window is invalid, but the very next is valid
+  var earliestRestartDate
+  if (earliestRestart !== null) {
+    earliestRestart += 1; //+1 since the last window is invalid, but the very next is valid
     earliestRestartDate = new Date(ilrStartValue);
-    earliestRestartDate.setDate(earliestRestartDate.getDate() + earliestRestart) 
+    earliestRestartDate.setDate(
+      earliestRestartDate.getDate() + earliestRestart
+    );
   } else {
-    earliestRestartDate = null
+    earliestRestartDate = null;
   }
 
   console.log(`finally, l is ${l}`);

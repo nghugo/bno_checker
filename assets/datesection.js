@@ -23,23 +23,23 @@ function addDateSection() {
   <div
     class="wrap-input rs1-wrap-input validateInput"
     id="dateSectionLeft${counter}"
-    invalidInputMessage="First day outside of the UK is required and needs to be after ILR start date"
+    invalid-input-message="First day outside of the UK is required and needs to be after ILR start date"
   >
     <span class="label-input"
       >First day outside of the UK (interval ${counter}) *</span
     >
-    <input class="input leaveStart" type="date" name='leaveStart${counter}' max="9999-12-31"/>
+    <input class="input absentStart" type="date" name='absentStart${counter}' max="9999-12-31"/>
     <div class="error"></div>
   </div>
   <div
     class="wrap-input rs1-wrap-input validateInput"
     id="dateSectionRight${counter}"
-    invalidInputMessage="Last day outside of the UK is required and needs to be after 1. ILR start date and 2. first day outside of the UK"
+    invalid-input-message="Last day outside of the UK is required and needs to be after 1. ILR start date and 2. first day outside of the UK"
   >
     <span class="label-input"
       >Last day outside of the UK (interval ${counter}) *</span
     >
-    <input class="input leaveEnd" type="date" name='leaveEnd${counter}' max="9999-12-31"/>
+    <input class="input absentEnd" type="date" name='absentEnd${counter}' max="9999-12-31"/>
     <div class="error"></div>
   </div>
     `;
