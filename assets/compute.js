@@ -2,14 +2,19 @@
 //     return Math.round((second - first) / (1000 * 60 * 60 * 24));
 // }
 
-// test input
-const absentStartCollectionValues = ["2023-08-01", "2023-11-01"];
-const absentEndCollectionValues = ["2023-08-31", "2023-11-30"];
 
 // **** **** **** **** **** **** **** **** **** **** **** **** ****
-// all indices are taken as the milisecond count since the epoch
+// test input
+const absentStartCollectionValues = ["2023-08-01", "2023-11-01"];
+const absentEndCollectionValues = ["2023-08-31", "2040-11-30"];
+const bnoStartValue = "2023-07-01";
+const bnoStartIndex = new Date(bnoStartValue).getTime();
+// **** **** **** **** **** **** **** **** **** **** **** **** ****
 
+
+// all indices are taken as the milisecond count since the epoch
 const DAY = 1000 * 3600 * 24; // day in miliseconds
+
 function daysBetween(firstDateIndex, secondDateIndex) {
   var diff = Math.floor(
     (secondDateIndex - firstDateIndex) / (24 * 60 * 60 * 1000)
@@ -46,15 +51,17 @@ function isAbsentFactory(
   // isAbsentFactory returns a first class function (call this isAbsent) as a closure
   // isAbsent can be called to determine if an index belongs to an absent date
   const absentIndexSet = new Set();
-  for (let i; i < absentStartCollectionValues.length; i++) {
+  for (let i = 0; i < absentStartCollectionValues.length; i++) {
     const lower = new Date(absentStartCollectionValues[i]).getTime();
     const upper = new Date(absentEndCollectionValues[i]).getTime();
+    console.log(lower, upper, "*****************");
     var index = lower;
     while (index <= upper) {
       absentIndexSet.add(index);
       index += 1 * DAY;
     }
   }
+  console.log(absentIndexSet)
   function isAbsent(index) {
     return absentIndexSet.has(index);
   }
@@ -62,25 +69,123 @@ function isAbsentFactory(
 }
 
 const isAbsent = isAbsentFactory(
-  daysBetween,
   absentStartCollectionValues,
   absentEndCollectionValues
 );
-console.log(`isAbsent(1690848000000) is ${isAbsent(1690848000000)}`); // expect true
-console.log(
-  `isAbsent(1690848000000 + 1*DAY) is ${isAbsent(1690848000000 + 1 * DAY)}`
-); // expect true
-console.log(
-  `isAbsent(1690848000000 + 5*DAY) is ${isAbsent(1690848000000 + 5 * DAY)}`
-); // expect true
-console.log(`isAbsent(1693440000000) is ${isAbsent(1693440000000)}`); // expect true
-console.log(
-  `isAbsent(1693440000000 + 1*DAY) is ${isAbsent(1693440000000 + 1 * DAY)}`
-); // expect false
 
-function earliestValidILRPeriod(bnoStartIndex, absences) {
-  1;
+// **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** 
+// TESTING 
+console.log(`expect true: isAbsent(1690848000000) is ${isAbsent(1690848000000)}`); // expect true
+console.log(
+  `expect true: isAbsent(1690848000000 + 1*DAY) is ${isAbsent(1690848000000 + 1 * DAY)}`
+); // expect true
+console.log(
+  `expect true: isAbsent(1690848000000 + 5*DAY) is ${isAbsent(1690848000000 + 5 * DAY)}`
+); // expect true
+console.log(`expect true: isAbsent(1693440000000) is ${isAbsent(1693440000000)}`); // expect true
+console.log(
+  `expect false: isAbsent(1693440000000 + 1*DAY) is ${isAbsent(1693440000000 + 1 * DAY)}`
+); // expect false
+// **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** 
+
+
+function indexAdd5Years(inputIndex) {
+  // automatically adjust for Feb29
+  const inputDate = new Date(inputIndex);
+  var resDate = new Date(inputIndex);
+  resDate.setFullYear(resDate.getFullYear() + 5); // add 5 years
+  resDate.setDate(resDate.getDate() - 1); // minus 1 day
+  var resIndex = resDate.getTime();
+  return resIndex
 }
+
+function indexMinus1Year(inputIndex) {
+  // automatically adjust for Feb29
+  const inputDate = new Date(inputIndex);
+  var resDate = new Date(inputIndex);
+  resDate.setFullYear(resDate.getFullYear() - 1); // minus 1 year
+  resDate.setDate(resDate.getDate() + 1); // add 1 day
+  var resIndex = resDate.getTime();
+  return resIndex
+}
+
+function earliestValidILRPeriod(bnoStartIndex) {
+  var candidateILRStartIndex = bnoStartIndex;
+  var candidateILREndIndex = indexAdd5Years(candidateILRStartIndex);
+
+  function lastInvalidILRStartPointInPeriod(candidateILRStartIndex, candidateILREndIndex) {
+    var absentCount = 0
+    var yearWindowRightIndex = candidateILREndIndex
+    var yearWindowLeftIndex = indexMinus1Year(yearWindowRightIndex)
+
+    // phase 1: grow window from right to left
+    for (let i = yearWindowRightIndex; i >= yearWindowLeftIndex; i -= DAY) {
+      // console.log(absentCount, i, isAbsent(i))
+      if (isAbsent(i)) {
+        absentCount += 1
+      }
+      if (absentCount > 180) {
+        return i + DAY
+      }
+    }
+
+    // phase 2: shift window from right to left, adjusting for Feb29
+    while (yearWindowLeftIndex >= candidateILRStartIndex) {
+      yearWindowLeftIndex -= DAY;
+      yearWindowRightIndex -= DAY;
+      if (isAbsent(yearWindowLeftIndex)) {
+        absentCount += 1
+      }
+      if (isAbsent(yearWindowRightIndex + DAY)) {
+        absentCount -= 1
+      }
+      if (isFeb29(yearWindowLeftIndex)) {
+        yearWindowLeftIndex -= DAY
+        if (isAbsent(yearWindowLeftIndex)) {
+          absentCount += 1
+        }
+      }
+      if (isFeb29(yearWindowRightIndex)) {
+        yearWindowRightIndex -= DAY
+        if (isAbsent(yearWindowRightIndex + DAY)) {
+          absentCount -= 1
+        }
+      }
+      if (absentCount > 180) {
+        return yearWindowLeftIndex + DAY
+      }
+    }
+
+    // phase 3: if absentCount did not exceed 180, return null
+    return null
+  }
+
+  while (lastInvalidILRStartPointInPeriod(candidateILRStartIndex, candidateILREndIndex) !== null) {
+    candidateILRStartIndex = lastInvalidILRStartPointInPeriod(candidateILRStartIndex, candidateILREndIndex) + DAY;
+    candidateILREndIndex = indexAdd5Years(candidateILRStartIndex);
+  }
+
+  const earliestValidILRStartIndex = candidateILRStartIndex;
+  const earliestValidILREndIndex = candidateILREndIndex;
+  return [earliestValidILRStartIndex, earliestValidILREndIndex]
+  
+}
+
+
+// **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** 
+// TESTING 
+console.log(`bnoStartIndex is ${bnoStartIndex}`)
+console.log(`earliestValidILRPeriod(bnoStartIndex) is ${earliestValidILRPeriod(bnoStartIndex)}`)
+for (var index of earliestValidILRPeriod(bnoStartIndex)) {
+  console.log(`date: ${new Date(index)}`)
+}
+
+// **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** 
+
+
+
+
+
 // **** **** **** **** **** **** **** **** **** **** **** **** ****
 // export function getArrays(
 //   bnoStartValue,
