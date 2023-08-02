@@ -5,22 +5,61 @@
 // const bnoStartValue = "2023-07-01";
 // const bnoStartIndex = new Date(bnoStartValue).getTime();
 
-// Feb29 leaves from LHS (test case 1)
-const absentStartCollectionValues = ["2023-01-09", "2024-01-01"];
-const absentEndCollectionValues = ["2023-04-12", "2024-03-20"];
-const bnoStartValue = "2023-11-18";
-const projectionValue = "2025-02-09";
+// Recall that the objective is to find the longest consecutive absence possible starting from projection date
+// but without breaking the 180 day limit and thus invalidating the ILR qualification period
+// this means exactly using up the 180 day limit
 
-// // Feb29 enters from RHS (test case 2)
+// // Feb29 leaves from LHS (test case 1)  (75+1) + 104 = 180
+// // output remaining = 104
+// // days between 2024 may 21 to 2024 aug 04 INCLUSIVE = (75+1) = 76 days
+// const absentStartCollectionValues = ["2024-01-09", "2024-05-21"];
+// const absentEndCollectionValues = ["2024-03-12", "2024-08-04"];
+// const bnoStartValue = "2023-11-18";
+// const projectionValue = "2025-01-27";
+
+// // Feb29 leaves from LHS (test case 2)
+// // 180 exactly, since the quota of absent days last year are recovered when they exit the LHS of window
+// const absentStartCollectionValues = ["2024-01-09"];
+// const absentEndCollectionValues = ["2024-03-12"];
+// const bnoStartValue = "2023-11-18";
+// const projectionValue = "2025-01-27";
+
+// // Feb29 enters from RHS (test case 3)  (85+1) + 94 = 180
+// days between 2023 may 1 and 2023 july 25 INCLUSIVE = 85+1 = 86 days
+// output remaining = 94
 // const absentStartCollectionValues = ["2023-01-09", "2023-05-01"];
 // const absentEndCollectionValues = ["2023-04-12", "2023-07-25"];
 // const bnoStartValue = "2020-11-18";
 // const projectionValue = "2024-01-27";
 
-// const absentStartCollectionValues = ["2024-09-09"];
-// const absentEndCollectionValues = ["2025-01-12"];
-// const bnoStartValue = "2023-11-18";
-// const projectionValue = "2025-01-27";
+// // Feb29 enters from RHS (test case 4)  (80+1) + 99 = 180
+// days between 2023 june 01 and 2023 aug 20 INCLUSIVE = (80+1) = 81 days
+// output remaining = 99
+// const absentStartCollectionValues = ["2023-01-25", "2023-06-01"];
+// const absentEndCollectionValues = ["2023-03-12", "2023-08-20"];
+// const bnoStartValue = "2023-01-18";
+// const projectionValue = "2024-02-09";
+
+
+// // no Feb29, but 2 holidays (test case 5)
+// // 81 + 47 + 52 = 180
+// // days between 2021-06-01 and 2021-08-20 INCLUSIVE = 80+1
+// // days between 2022-01-25 and 2022-03-12 = 46+1
+// // output remaining = 52
+// const absentStartCollectionValues = ["2021-06-01", "2022-01-25"];
+// const absentEndCollectionValues = ["2021-08-20", "2022-03-12"];
+// const bnoStartValue = "2021-01-18";
+// const projectionValue = "2022-04-05";
+
+// 78 + 46 + 56 = 180 (test case 6)
+// days between 2023-11-13 and 2023-12-28 INCLUSIVE = 45+1
+// days between 2024-01-23 and 2024-04-09 = 77+1
+// output remaining = 56
+const absentStartCollectionValues = ["2023-11-13", "2024-01-23"];
+const absentEndCollectionValues = ["2023-12-28", "2024-04-09"];
+const bnoStartValue = "2020-11-18";
+const projectionValue = "2024-05-27";
+
 
 const bnoStartIndex = new Date(bnoStartValue).getTime();
 const projectionIndex = new Date(projectionValue).getTime();
@@ -165,14 +204,14 @@ function projectRemainingILR(projectionIndex, earliestValidILRStartIndex, earlie
       remainingCount = Math.min(1 + remainingCount, 180);
     }
 
-    // adjust for Feb29 currently leaving from LHS (correct dates and +1 correct -> see test case 1)
+    // adjust for Feb29 currently leaving from LHS (correct dates and +1 correct -> see test case 1, 2)
     if (isFeb29(yearWindowLeftIndex)) {
       yearWindowLeftIndex += DAY; // increment left window once here and once below
       if (yearWindowLeftIndex >= earliestValidILRStartIndex && isAbsent(yearWindowLeftIndex)) {
         remainingCount = Math.min(1 + remainingCount, 180);
       }
     }
-    // adjust for Feb29 about to enter from the RHS (correct dates and -1 correct -> see test case 2)
+    // adjust for Feb29 about to enter from the RHS (correct dates and -1 correct -> see test case 3, 4)
     if (isFeb29(yearWindowRightIndex + DAY)) {
       yearWindowLeftIndex -= DAY; // cancel out window increment below
       remainingCount -= 1; // represents adding a day of continuous absence starting from the projection date
