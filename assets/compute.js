@@ -5,10 +5,19 @@
 // const bnoStartValue = "2023-07-01";
 // const bnoStartIndex = new Date(bnoStartValue).getTime();
 
-const absentStartCollectionValues = ["2021-10-10", "2021-11-05"];
-const absentEndCollectionValues = ["2021-10-30", "2040-02-05"];
-const bnoStartValue = "2020-11-18";
+// const absentStartCollectionValues = ["2023-01-10", "2024-02-20"];
+// const absentEndCollectionValues = ["2023-03-30", "2024-03-07"];
+// const bnoStartValue = "2020-11-18";
+// const projectionValue = "2024-02-29";
+
+// const absentStartCollectionValues = ["2024-01-10", "2025-02-20"];
+// const absentEndCollectionValues = ["2024-03-30", "2025-03-07"];
+// const bnoStartValue = "2021-11-18";
+// const projectionValue = "2023-03-01";
+
 const bnoStartIndex = new Date(bnoStartValue).getTime();
+const projectionIndex = new Date(projectionValue).getTime();
+console.log(`projectionIndex            is ${projectionIndex} ie ${new Date(projectionIndex)}`)
 // **** **** **** **** **** **** **** **** **** **** **** **** ****
 
 // all indices are taken as the millisecond count since the epoch
@@ -27,6 +36,10 @@ const isAbsent = isAbsentFactory(
 );
 
 function earliestValidILRPeriod(bnoStartIndex) {
+  // given a bno start date represented in millisecond index since the epoch,
+  // and also the days of absences using the closure isAbsent
+  // returns the earliest valid ILR qualification period
+  // note, this makes user of the function isFeb29 as well
   var candidateILRStartIndex = bnoStartIndex;
   var candidateILREndIndex = indexAdd5Years(candidateILRStartIndex);
 
@@ -49,7 +62,6 @@ function earliestValidILRPeriod(bnoStartIndex) {
 
     // phase 2: shift window from right to left, adjusting for Feb29
     while (yearWindowLeftIndex >= candidateILRStartIndex) {
-      
       if (absentCount > 180) {
         return yearWindowLeftIndex + DAY;
       }
@@ -102,12 +114,91 @@ function earliestValidILRPeriod(bnoStartIndex) {
   return [earliestValidILRStartIndex, earliestValidILREndIndex];
 }
 
+function projectRemainingILR(projectionIndex, earliestValidILRStartIndex, earliestValidILREndIndex) {
+  // returns the number of continuous absences available starting from the projection day
+
+  // case 1: projection is out of bounds (before start)
+  if (projectionIndex < earliestValidILRStartIndex) {
+    return -1;
+  }
+
+  // case 2: projection is out of bounds (after end)
+  if (projectionIndex > earliestValidILREndIndex) {
+    return -2;
+  }
+
+  // case 3: projection within bounds, so init remainingCount = 180 - absentCount
+  // then shift window until remaining === 0 or yearWindowRightIndex === earliestValidILREndIndex
+  // the number of continuous absences available is given by (yearWindowRightIndex - projectionIndex - DAY) / DAY
+
+
+  // phase 1: get initial absentCount
+  var absentCount = 0;
+  // console.log(Math.max(indexMinus1Year(projectionIndex), earliestValidILRStartIndex))
+  // console.log(projectionIndex - DAY)
+  // console.log(indexMinus1Year(projectionIndex))
+  // console.log(earliestValidILRStartIndex)
+  for (
+    let i = Math.max(indexMinus1Year(projectionIndex), earliestValidILRStartIndex);
+    i <= projectionIndex - DAY;
+    i += DAY
+  ) {
+    if (isAbsent(i)) {
+      absentCount += 1;
+    }
+  }
+  var remainingCount = 180 - absentCount;
+  console.log(`initial remainingCount is ${remainingCount}`)
+
+  // phase 2: shift window to the right, adjusting for Feb29
+  var yearWindowLeftIndex = indexMinus1Year(projectionIndex);
+  var yearWindowRightIndex = projectionIndex - DAY;
+  while (remainingCount > 0) {  //  && yearWindowRightIndex < earliestValidILREndIndex
+    if (yearWindowLeftIndex >= earliestValidILRStartIndex && isAbsent(yearWindowLeftIndex)) {
+      remainingCount = Math.min(1 + remainingCount, 180);
+    }
+
+    // // adjust for Feb29 about to enter from the RHS, return immediately if remainingCount reaches 0
+    // if (isFeb29(yearWindowRightIndex + DAY)) {
+    //   yearWindowRightIndex += DAY;
+    //   remainingCount -= 1;
+    //   if (remainingCount === 0) {
+    //     return (yearWindowRightIndex - (projectionIndex - DAY)) / DAY;
+    //   }
+    // }
+    // // adjust for Feb29 currently leaving from LHS
+    // if (isFeb29(yearWindowLeftIndex)) {
+    //   yearWindowLeftIndex += DAY;
+    //   if (yearWindowLeftIndex >= earliestValidILRStartIndex && isAbsent(yearWindowLeftIndex)) {
+    //     remainingCount = Math.min(1 + remainingCount, 180);
+    //   }
+    // }
+
+    // increment window
+    yearWindowLeftIndex += DAY;
+    yearWindowRightIndex += DAY;
+    remainingCount -= 1; // represents adding a day of continuous absence starting from the projection date
+  }
+
+  return (yearWindowRightIndex - (projectionIndex - DAY)) / DAY;
+}
+
 // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
 // TESTING OUTPUT
-console.log(`bnoStartIndex is ${bnoStartIndex}`)
-console.log(`earliestValidILRPeriod(bnoStartIndex) is ${earliestValidILRPeriod(bnoStartIndex)}`)
-for (var index of earliestValidILRPeriod(bnoStartIndex)) {
-  console.log(`date: ${new Date(index)}`)
-}
+console.log(`bnoStartIndex is ${bnoStartIndex}`);
+console.log(
+  `earliestValidILRPeriod(bnoStartIndex) is ${earliestValidILRPeriod(
+    bnoStartIndex
+  )}`
+);
+
+const arr = earliestValidILRPeriod(bnoStartIndex);
+const earliestValidILRStartIndex = arr[0];
+const earliestValidILREndIndex = arr[1];
+console.log(`earliestValidILRStartIndex is ${earliestValidILRStartIndex} ie ${new Date(earliestValidILRStartIndex)}`)
+console.log(`earliestValidILREndIndex   is ${earliestValidILREndIndex} ie ${new Date(earliestValidILREndIndex)}`)
+
+const remain = projectRemainingILR(projectionIndex, earliestValidILRStartIndex, earliestValidILREndIndex);
+console.log(`remain is ${remain}`);
 
 // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
