@@ -5,15 +5,22 @@
 // const bnoStartValue = "2023-07-01";
 // const bnoStartIndex = new Date(bnoStartValue).getTime();
 
-const absentStartCollectionValues = ["2023-02-01", "2023-07-01"];
-const absentEndCollectionValues = ["2023-06-12", "2023-08-17"];
-const bnoStartValue = "2020-11-18";
-const projectionValue = "2024-02-01";
+// Feb29 leaves from LHS (test case 1)
+const absentStartCollectionValues = ["2023-01-09", "2024-01-01"];
+const absentEndCollectionValues = ["2023-04-12", "2024-03-20"];
+const bnoStartValue = "2023-11-18";
+const projectionValue = "2025-02-09";
 
-// const absentStartCollectionValues = ["2023-07-05"];
-// const absentEndCollectionValues = ["2023-12-31"];
+// // Feb29 enters from RHS (test case 2)
+// const absentStartCollectionValues = ["2023-01-09", "2023-05-01"];
+// const absentEndCollectionValues = ["2023-04-12", "2023-07-25"];
 // const bnoStartValue = "2020-11-18";
-// const projectionValue = "2024-07-05";
+// const projectionValue = "2024-01-27";
+
+// const absentStartCollectionValues = ["2024-09-09"];
+// const absentEndCollectionValues = ["2025-01-12"];
+// const bnoStartValue = "2023-11-18";
+// const projectionValue = "2025-01-27";
 
 const bnoStartIndex = new Date(bnoStartValue).getTime();
 const projectionIndex = new Date(projectionValue).getTime();
@@ -158,14 +165,27 @@ function projectRemainingILR(projectionIndex, earliestValidILRStartIndex, earlie
       remainingCount = Math.min(1 + remainingCount, 180);
     }
 
-    // RM FEB29
+    // adjust for Feb29 currently leaving from LHS (correct dates and +1 correct -> see test case 1)
+    if (isFeb29(yearWindowLeftIndex)) {
+      yearWindowLeftIndex += DAY; // increment left window once here and once below
+      if (yearWindowLeftIndex >= earliestValidILRStartIndex && isAbsent(yearWindowLeftIndex)) {
+        remainingCount = Math.min(1 + remainingCount, 180);
+      }
+    }
+    // adjust for Feb29 about to enter from the RHS (correct dates and -1 correct -> see test case 2)
+    if (isFeb29(yearWindowRightIndex + DAY)) {
+      yearWindowLeftIndex -= DAY; // cancel out window increment below
+      remainingCount -= 1; // represents adding a day of continuous absence starting from the projection date
+    }
 
+    console.log(`left ${new Date(yearWindowLeftIndex)} right ${new Date(yearWindowRightIndex + DAY)}, ${(yearWindowRightIndex - (projectionIndex - DAY)) / DAY}, ${remainingCount}`)
+    
     // increment window
     yearWindowLeftIndex += DAY;
     yearWindowRightIndex += DAY;
     remainingCount -= 1; // represents adding a day of continuous absence starting from the projection date
   }
-
+  
   return (yearWindowRightIndex - (projectionIndex - DAY)) / DAY;
 }
 
