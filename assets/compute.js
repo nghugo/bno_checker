@@ -6,9 +6,16 @@
 // **** **** **** **** **** **** **** **** **** **** **** **** ****
 // test input
 const absentStartCollectionValues = ["2023-08-01", "2023-11-01"];
-const absentEndCollectionValues = ["2023-08-31", "2040-11-30"];
+const absentEndCollectionValues = ["2023-08-31", "2024-11-30"];
 const bnoStartValue = "2023-07-01";
 const bnoStartIndex = new Date(bnoStartValue).getTime();
+
+// const absentStartCollectionValues = ["2023-01-01"];
+// const absentEndCollectionValues = ["2023-06-30"];
+// const bnoStartValue = "2023-01-01";
+// const bnoStartIndex = new Date(bnoStartValue).getTime();
+
+
 // **** **** **** **** **** **** **** **** **** **** **** **** ****
 
 
@@ -74,7 +81,14 @@ const isAbsent = isAbsentFactory(
 );
 
 // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** 
-// TESTING 
+// TESTING using input
+
+// const absentStartCollectionValues = ["2023-08-01", "2023-11-01"];
+// const absentEndCollectionValues = ["2023-08-31", "2024-11-30"];
+// const bnoStartValue = "2023-07-01";
+// const bnoStartIndex = new Date(bnoStartValue).getTime();
+
+// TESTING MAIN PART
 console.log(`expect true: isAbsent(1690848000000) is ${isAbsent(1690848000000)}`); // expect true
 console.log(
   `expect true: isAbsent(1690848000000 + 1*DAY) is ${isAbsent(1690848000000 + 1 * DAY)}`
@@ -91,7 +105,6 @@ console.log(
 
 function indexAdd5Years(inputIndex) {
   // automatically adjust for Feb29
-  const inputDate = new Date(inputIndex);
   var resDate = new Date(inputIndex);
   resDate.setFullYear(resDate.getFullYear() + 5); // add 5 years
   resDate.setDate(resDate.getDate() - 1); // minus 1 day
@@ -101,7 +114,6 @@ function indexAdd5Years(inputIndex) {
 
 function indexMinus1Year(inputIndex) {
   // automatically adjust for Feb29
-  const inputDate = new Date(inputIndex);
   var resDate = new Date(inputIndex);
   resDate.setFullYear(resDate.getFullYear() - 1); // minus 1 year
   resDate.setDate(resDate.getDate() + 1); // add 1 day
@@ -114,13 +126,16 @@ function earliestValidILRPeriod(bnoStartIndex) {
   var candidateILREndIndex = indexAdd5Years(candidateILRStartIndex);
 
   function lastInvalidILRStartPointInPeriod(candidateILRStartIndex, candidateILREndIndex) {
-    var absentCount = 0
-    var yearWindowRightIndex = candidateILREndIndex
-    var yearWindowLeftIndex = indexMinus1Year(yearWindowRightIndex)
+    var absentCount = 0;
+    var yearWindowRightIndex = candidateILREndIndex;
+    var yearWindowLeftIndex = indexMinus1Year(yearWindowRightIndex);
+
+    console.log(`right index ${new Date(yearWindowRightIndex)}`)
+    console.log(`left index  ${new Date(yearWindowLeftIndex)}`)
 
     // phase 1: grow window from right to left
     for (let i = yearWindowRightIndex; i >= yearWindowLeftIndex; i -= DAY) {
-      // console.log(absentCount, i, isAbsent(i))
+      // console.log(absentCount)
       if (isAbsent(i)) {
         absentCount += 1
       }
@@ -130,22 +145,17 @@ function earliestValidILRPeriod(bnoStartIndex) {
     }
 
     // phase 2: shift window from right to left, adjusting for Feb29
+
     while (yearWindowLeftIndex >= candidateILRStartIndex) {
-      yearWindowLeftIndex -= DAY;
-      yearWindowRightIndex -= DAY;
-      if (isAbsent(yearWindowLeftIndex)) {
-        absentCount += 1
-      }
-      if (isAbsent(yearWindowRightIndex + DAY)) {
-        absentCount -= 1
-      }
+
+      // handle feb29 at current pos first
       if (isFeb29(yearWindowLeftIndex)) {
         yearWindowLeftIndex -= DAY
         if (isAbsent(yearWindowLeftIndex)) {
           absentCount += 1
         }
       }
-      if (isFeb29(yearWindowRightIndex)) {
+      if (isFeb29(yearWindowRightIndex + DAY)) {
         yearWindowRightIndex -= DAY
         if (isAbsent(yearWindowRightIndex + DAY)) {
           absentCount -= 1
@@ -154,6 +164,20 @@ function earliestValidILRPeriod(bnoStartIndex) {
       if (absentCount > 180) {
         return yearWindowLeftIndex + DAY
       }
+
+      // console.log(absentCount)
+      yearWindowLeftIndex -= DAY;
+      yearWindowRightIndex -= DAY;
+     
+      if (isAbsent(yearWindowLeftIndex)) {
+        absentCount += 1
+      }
+      if (isAbsent(yearWindowRightIndex + DAY)) {
+        absentCount -= 1
+      }
+      
+      
+
     }
 
     // phase 3: if absentCount did not exceed 180, return null
@@ -161,7 +185,7 @@ function earliestValidILRPeriod(bnoStartIndex) {
   }
 
   while (lastInvalidILRStartPointInPeriod(candidateILRStartIndex, candidateILREndIndex) !== null) {
-    candidateILRStartIndex = lastInvalidILRStartPointInPeriod(candidateILRStartIndex, candidateILREndIndex) + DAY;
+    candidateILRStartIndex = lastInvalidILRStartPointInPeriod(candidateILRStartIndex, candidateILREndIndex);
     candidateILREndIndex = indexAdd5Years(candidateILRStartIndex);
   }
 
@@ -176,9 +200,9 @@ function earliestValidILRPeriod(bnoStartIndex) {
 // TESTING 
 console.log(`bnoStartIndex is ${bnoStartIndex}`)
 console.log(`earliestValidILRPeriod(bnoStartIndex) is ${earliestValidILRPeriod(bnoStartIndex)}`)
-for (var index of earliestValidILRPeriod(bnoStartIndex)) {
-  console.log(`date: ${new Date(index)}`)
-}
+// for (var index of earliestValidILRPeriod(bnoStartIndex)) {
+//   console.log(`date: ${new Date(index)}`)
+// }
 
 // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** 
 
