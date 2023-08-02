@@ -5,13 +5,13 @@
 // const bnoStartValue = "2023-07-01";
 // const bnoStartIndex = new Date(bnoStartValue).getTime();
 
-const absentStartCollectionValues = ["2024-02-27"];
-const absentEndCollectionValues = ["2024-08-27"];
-const bnoStartValue = "2024-01-01";
+const absentStartCollectionValues = ["2021-10-10", "2021-11-05"];
+const absentEndCollectionValues = ["2021-10-30", "2040-02-05"];
+const bnoStartValue = "2020-11-18";
 const bnoStartIndex = new Date(bnoStartValue).getTime();
 // **** **** **** **** **** **** **** **** **** **** **** **** ****
 
-// all indices are taken as the milisecond count since the epoch
+// all indices are taken as the millisecond count since the epoch
 
 import {
   DAY,
