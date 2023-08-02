@@ -8,12 +8,12 @@
 // const absentStartCollectionValues = ["2023-01-10", "2024-02-20"];
 // const absentEndCollectionValues = ["2023-03-30", "2024-03-07"];
 // const bnoStartValue = "2020-11-18";
-// const projectionValue = "2024-02-29";
+// const projectionValue = "2024-02-25";
 
-// const absentStartCollectionValues = ["2024-01-10", "2025-02-20"];
-// const absentEndCollectionValues = ["2024-03-30", "2025-03-07"];
-// const bnoStartValue = "2021-11-18";
-// const projectionValue = "2023-03-01";
+const absentStartCollectionValues = ["2023-07-05"];
+const absentEndCollectionValues = ["2023-12-31"];
+const bnoStartValue = "2020-11-18";
+const projectionValue = "2024-07-05";
 
 const bnoStartIndex = new Date(bnoStartValue).getTime();
 const projectionIndex = new Date(projectionValue).getTime();
@@ -158,21 +158,21 @@ function projectRemainingILR(projectionIndex, earliestValidILRStartIndex, earlie
       remainingCount = Math.min(1 + remainingCount, 180);
     }
 
-    // // adjust for Feb29 about to enter from the RHS, return immediately if remainingCount reaches 0
-    // if (isFeb29(yearWindowRightIndex + DAY)) {
-    //   yearWindowRightIndex += DAY;
-    //   remainingCount -= 1;
-    //   if (remainingCount === 0) {
-    //     return (yearWindowRightIndex - (projectionIndex - DAY)) / DAY;
-    //   }
-    // }
-    // // adjust for Feb29 currently leaving from LHS
-    // if (isFeb29(yearWindowLeftIndex)) {
-    //   yearWindowLeftIndex += DAY;
-    //   if (yearWindowLeftIndex >= earliestValidILRStartIndex && isAbsent(yearWindowLeftIndex)) {
-    //     remainingCount = Math.min(1 + remainingCount, 180);
-    //   }
-    // }
+    // adjust for Feb29 about to enter from the RHS, return immediately if remainingCount reaches 0
+    if (isFeb29(yearWindowRightIndex + DAY)) {
+      yearWindowRightIndex += DAY;
+      remainingCount -= 1;
+      if (remainingCount === 0) {
+        return (yearWindowRightIndex - (projectionIndex - DAY)) / DAY;
+      }
+    }
+    // adjust for Feb29 currently leaving from LHS
+    if (isFeb29(yearWindowLeftIndex)) {
+      yearWindowLeftIndex += DAY;
+      if (yearWindowLeftIndex >= earliestValidILRStartIndex && isAbsent(yearWindowLeftIndex)) {
+        remainingCount = Math.min(1 + remainingCount, 180);
+      }
+    }
 
     // increment window
     yearWindowLeftIndex += DAY;
