@@ -6,7 +6,7 @@
 // const bnoStartIndex = new Date(bnoStartValue).getTime();
 
 const absentStartCollectionValues = ["2024-02-27"];
-const absentEndCollectionValues = ["2024-08-25"];
+const absentEndCollectionValues = ["2024-08-27"];
 const bnoStartValue = "2024-01-01";
 const bnoStartIndex = new Date(bnoStartValue).getTime();
 // **** **** **** **** **** **** **** **** **** **** **** **** ****
@@ -49,7 +49,12 @@ function earliestValidILRPeriod(bnoStartIndex) {
 
     // phase 2: shift window from right to left, adjusting for Feb29
     while (yearWindowLeftIndex >= candidateILRStartIndex) {
-      // handle feb29 at current pos
+      
+      if (absentCount > 180) {
+        return yearWindowLeftIndex + DAY;
+      }
+
+      // adjust for feb29
       if (isFeb29(yearWindowLeftIndex)) {
         yearWindowLeftIndex -= DAY;
         if (isAbsent(yearWindowLeftIndex)) {
@@ -62,11 +67,8 @@ function earliestValidILRPeriod(bnoStartIndex) {
           absentCount -= 1;
         }
       }
-      if (absentCount > 180) {
-        return yearWindowLeftIndex + DAY;
-      }
 
-      // then shift window by 1 unit
+      // shift window by 1 unit
       yearWindowLeftIndex -= DAY;
       yearWindowRightIndex -= DAY;
 
