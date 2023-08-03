@@ -9,7 +9,7 @@
 // but without breaking the 180 day limit and thus invalidating the ILR qualification period
 // this means exactly using up the 180 day limit
 
-// // Feb29 leaves from LHS (test case 1)  (75+1) + 104 = 180
+// // Feb29 leaves from LHS (test case 1) for ilr  (75+1) + 104 = 180
 // // output remaining = 104
 // // days between 2024 may 21 to 2024 aug 04 INCLUSIVE = (75+1) = 76 days
 // const absentStartCollectionValues = ["2024-01-09", "2024-05-21"];
@@ -17,14 +17,14 @@
 // const bnoStartValue = "2023-11-18";
 // const projectionValue = "2025-01-27";
 
-// // Feb29 leaves from LHS (test case 2)
+// // Feb29 leaves from LHS (test case 2) for ilr
 // // 180 exactly, since the quota of absent days last year are recovered when they exit the LHS of window
 // const absentStartCollectionValues = ["2024-01-09"];
 // const absentEndCollectionValues = ["2024-03-12"];
 // const bnoStartValue = "2023-11-18";
 // const projectionValue = "2025-01-27";
 
-// // Feb29 enters from RHS (test case 3)  (85+1) + 94 = 180
+// // Feb29 enters from RHS (test case 3) for ilr  (85+1) + 94 = 180
 // days between 2023 may 1 and 2023 july 25 INCLUSIVE = 85+1 = 86 days
 // output remaining = 94
 // const absentStartCollectionValues = ["2023-01-09", "2023-05-01"];
@@ -32,7 +32,7 @@
 // const bnoStartValue = "2020-11-18";
 // const projectionValue = "2024-01-27";
 
-// // Feb29 enters from RHS (test case 4)  (80+1) + 99 = 180
+// // Feb29 enters from RHS (test case 4) for ilr  (80+1) + 99 = 180
 // days between 2023 june 01 and 2023 aug 20 INCLUSIVE = (80+1) = 81 days
 // output remaining = 99
 // const absentStartCollectionValues = ["2023-01-25", "2023-06-01"];
@@ -41,7 +41,7 @@
 // const projectionValue = "2024-02-09";
 
 
-// // no Feb29, but 2 holidays (test case 5)
+// // no Feb29, but 2 holidays (test case 5) for ilr
 // // 81 + 47 + 52 = 180
 // // days between 2021-06-01 and 2021-08-20 INCLUSIVE = 80+1
 // // days between 2022-01-25 and 2022-03-12 = 46+1
@@ -51,15 +51,24 @@
 // const bnoStartValue = "2021-01-18";
 // const projectionValue = "2022-04-05";
 
-// 78 + 46 + 56 = 180 (test case 6)
+// 78 + 46 + 56 = 180 (test case 6) for ilr
 // days between 2023-11-13 and 2023-12-28 INCLUSIVE = 45+1
 // days between 2024-01-23 and 2024-04-09 = 77+1
 // output remaining = 56
-const absentStartCollectionValues = ["2023-11-13", "2024-01-23"];
-const absentEndCollectionValues = ["2023-12-28", "2024-04-09"];
-const bnoStartValue = "2020-11-18";
+// const absentStartCollectionValues = ["2023-11-13", "2024-01-23"];
+// const absentEndCollectionValues = ["2023-12-28", "2024-04-09"];
+// const bnoStartValue = "2020-11-18";
+// const projectionValue = "2024-05-27";
+
+// test case 7 for citizenship
+const absentStartCollectionValues = ["2023-01-23"];
+const absentEndCollectionValues = ["2024-04-17"];
+const bnoStartValue = "2020-01-18";
 const projectionValue = "2024-05-27";
 
+
+const constrainedStartDateMockValue = "2020-01-18";
+const constrainedStartIndex = new Date(constrainedStartDateMockValue).getTime();
 
 const bnoStartIndex = new Date(bnoStartValue).getTime();
 const projectionIndex = new Date(projectionValue).getTime();
@@ -73,6 +82,7 @@ import {
   isFeb29,
   isAbsentFactory,
   indexAdd5Years,
+  indexMinus5Years,
   indexMinus1Year,
 } from "./computeHelper.js";
 
@@ -228,7 +238,48 @@ function projectRemainingILR(projectionIndex, earliestValidILRStartIndex, earlie
   return (yearWindowRightIndex - (projectionIndex - DAY)) / DAY;
 }
 
+function earliestCitizenshipPeriod(constrainedStartIndex) {
+  var candidateL = constrainedStartIndex;
+  var candidateR = indexAdd5Years(constrainedStartIndex);
+  
+  var absentCount = 0;
+  for (let i = candidateL; i <= candidateR; i += DAY) {
+    if (isAbsent(i)) {
+      absentCount++
+    }
+  }
+  console.log("*********************")
+  console.log(new Date(candidateL), new Date(candidateR), absentCount)
+  while (absentCount > 450) {
+    if (isFeb29(candidateR + DAY)) {
+      if (isAbsent(candidateR + DAY)) {
+        absentCount++
+      }
+      candidateR += DAY
+    }
+    if (isFeb29(candidateL)) {
+      if (isAbsent(candidateL)) {
+        absentCount--
+      }
+      candidateL += DAY
+    }
+    if (isAbsent(candidateL)) {
+      absentCount--
+    }
+    if (isAbsent(candidateR + DAY)) {
+      absentCount++
+    }
+    candidateL += DAY
+    candidateR += DAY
+    console.log(new Date(candidateL), new Date(candidateR), absentCount)
+  }
+  console.log("*********************")
 
+  const earliestCitizenshipStartIndex = candidateL;
+  const earliestCitizenshipEndIndex = candidateR;
+
+  return [earliestCitizenshipStartIndex, earliestCitizenshipEndIndex];
+}
 
 // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
 // TESTING OUTPUT
@@ -247,5 +298,11 @@ console.log(`earliestValidILREndIndex   is ${earliestValidILREndIndex} ie ${new 
 
 const remain = projectRemainingILR(projectionIndex, earliestValidILRStartIndex, earliestValidILREndIndex);
 console.log(`remain is ${remain}`);
+
+const arr2 = earliestCitizenshipPeriod(constrainedStartIndex);
+const earliestValidCitizenshipStartIndex = arr2[0];
+const earliestValidCitizenshipEndIndex = arr2[1];
+console.log(`earliestValidCitizenshipStartIndex is ${earliestValidCitizenshipStartIndex} ie ${new Date(earliestValidCitizenshipStartIndex)}`)
+console.log(`earliestValidCitizenshipEndIndex   is ${earliestValidCitizenshipEndIndex} ie ${new Date(earliestValidCitizenshipEndIndex)}`)
 
 // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
