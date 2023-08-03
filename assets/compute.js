@@ -76,25 +76,31 @@ import {
 // const absentStartCollectionValues = ["2028-02-15"];
 // const absentEndCollectionValues = ["2028-05-14"];
 // const mockDateValue = "2024-02-01" // use this to mock the constrainedStartIndex
-// const projectionValue = "2029-01-01"; // ignore
+// // const projectionValue = "2028-05-14"; // 361 1 expected
+// // const projectionValue = "2028-02-15"; // 450 90 expected
+// const projectionValue = "2028-02-16"; // 449 89 expected
+// // const projectionValue = "2028-02-14"; // 450 90 expected
 
 // // // test case 8 for citizenship (cts 450 day test -> split 360 and 90) (pass)
 // // 449 days after 2028-02-15 = 9 May 2029 (ie total 450 days)
-// expect earliest start on 9 feb 2025 (89 days before 2029-05-09), and yes indeed
+// // expect earliest start on 9 feb 2025 (4 years + 89 days before 2029-05-09), and yes indeed
 // const bnoStartValue = "2024-03-19"; // ignore this
 // const absentStartCollectionValues = ["2028-02-15"]; 
 // const absentEndCollectionValues = ["2029-05-09"];
 // const mockDateValue = "2024-02-01" // use this to mock the constrainedStartIndex
-// const projectionValue = "2029-01-01";  // ignore this
+// // const projectionValue = "2029-02-09"; // 90 90 expected
+// const projectionValue = "2029-05-09"; // 1 1 expected
 
-// // test case 8 for citizenship (cts 450 day test -> split 360 and 90) (pass)
+// // test case 9 for citizenship (cts 450 day test -> split 360 and 90) (pass)
 // 450 days after 2028-02-15 = 10 May 2029 (ie total 451 days)
 // expect to start 1 day after 2028-02-15 ie 2028-02-16 (yes indeed)
 const bnoStartValue = "2024-03-19"; // ignore this
 const absentStartCollectionValues = ["2028-02-15"]; 
 const absentEndCollectionValues = ["2029-05-10"];
 const mockDateValue = "2024-02-01" // use this to mock the constrainedStartIndex
-const projectionValue = "2029-01-01"; // ignore this
+const projectionValue = "2029-05-09"; // 2, null expected
+// const projectionValue = "2029-05-10"; // 1, null expected
+//const projectionValue = "2029-05-11"; // 0, null expected
 
 
 const bnoStartIndex = new Date(bnoStartValue).getTime();
