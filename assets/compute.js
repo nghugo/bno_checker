@@ -19,7 +19,7 @@ import {
 // but without breaking the 180 day limit and thus invalidating the ILR qualification period
 // this means exactly using up the 180 day limit
 
-// // Feb29 leaves from LHS (test case 1) for ilr  (75+1) + 104 = 180
+// // Feb29 leaves from LHS (test case 1) for ilr  (75+1) + 104 = 180 (pass)
 // // output remaining = 104
 // // days between 2024 may 21 to 2024 aug 04 INCLUSIVE = (75+1) = 76 days
 // const absentStartCollectionValues = ["2024-01-09", "2024-05-21"];
@@ -27,14 +27,14 @@ import {
 // const bnoStartValue = "2023-11-18";
 // const projectionValue = "2025-01-27";
 
-// // Feb29 leaves from LHS (test case 2) for ilr
+// // Feb29 leaves from LHS (test case 2) for ilr (pass)
 // // 180 exactly, since the quota of absent days last year are recovered when they exit the LHS of window
 // const absentStartCollectionValues = ["2024-01-09"];
 // const absentEndCollectionValues = ["2024-03-12"];
 // const bnoStartValue = "2023-11-18";
 // const projectionValue = "2025-01-27";
 
-// // Feb29 enters from RHS (test case 3) for ilr  (85+1) + 94 = 180
+// // Feb29 enters from RHS (test case 3) for ilr  (85+1) + 94 = 180 (pass)
 // days between 2023 may 1 and 2023 july 25 INCLUSIVE = 85+1 = 86 days
 // output remaining = 94
 // const absentStartCollectionValues = ["2023-01-09", "2023-05-01"];
@@ -42,7 +42,7 @@ import {
 // const bnoStartValue = "2020-11-18";
 // const projectionValue = "2024-01-27";
 
-// // Feb29 enters from RHS (test case 4) for ilr  (80+1) + 99 = 180
+// // Feb29 enters from RHS (test case 4) for ilr  (80+1) + 99 = 180 (pass)
 // days between 2023 june 01 and 2023 aug 20 INCLUSIVE = (80+1) = 81 days
 // output remaining = 99
 // const absentStartCollectionValues = ["2023-01-25", "2023-06-01"];
@@ -50,7 +50,7 @@ import {
 // const bnoStartValue = "2023-01-18";
 // const projectionValue = "2024-02-09";
 
-// // no Feb29, but 2 holidays (test case 5) for ilr
+// // no Feb29, but 2 holidays (test case 5) for ilr (pass)
 // // 81 + 47 + 52 = 180
 // // days between 2021-06-01 and 2021-08-20 INCLUSIVE = 80+1
 // // days between 2022-01-25 and 2022-03-12 = 46+1
@@ -60,7 +60,7 @@ import {
 // const bnoStartValue = "2021-01-18";
 // const projectionValue = "2022-04-05";
 
-// 78 + 46 + 56 = 180 (test case 6) for ilr
+// 78 + 46 + 56 = 180 (test case 6) for ilr (pass)
 // days between 2023-11-13 and 2023-12-28 INCLUSIVE = 45+1
 // days between 2024-01-23 and 2024-04-09 = 77+1
 // output remaining = 56
@@ -69,23 +69,33 @@ import {
 // const bnoStartValue = "2020-11-18";
 // const projectionValue = "2024-05-27";
 
-// // test case 7 for citizenship
-const absentStartCollectionValues = ["2029-01-21"]; 90
-const absentEndCollectionValues = ["2029-04-20"];
-const bnoStartValue = "2023-03-19";
-const projectionValue = "2028-11-25";
 
+// // // test case 7 for citizenship (90 days test) (pass)
+// // 89 days after 15 February 2028 = 14 May 2028 (ie total 90 days)
+// const bnoStartValue = "2024-03-19"; // ignore this
+// const absentStartCollectionValues = ["2028-02-15"];
+// const absentEndCollectionValues = ["2028-05-14"];
+// const mockDateValue = "2024-02-01" // use this to mock the constrainedStartIndex
+// const projectionValue = "2029-01-01"; // ignore
 
-// // test case 8 for citizenship
-// const absentStartCollectionValues = ["2027-08-24", "2029-01-21"];  // 180, 90
-// const absentEndCollectionValues = ["2028-02-20", "2029-04-20"];
-// const bnoStartValue = "2023-04-19";
-// const projectionValue = "2028-11-25";
+// // // test case 8 for citizenship (cts 450 day test -> split 360 and 90) (pass)
+// // 449 days after 2028-02-15 = 9 May 2029 (ie total 450 days)
+// expect earliest start on 9 feb 2025 (89 days before 2029-05-09), and yes indeed
+// const bnoStartValue = "2024-03-19"; // ignore this
+// const absentStartCollectionValues = ["2028-02-15"]; 
+// const absentEndCollectionValues = ["2029-05-09"];
+// const mockDateValue = "2024-02-01" // use this to mock the constrainedStartIndex
+// const projectionValue = "2029-01-01";  // ignore this
 
+// // test case 8 for citizenship (cts 450 day test -> split 360 and 90) (pass)
+// 450 days after 2028-02-15 = 10 May 2029 (ie total 451 days)
+// expect to start 1 day after 2028-02-15 ie 2028-02-16 (yes indeed)
+const bnoStartValue = "2024-03-19"; // ignore this
+const absentStartCollectionValues = ["2028-02-15"]; 
+const absentEndCollectionValues = ["2029-05-10"];
+const mockDateValue = "2024-02-01" // use this to mock the constrainedStartIndex
+const projectionValue = "2029-01-01"; // ignore this
 
-
-// const constrainedStartDateMockValue = "2020-01-18";
-// const citizenshipConstrainedEarliestStartIndex = new Date(constrainedStartDateMockValue).getTime();
 
 const bnoStartIndex = new Date(bnoStartValue).getTime();
 const projectionIndex = new Date(projectionValue).getTime();
@@ -421,11 +431,15 @@ export function projectRemainingCitizenship(
   // hence, init remainingCountFULL = 450, and init remainingCountRHS = null (or 90)
 
   var remainingCountFULL = 450;
+  console.log(`new Date(earliestValidCitizenshipStartIndex) is ${new Date(earliestValidCitizenshipStartIndex)}`)
+  console.log(`new Date(projectionIndex) is ${new Date(projectionIndex)}`)
+  
   for (
     let i = earliestValidCitizenshipStartIndex;
     i < projectionIndex; // do not count projection index
     i += DAY
   ) {
+    // console.log(isAbsent(i), new Date(i))
     if (isAbsent(i)) {
       remainingCountFULL--;
     }
@@ -480,16 +494,19 @@ const ilrAbsencesRemaining = projectRemainingILR(
 );
 console.log(`ilr absences remaining is ${ilrAbsencesRemaining}`);
 
+// mock input **** **** **** **** **** **** **** 
+// const ilrObtainedCheckboxChecked = false;
+// const ilrObtainedDateFieldIndex = null;
+// const citizenshipConstrainedEarliestStartIndex =
+//   getCitizenshipConstrainedEarliestStartIndex(
+//     ilrObtainedCheckboxChecked,
+//     ilrObtainedDateFieldIndex,
+//     earliestValidILREndIndex
+//   );
 
-const ilrObtainedCheckboxChecked = false;
-const ilrObtainedDateFieldIndex = null;
 
-const citizenshipConstrainedEarliestStartIndex =
-  getCitizenshipConstrainedEarliestStartIndex(
-    ilrObtainedCheckboxChecked,
-    ilrObtainedDateFieldIndex,
-    earliestValidILREndIndex
-  );
+const citizenshipConstrainedEarliestStartIndex = new Date(mockDateValue).getTime()
+//  **** **** **** **** **** **** **** **** **** 
 
 const arr2 = getEarliestCitizenshipPeriod(
   citizenshipConstrainedEarliestStartIndex,
@@ -517,7 +534,7 @@ const arr3 = projectRemainingCitizenship(
   isAbsent
 );
 console.log(
-  `citizenship absences remaining on projection date is ${arr3[0]} ${arr3[1]}`
+  `citizenship absences remaining on projection date is ${arr3}`
 );
 
 // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
