@@ -38,19 +38,19 @@ export function indexAdd5YearsMinus1Day(inputIndex) {
   return resIndex;
 }
 
-export function indexMinus5YearsAdd1Day(inputIndex) {
+export function indexMinus1YearAdd1Day(inputIndex) {
   // automatically adjust for Feb29
   var resDate = new Date(inputIndex);
-  resDate.setFullYear(resDate.getFullYear() - 5); // minus 5 years
+  resDate.setFullYear(resDate.getFullYear() - 1); // minus 1 year
   resDate.setDate(resDate.getDate() + 1); // add 1 day
   var resIndex = resDate.getTime();
   return resIndex;
 }
 
-export function indexMinus1YearAdd1Day(inputIndex) {
+export function indexMinus4YearsAdd1Day(inputIndex) {
   // automatically adjust for Feb29
   var resDate = new Date(inputIndex);
-  resDate.setFullYear(resDate.getFullYear() - 1); // minus 1 year
+  resDate.setFullYear(resDate.getFullYear() - 4); // minus 4 year
   resDate.setDate(resDate.getDate() + 1); // add 1 day
   var resIndex = resDate.getTime();
   return resIndex;

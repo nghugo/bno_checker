@@ -1,7 +1,7 @@
 import {
-  earliestValidILRPeriod,
+  getEarliestValidILRPeriod,
   projectRemainingILR,
-  earliestCitizenshipPeriod,
+  getEarliestCitizenshipPeriod,
   projectRemainingCitizenship,
 } from "./compute.js";
 
@@ -46,7 +46,7 @@ export function updateDisplaySection(
     const isAbsent = isAbsentFactory(absentStartCollectionValues, absentEndCollectionValues);
 
     const [earliestValidILRStartIndex, earliestValidILREndIndex] =
-      earliestValidILRPeriod(bnoStartValue, isAbsent);
+      getEarliestValidILRPeriod(bnoStartValue, isAbsent);
       addDivNode("Earliest Valid ILR Qualifying Period", `The earliest 5-year period during which you can qualify for Indefinite Leave to Remain is from ${new Date(earliestValidILRStartIndex).toDateString()} to ${new Date(earliestValidILREndIndex).toDateString()}`)
   }
 

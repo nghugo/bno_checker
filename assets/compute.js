@@ -3,8 +3,8 @@ import {
   isFeb29,
   isAbsentFactory,
   indexAdd5YearsMinus1Day,
-  indexMinus5YearsAdd1Day,
   indexMinus1YearAdd1Day,
+  indexMinus4YearsAdd1Day,
   indexAdd4Years,
 } from "./computeHelper.js";
 
@@ -70,13 +70,22 @@ import {
 // const projectionValue = "2024-05-27";
 
 // // test case 7 for citizenship
-const absentStartCollectionValues = ["2028-02-20"];
-const absentEndCollectionValues = ["2029-03-18"];
-const bnoStartValue = "2023-01-18";
+const absentStartCollectionValues = ["2029-01-21"]; 90
+const absentEndCollectionValues = ["2029-04-20"];
+const bnoStartValue = "2023-03-19";
 const projectionValue = "2028-11-25";
 
+
+// // test case 8 for citizenship
+// const absentStartCollectionValues = ["2027-08-24", "2029-01-21"];  // 180, 90
+// const absentEndCollectionValues = ["2028-02-20", "2029-04-20"];
+// const bnoStartValue = "2023-04-19";
+// const projectionValue = "2028-11-25";
+
+
+
 // const constrainedStartDateMockValue = "2020-01-18";
-// const constrainedStartIndex = new Date(constrainedStartDateMockValue).getTime();
+// const citizenshipConstrainedEarliestStartIndex = new Date(constrainedStartDateMockValue).getTime();
 
 const bnoStartIndex = new Date(bnoStartValue).getTime();
 const projectionIndex = new Date(projectionValue).getTime();
@@ -95,7 +104,7 @@ const isAbsent = isAbsentFactory(
 
 // all indices are taken as the millisecond count since the epoch
 
-export function earliestValidILRPeriod(bnoStartIndex, isAbsent) {
+export function getEarliestValidILRPeriod(bnoStartIndex, isAbsent) {
   // given a bno start date represented in millisecond index since the epoch,
   // and also the days of absences using the closure isAbsent
   // returns the earliest valid ILR qualification period
@@ -258,10 +267,29 @@ export function projectRemainingILR(
   return [(yearWindowRightIndex - (projectionIndex - DAY)) / DAY, "in bound"];
 }
 
-export function earliestCitizenshipPeriod(constrainedStartIndex, isAbsent) {
-  var candidateL = constrainedStartIndex; // candidateL is an inclusive left bound for FULL
-  var candidateM = indexAdd4Years(constrainedStartIndex); // candidateM is an inclusive left bound for RHS
-  var candidateR = indexAdd5YearsMinus1Day(constrainedStartIndex); // candidateR is an inclusive right bound for both FULL and RHS
+export function getCitizenshipConstrainedEarliestStartIndex(
+  ilrObtainedCheckboxChecked,
+  ilrObtainedDateFieldIndex,
+  earliestValidILREndIndex
+) {
+  // citizenship process is 5 years and must end at least 1 year after obtaining ILR
+  // ILR qualification period is 5 years
+  // thus, earliest start date for citizenship qualification period = backtrack 4 years from the point of obtaining ILR
+  if (ilrObtainedCheckboxChecked) {
+    return indexMinus4YearsAdd1Day(ilrObtainedDateFieldIndex);
+  }
+  return indexMinus4YearsAdd1Day(earliestValidILREndIndex);
+}
+
+export function getEarliestCitizenshipPeriod(
+  citizenshipConstrainedEarliestStartIndex,
+  isAbsent
+) {
+  var candidateL = citizenshipConstrainedEarliestStartIndex; // candidateL is an inclusive left bound for FULL
+  var candidateM = indexAdd4Years(citizenshipConstrainedEarliestStartIndex); // candidateM is an inclusive left bound for RHS
+  var candidateR = indexAdd5YearsMinus1Day(
+    citizenshipConstrainedEarliestStartIndex
+  ); // candidateR is an inclusive right bound for both FULL and RHS
 
   // ie,
   // the range {candidateL , ..., candidateR} inclusive belongs to FULL
@@ -391,7 +419,7 @@ export function projectRemainingCitizenship(
   // -> A. only in FULL
   // -> B. in both FULL and RHS
   // hence, init remainingCountFULL = 450, and init remainingCountRHS = null (or 90)
-  
+
   var remainingCountFULL = 450;
   for (
     let i = earliestValidCitizenshipStartIndex;
@@ -420,18 +448,17 @@ export function projectRemainingCitizenship(
   return [remainingCountFULL, remainingCountRHS, "in FULL bound"]; // case 3A
 }
 
-
 // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
 // TESTING OUTPUT
 console.log(`bnoStartIndex is ${bnoStartIndex}`);
 console.log(
-  `earliestValidILRPeriod(bnoStartIndex) is ${earliestValidILRPeriod(
+  `getEarliestValidILRPeriod(bnoStartIndex) is ${getEarliestValidILRPeriod(
     bnoStartIndex,
     isAbsent
   )}`
 );
 
-const arr = earliestValidILRPeriod(bnoStartIndex, isAbsent);
+const arr = getEarliestValidILRPeriod(bnoStartIndex, isAbsent);
 const earliestValidILRStartIndex = arr[0];
 const earliestValidILREndIndex = arr[1];
 console.log(
@@ -445,19 +472,29 @@ console.log(
   )}`
 );
 
-const remain = projectRemainingILR(
+const ilrAbsencesRemaining = projectRemainingILR(
   projectionIndex,
   earliestValidILRStartIndex,
   earliestValidILREndIndex,
   isAbsent
 );
-console.log(`remain is ${remain}`);
+console.log(`ilr absences remaining is ${ilrAbsencesRemaining}`);
 
-// const constrainedStartDateMockValue = "2020-01-18";
-// const constrainedStartIndex = new Date(constrainedStartDateMockValue).getTime();
-const constrainedStartIndex = new Date(earliestValidILRStartIndex).getTime();
 
-const arr2 = earliestCitizenshipPeriod(constrainedStartIndex, isAbsent);
+const ilrObtainedCheckboxChecked = false;
+const ilrObtainedDateFieldIndex = null;
+
+const citizenshipConstrainedEarliestStartIndex =
+  getCitizenshipConstrainedEarliestStartIndex(
+    ilrObtainedCheckboxChecked,
+    ilrObtainedDateFieldIndex,
+    earliestValidILREndIndex
+  );
+
+const arr2 = getEarliestCitizenshipPeriod(
+  citizenshipConstrainedEarliestStartIndex,
+  isAbsent
+);
 const earliestValidCitizenshipStartIndex = arr2[0];
 const earliestValidCitizenshipMidIndex = arr2[1];
 const earliestValidCitizenshipEndIndex = arr2[2];
