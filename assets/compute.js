@@ -19,36 +19,6 @@ import {
 // but without breaking the 180 day limit and thus invalidating the ILR qualification period
 // this means exactly using up the 180 day limit
 
-// // Feb29 leaves from LHS (test case 1) for ilr  (75+1) + 104 = 180 (pass)
-// // output remaining = 104
-// // days between 2024 may 21 to 2024 aug 04 INCLUSIVE = (75+1) = 76 days
-// const absentStartCollectionValues = ["2024-01-09", "2024-05-21"];
-// const absentEndCollectionValues = ["2024-03-12", "2024-08-04"];
-// const bnoStartValue = "2023-11-18";
-// const projectionValue = "2025-01-27";
-
-// // Feb29 leaves from LHS (test case 2) for ilr (pass)
-// // 180 exactly, since the quota of absent days last year are recovered when they exit the LHS of window
-// const absentStartCollectionValues = ["2024-01-09"];
-// const absentEndCollectionValues = ["2024-03-12"];
-// const bnoStartValue = "2023-11-18";
-// const projectionValue = "2025-01-27";
-
-// // Feb29 enters from RHS (test case 3) for ilr  (85+1) + 94 = 180 (pass)
-// days between 2023 may 1 and 2023 july 25 INCLUSIVE = 85+1 = 86 days
-// output remaining = 94
-// const absentStartCollectionValues = ["2023-01-09", "2023-05-01"];
-// const absentEndCollectionValues = ["2023-04-12", "2023-07-25"];
-// const bnoStartValue = "2020-11-18";
-// const projectionValue = "2024-01-27";
-
-// // Feb29 enters from RHS (test case 4) for ilr  (80+1) + 99 = 180 (pass)
-// days between 2023 june 01 and 2023 aug 20 INCLUSIVE = (80+1) = 81 days
-// output remaining = 99
-// const absentStartCollectionValues = ["2023-01-25", "2023-06-01"];
-// const absentEndCollectionValues = ["2023-03-12", "2023-08-20"];
-// const bnoStartValue = "2023-01-18";
-// const projectionValue = "2024-02-09";
 
 // // no Feb29, but 2 holidays (test case 5) for ilr (pass)
 // // 81 + 47 + 52 = 180
@@ -75,7 +45,7 @@ import {
 // const bnoStartValue = "2024-03-19"; // ignore this
 // const absentStartCollectionValues = ["2028-02-15"];
 // const absentEndCollectionValues = ["2028-05-14"];
-// const mockDateValue = "2024-02-01" // use this to mock the constrainedStartIndex
+const mockDateValue = "2024-02-01" // use this to mock the constrainedStartIndex
 // // const projectionValue = "2028-05-14"; // 361 1 expected
 // // const projectionValue = "2028-02-15"; // 450 90 expected
 // const projectionValue = "2028-02-16"; // 449 89 expected
@@ -91,16 +61,16 @@ import {
 // // const projectionValue = "2029-02-09"; // 90 90 expected
 // const projectionValue = "2029-05-09"; // 1 1 expected
 
-// // test case 9 for citizenship (cts 450 day test -> split 360 and 90) (pass)
-// 450 days after 2028-02-15 = 10 May 2029 (ie total 451 days)
-// expect to start 1 day after 2028-02-15 ie 2028-02-16 (yes indeed)
-const bnoStartValue = "2024-03-19"; // ignore this
-const absentStartCollectionValues = ["2028-02-15"]; 
-const absentEndCollectionValues = ["2029-05-10"];
-const mockDateValue = "2024-02-01" // use this to mock the constrainedStartIndex
-const projectionValue = "2029-05-09"; // 2, null expected
-// const projectionValue = "2029-05-10"; // 1, null expected
-//const projectionValue = "2029-05-11"; // 0, null expected
+// // // test case 9 for citizenship (cts 450 day test -> split 360 and 90) (pass)
+// // 450 days after 2028-02-15 = 10 May 2029 (ie total 451 days)
+// // expect to start 1 day after 2028-02-15 ie 2028-02-16 (yes indeed)
+// const bnoStartValue = "2024-03-19"; // ignore this
+// const absentStartCollectionValues = ["2028-02-15"]; 
+// const absentEndCollectionValues = ["2029-05-10"];
+// const mockDateValue = "2024-02-01" // use this to mock the constrainedStartIndex
+// const projectionValue = "2029-05-09"; // 2, null expected
+// // const projectionValue = "2029-05-10"; // 1, null expected
+// //const projectionValue = "2029-05-11"; // 0, null expected
 
 
 const bnoStartIndex = new Date(bnoStartValue).getTime();
