@@ -55,3 +55,12 @@ export function indexMinus1Year(inputIndex) {
   var resIndex = resDate.getTime();
   return resIndex;
 }
+
+export function indexAdd6Years(inputIndex) {
+  // automatically adjust for Feb29
+  var resDate = new Date(inputIndex);
+  resDate.setFullYear(resDate.getFullYear() + 6); // add 6 years
+  resDate.setDate(resDate.getDate() - 1); // minus 1 day
+  var resIndex = resDate.getTime();
+  return resIndex;
+}

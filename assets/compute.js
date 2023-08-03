@@ -1,3 +1,13 @@
+import {
+  DAY,
+  isFeb29,
+  isAbsentFactory,
+  indexAdd5Years,
+  indexMinus5Years,
+  indexMinus1Year,
+  indexAdd6Years,
+} from "./computeHelper.js";
+
 // **** **** **** **** **** **** **** **** **** **** **** **** ****
 // test input
 // const absentStartCollectionValues = ["2023-08-01", "2023-11-01"];
@@ -60,39 +70,31 @@
 // const projectionValue = "2024-05-27";
 
 // // test case 7 for citizenship
-// const absentStartCollectionValues = ["2023-01-20"];
-// const absentEndCollectionValues = ["2024-04-16"];
-// const bnoStartValue = "2020-01-18";
-// const projectionValue = "2024-04-17";
+const absentStartCollectionValues = ["2028-02-20"];
+const absentEndCollectionValues = ["2029-03-18"];
+const bnoStartValue = "2023-01-18";
+const projectionValue = "2028-11-25";
 
 // const constrainedStartDateMockValue = "2020-01-18";
 // const constrainedStartIndex = new Date(constrainedStartDateMockValue).getTime();
 
-// const bnoStartIndex = new Date(bnoStartValue).getTime();
-// const projectionIndex = new Date(projectionValue).getTime();
-// console.log(
-//   `projectionIndex            is ${projectionIndex} ie ${new Date(
-//     projectionIndex
-//   )}`
-// );
+const bnoStartIndex = new Date(bnoStartValue).getTime();
+const projectionIndex = new Date(projectionValue).getTime();
+console.log(
+  `projectionIndex            is ${projectionIndex} ie ${new Date(
+    projectionIndex
+  )}`
+);
 
-// const isAbsent = isAbsentFactory(
-//   absentStartCollectionValues,
-//   absentEndCollectionValues
-// );
+const isAbsent = isAbsentFactory(
+  absentStartCollectionValues,
+  absentEndCollectionValues
+);
 
 // **** **** **** **** **** **** **** **** **** **** **** **** ****
 
 // all indices are taken as the millisecond count since the epoch
 
-import {
-  DAY,
-  isFeb29,
-  isAbsentFactory,
-  indexAdd5Years,
-  indexMinus5Years,
-  indexMinus1Year,
-} from "./computeHelper.js";
 
 export function earliestValidILRPeriod(bnoStartIndex, isAbsent) {
   // given a bno start date represented in millisecond index since the epoch,
@@ -177,7 +179,7 @@ export function projectRemainingILR(
   projectionIndex,
   earliestValidILRStartIndex,
   earliestValidILREndIndex,
-  isAbsent,
+  isAbsent
 ) {
   // returns the number of continuous absences available starting from the projection day without violating earliest ILR
   // special case: if return -1, then projection is out of bounds to the left
@@ -185,12 +187,12 @@ export function projectRemainingILR(
 
   // case 1: projection is out of bounds (before start)
   if (projectionIndex < earliestValidILRStartIndex) {
-    return -1;
+    return [-1, "out of bounds"];
   }
 
   // case 2: projection is out of bounds (after end)
   if (projectionIndex > earliestValidILREndIndex) {
-    return -2;
+    return [-2, "out of bounds"];
   }
 
   // case 3: projection within bounds, so init remainingCount = 180 - absentCount
@@ -254,57 +256,117 @@ export function projectRemainingILR(
     remainingCount -= 1; // represents adding a day of continuous absence starting from the projection date
   }
 
-  return (yearWindowRightIndex - (projectionIndex - DAY)) / DAY;
+  return [(yearWindowRightIndex - (projectionIndex - DAY)) / DAY, "in bound"];
 }
 
 export function earliestCitizenshipPeriod(constrainedStartIndex, isAbsent) {
   var candidateL = constrainedStartIndex;
-  var candidateR = indexAdd5Years(constrainedStartIndex);
+  var candidateM = indexAdd5Years(constrainedStartIndex);
+  var candidateR = indexAdd6Years(constrainedStartIndex);
 
-  var absentCount = 0;
-  for (let i = candidateL; i <= candidateR; i += DAY) {
+  // candidateL      , ..., candidateM inclusive belong to LHS
+  // candidateM + DAY, ..., candidateR inclusive belong to RHS
+
+  var absentCountLHS = 0;
+  for (let i = candidateL; i <= candidateM; i += DAY) {
     if (isAbsent(i)) {
-      absentCount++;
+      absentCountLHS++;
     }
   }
-  // console.log("*********************")
-  // console.log(new Date(candidateL), new Date(candidateR), absentCount)
-  while (absentCount > 450) {
-    if (isFeb29(candidateR + DAY)) {
-      if (isAbsent(candidateR + DAY)) {
-        absentCount++;
+  var absentCountRHS = 0;
+  for (let j = candidateM + DAY; j <= candidateR; j += DAY) {
+    if (isAbsent(j)) {
+      absentCountRHS++;
+    }
+  }
+
+  console.log("*********************");
+  console.log(
+    new Date(candidateL).toDateString(),
+    ",",
+    new Date(candidateM).toDateString(),
+    " LHS | RHS ",
+    new Date(candidateM + DAY).toDateString(),
+    ",",
+    new Date(candidateR).toDateString(),
+    absentCountLHS,
+    absentCountRHS
+  );
+
+  while (absentCountLHS > 450 || absentCountRHS > 90) {
+    if (isFeb29(candidateM + DAY)) {
+      if (isAbsent(candidateM + DAY)) {
+        absentCountLHS++;
       }
-      candidateR += DAY;
+      candidateM += DAY;
     }
     if (isFeb29(candidateL)) {
       if (isAbsent(candidateL)) {
-        absentCount--;
+        absentCountLHS--;
       }
       candidateL += DAY;
     }
     if (isAbsent(candidateL)) {
-      absentCount--;
+      absentCountLHS--;
+    }
+    if (isAbsent(candidateM + DAY)) {
+      absentCountLHS++;
+    }
+
+    if (isFeb29(candidateR + DAY)) {
+      if (isAbsent(candidateR + DAY)) {
+        absentCountRHS++;
+      }
+      candidateR += DAY;
+    }
+    // if (isFeb29(candidateM)) {
+    //   if (isAbsent(candidateM)) {
+    //     absentCountRHS--;
+    //   }
+    //   candidateM += DAY;
+    // }
+    if (isAbsent(candidateM)) {
+      absentCountRHS--;
     }
     if (isAbsent(candidateR + DAY)) {
-      absentCount++;
+      absentCountRHS++;
     }
+
     candidateL += DAY;
+    candidateM += DAY;
     candidateR += DAY;
-    // console.log(new Date(candidateL), new Date(candidateR), absentCount)
+    
+    console.log(
+      new Date(candidateL).toDateString(),
+      ",",
+      new Date(candidateM).toDateString(),
+      " LHS | RHS ",
+      new Date(candidateM + DAY).toDateString(),
+      ",",
+      new Date(candidateR).toDateString(),
+      absentCountLHS,
+      absentCountRHS
+    );
   }
-  // console.log("*********************")
+  console.log("*********************");
 
   const earliestCitizenshipStartIndex = candidateL;
+  const earliestCitizenshipMidIndex = candidateM;
   const earliestCitizenshipEndIndex = candidateR;
 
-  return [earliestCitizenshipStartIndex, earliestCitizenshipEndIndex];
+  return [
+    earliestCitizenshipStartIndex,
+    earliestCitizenshipMidIndex,
+    earliestCitizenshipEndIndex,
+  ];
 }
 
 export function projectRemainingCitizenship(
   projectionIndex,
   earliestValidCitizenshipStartIndex,
+  earliestValidCitizenshipMidIndex,
   earliestValidCitizenshipEndIndex,
-  isAbsent,
+  isAbsent
 ) {
   // returns the number of absences available starting from the projection day without violating earliest Citizenship
   // special case: if return -1, then projection is out of bounds to the left
@@ -312,78 +374,110 @@ export function projectRemainingCitizenship(
 
   // case 1: projection is out of bounds (before start)
   if (projectionIndex < earliestValidCitizenshipStartIndex) {
-    return -1;
+    return [-1, "out of bounds"];
   }
 
   // case 2: projection is out of bounds (after end)
   if (projectionIndex > earliestValidCitizenshipEndIndex) {
-    return -2;
+    return [-2, "out of bounds"];
   }
 
-  // case 3: projection within bounds, so init remainingCount = 450
-  var remainingCount = 450;
-  for (
-    let i = earliestValidCitizenshipStartIndex;
-    i < projectionIndex; // do not count projection index
-    i += DAY
-  ) {
-    if (isAbsent(i)) {
-      remainingCount--;
+  
+  if (projectionIndex <= earliestValidCitizenshipMidIndex) {
+    // case 3a: projection within bounds, and on the LHS side
+    // hence init remainingCount = 450
+    var remainingCount = 450;
+    for (
+      let i = earliestValidCitizenshipStartIndex;
+      i < projectionIndex; // do not count projection index
+      i += DAY
+    ) {
+      if (isAbsent(i)) {
+        remainingCount--;
+      }
     }
+    return [remainingCount, "in 450 bound"];
+  } else { 
+    // case 3b projection within bounds, and on the RHS side
+    // hence init remainingCount = 90
+    var remainingCount = 90;
+    for (
+      let i = earliestValidCitizenshipMidIndex + DAY;
+      i < projectionIndex; // do not count projection index
+      i += DAY
+    ) {
+      if (isAbsent(i)) {
+        remainingCount--;
+      }
+    }
+    return [remainingCount, "in 90 bound"];
+
+
   }
-  return remainingCount;
 }
 
-// // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
-// // TESTING OUTPUT
-// console.log(`bnoStartIndex is ${bnoStartIndex}`);
-// console.log(
-//   `earliestValidILRPeriod(bnoStartIndex) is ${earliestValidILRPeriod(
-//     bnoStartIndex
-//   )}`
-// );
+// **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+// TESTING OUTPUT
+console.log(`bnoStartIndex is ${bnoStartIndex}`);
+console.log(
+  `earliestValidILRPeriod(bnoStartIndex) is ${earliestValidILRPeriod(
+    bnoStartIndex,
+    isAbsent
+  )}`
+);
 
-// const arr = earliestValidILRPeriod(bnoStartIndex);
-// const earliestValidILRStartIndex = arr[0];
-// const earliestValidILREndIndex = arr[1];
-// console.log(
-//   `earliestValidILRStartIndex is ${earliestValidILRStartIndex} ie ${new Date(
-//     earliestValidILRStartIndex
-//   )}`
-// );
-// console.log(
-//   `earliestValidILREndIndex   is ${earliestValidILREndIndex} ie ${new Date(
-//     earliestValidILREndIndex
-//   )}`
-// );
+const arr = earliestValidILRPeriod(bnoStartIndex, isAbsent);
+const earliestValidILRStartIndex = arr[0];
+const earliestValidILREndIndex = arr[1];
+console.log(
+  `earliestValidILRStartIndex is ${earliestValidILRStartIndex} ie ${new Date(
+    earliestValidILRStartIndex
+  )}`
+);
+console.log(
+  `earliestValidILREndIndex   is ${earliestValidILREndIndex} ie ${new Date(
+    earliestValidILREndIndex
+  )}`
+);
 
-// const remain = projectRemainingILR(
-//   projectionIndex,
-//   earliestValidILRStartIndex,
-//   earliestValidILREndIndex
-// );
-// console.log(`remain is ${remain}`);
+const remain = projectRemainingILR(
+  projectionIndex,
+  earliestValidILRStartIndex,
+  earliestValidILREndIndex,
+  isAbsent,
+);
+console.log(`remain is ${remain}`);
 
-// const arr2 = earliestCitizenshipPeriod(constrainedStartIndex);
-// const earliestValidCitizenshipStartIndex = arr2[0];
-// const earliestValidCitizenshipEndIndex = arr2[1];
-// console.log(
-//   `earliestValidCitizenshipStartIndex is ${earliestValidCitizenshipStartIndex} ie ${new Date(
-//     earliestValidCitizenshipStartIndex
-//   )}`
-// );
-// console.log(
-//   `earliestValidCitizenshipEndIndex   is ${earliestValidCitizenshipEndIndex} ie ${new Date(
-//     earliestValidCitizenshipEndIndex
-//   )}`
-// );
 
-// console.log(
-//   `citizenship absences remaining on projection date is ${projectRemainingCitizenship(
-//     projectionIndex,
-//     earliestValidCitizenshipStartIndex,
-//     earliestValidCitizenshipEndIndex
-//   )} out of 450`
-// );
+// const constrainedStartDateMockValue = "2020-01-18";
+// const constrainedStartIndex = new Date(constrainedStartDateMockValue).getTime();
+const constrainedStartIndex = new Date(earliestValidILRStartIndex).getTime();
 
-// // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+const arr2 = earliestCitizenshipPeriod(constrainedStartIndex, isAbsent);
+const earliestValidCitizenshipStartIndex = arr2[0];
+const earliestValidCitizenshipMidIndex = arr2[1];
+const earliestValidCitizenshipEndIndex = arr2[2];
+console.log(
+  `earliestValidCitizenshipStartIndex is ${earliestValidCitizenshipStartIndex} ie ${new Date(
+    earliestValidCitizenshipStartIndex
+  )}`
+);
+console.log(
+  `earliestValidCitizenshipEndIndex   is ${earliestValidCitizenshipEndIndex} ie ${new Date(
+    earliestValidCitizenshipEndIndex
+  )}`
+);
+
+
+const arr3 = projectRemainingCitizenship(
+  projectionIndex,
+  earliestValidCitizenshipStartIndex,
+  earliestValidCitizenshipMidIndex,
+  earliestValidCitizenshipEndIndex,
+  isAbsent,
+)
+console.log(
+  `citizenship absences remaining on projection date is ${arr3[0]} ${arr3[1]}`
+);
+
+// **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
