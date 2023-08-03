@@ -94,7 +94,7 @@ import {
   indexMinus1Year,
 } from "./computeHelper.js";
 
-export function earliestValidILRPeriod(bnoStartIndex) {
+export function earliestValidILRPeriod(bnoStartIndex, isAbsent) {
   // given a bno start date represented in millisecond index since the epoch,
   // and also the days of absences using the closure isAbsent
   // returns the earliest valid ILR qualification period
@@ -176,7 +176,8 @@ export function earliestValidILRPeriod(bnoStartIndex) {
 export function projectRemainingILR(
   projectionIndex,
   earliestValidILRStartIndex,
-  earliestValidILREndIndex
+  earliestValidILREndIndex,
+  isAbsent,
 ) {
   // returns the number of continuous absences available starting from the projection day without violating earliest ILR
   // special case: if return -1, then projection is out of bounds to the left
@@ -256,7 +257,7 @@ export function projectRemainingILR(
   return (yearWindowRightIndex - (projectionIndex - DAY)) / DAY;
 }
 
-export function earliestCitizenshipPeriod(constrainedStartIndex) {
+export function earliestCitizenshipPeriod(constrainedStartIndex, isAbsent) {
   var candidateL = constrainedStartIndex;
   var candidateR = indexAdd5Years(constrainedStartIndex);
 
@@ -302,7 +303,8 @@ export function earliestCitizenshipPeriod(constrainedStartIndex) {
 export function projectRemainingCitizenship(
   projectionIndex,
   earliestValidCitizenshipStartIndex,
-  earliestValidCitizenshipEndIndex
+  earliestValidCitizenshipEndIndex,
+  isAbsent,
 ) {
   // returns the number of absences available starting from the projection day without violating earliest Citizenship
   // special case: if return -1, then projection is out of bounds to the left
