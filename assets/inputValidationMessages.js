@@ -1,4 +1,4 @@
-import {indexAdd5Years} from "./computeHelper.js"
+import {indexAdd5YearsMinus1Day} from "./computeHelper.js"
 
 export function setInputValidationMessages(
   // inject CSS classes via setError vs setSuccess to each input field, depending on validation
@@ -260,7 +260,7 @@ function ilrObtainedDateProvidedAnd5YearsAfterStart(
         'Since you have indicated "yes" above, the date you obtained ILR is required.'
       );
       res = false;
-    } else if (new Date(ilrObtainedDateFieldValue).getTime() <= indexAdd5Years(new Date(bnoStartValue).getTime())) {
+    } else if (new Date(ilrObtainedDateFieldValue).getTime() <= indexAdd5YearsMinus1Day(new Date(bnoStartValue).getTime())) {
       setError(
         ilrObtainedDateField,
         'The date you obtained ILR must be at least 5 years after BNO start date'

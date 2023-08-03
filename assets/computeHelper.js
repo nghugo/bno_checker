@@ -29,7 +29,7 @@ export function isAbsentFactory(
   return isAbsent;
 }
 
-export function indexAdd5Years(inputIndex) {
+export function indexAdd5YearsMinus1Day(inputIndex) {
   // automatically adjust for Feb29
   var resDate = new Date(inputIndex);
   resDate.setFullYear(resDate.getFullYear() + 5); // add 5 years
@@ -38,7 +38,7 @@ export function indexAdd5Years(inputIndex) {
   return resIndex;
 }
 
-export function indexMinus5Years(inputIndex) {
+export function indexMinus5YearsAdd1Day(inputIndex) {
   // automatically adjust for Feb29
   var resDate = new Date(inputIndex);
   resDate.setFullYear(resDate.getFullYear() - 5); // minus 5 years
@@ -47,7 +47,7 @@ export function indexMinus5Years(inputIndex) {
   return resIndex;
 }
 
-export function indexMinus1Year(inputIndex) {
+export function indexMinus1YearAdd1Day(inputIndex) {
   // automatically adjust for Feb29
   var resDate = new Date(inputIndex);
   resDate.setFullYear(resDate.getFullYear() - 1); // minus 1 year
@@ -56,11 +56,10 @@ export function indexMinus1Year(inputIndex) {
   return resIndex;
 }
 
-export function indexAdd6Years(inputIndex) {
+export function indexAdd4Years(inputIndex) {
   // automatically adjust for Feb29
   var resDate = new Date(inputIndex);
-  resDate.setFullYear(resDate.getFullYear() + 6); // add 6 years
-  resDate.setDate(resDate.getDate() - 1); // minus 1 day
+  resDate.setFullYear(resDate.getFullYear() + 4); // add 4 years
   var resIndex = resDate.getTime();
   return resIndex;
 }
