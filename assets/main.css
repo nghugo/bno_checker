@@ -270,6 +270,22 @@ iframe {
 input.input {
   height: 62px;
 }
+
+input[type=checkbox] {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.checkbox-label {
+  cursor: pointer;
+}
+
+.flex-checkbox {
+  display: flex;
+}
+
 textarea.input {
   min-height: 162px;
   padding-top: 19px;
@@ -417,4 +433,16 @@ p.resultParagraph {
   .wrap {
     padding: 66px 15px 59px;
   }
+}
+
+input[type=date]:disabled {
+  background: repeating-linear-gradient(
+    135deg,
+    rgb(168, 168, 168),
+    rgb(168, 168, 168) 10px,
+    rgb(188, 188, 188) 10px,
+    rgb(188, 188, 188) 20px
+  );
+  color: transparent;
+  opacity: 1;
 }

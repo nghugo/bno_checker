@@ -194,7 +194,7 @@ function projectRemainingILR(projectionIndex, earliestValidILRStartIndex, earlie
     }
   }
   var remainingCount = 180 - absentCount;
-  console.log(`initial remainingCount is ${remainingCount}`)
+  // console.log(`initial remainingCount is ${remainingCount}`)
 
   // phase 2: shift window to the right, adjusting for Feb29
   var yearWindowLeftIndex = indexMinus1Year(projectionIndex);
@@ -217,7 +217,7 @@ function projectRemainingILR(projectionIndex, earliestValidILRStartIndex, earlie
       remainingCount -= 1; // represents adding a day of continuous absence starting from the projection date
     }
 
-    console.log(`left ${new Date(yearWindowLeftIndex)} right ${new Date(yearWindowRightIndex + DAY)}, ${(yearWindowRightIndex - (projectionIndex - DAY)) / DAY}, ${remainingCount}`)
+    // console.log(`left ${new Date(yearWindowLeftIndex)} right ${new Date(yearWindowRightIndex + DAY)}, ${(yearWindowRightIndex - (projectionIndex - DAY)) / DAY}, ${remainingCount}`)
     
     // increment window
     yearWindowLeftIndex += DAY;
@@ -227,6 +227,8 @@ function projectRemainingILR(projectionIndex, earliestValidILRStartIndex, earlie
   
   return (yearWindowRightIndex - (projectionIndex - DAY)) / DAY;
 }
+
+
 
 // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
 // TESTING OUTPUT

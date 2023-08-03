@@ -17,8 +17,9 @@
     <script src="./assets/iframeResizer.contentWindow.min.js"></script>
     
     <script defer src="assets/dynamicDateSection.js"></script>
-    <script defer src="assets/main.js" type="module"></script>
-    <script defer src="assets/compute.js" type="module"></script>
+    <script defer src="assets/dynamicCheckbox.js"></script>
+    <!-- <script defer src="assets/main.js" type="module"></script>
+    <script defer src="assets/compute.js" type="module"></script> -->
     
   </head>
   <body>
@@ -28,17 +29,18 @@
     >
       <div class="wrap">
         <form id="form" class="form validate-form">
-          <span class="form-title">Indefinite Leave to Remain and British Citizenship (BNO 5+1) Validity Checker</span>
+          <h1 class="form-title">Indefinite Leave to Remain and British Citizenship (BNO 5+1) Validity Checker</h1>
 
           
-          <span class="form-subtitle"
-            >Please enter the start date of your BNO visa.</span
-          >
+          <p class="form-subtitle">
+            Please enter the start date of your BNO visa.
+          </p>
+
           <div
             class="wrap-input validateInput"
             invalid-input-message="Valid BNO start date is required"
           >
-            <span class="label-input">BNO start date *</span>
+            <p class="label-input">BNO start date *</p>
             <input
               id="bnoStart"
               class="input" 
@@ -49,41 +51,68 @@
             <div class="error"></div>
           </div>
           
-          <span class="form-subtitle"> 
+          <p class="form-subtitle"> 
             Please enter all time intervals of your whole day absences from the UK&nbsp
             <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/939345/calculating-continuous-period-v22.0ext.pdf#page=9&zoom=100,93,728" target="_blank">
               (see definition)
             </a> on or after BNO start date, if any.
-            </span
-          >
+            </p>
 
           <p id="myPlaceholder" style="display:none; outline:4px solid red; width:100%">PLACEHOLDER</p> <!-- hidden element-->
                     
           <div class="addminus-button-group">
             <button class="addminus add" onclick="addDateSection()" type="button">
-              <strong>&#43</strong> &nbsp Add a Time Interval
+              <strong> &#43 </strong> &nbsp Add a Time Interval
             </button>
-            <button class="addminus minus" onclick="removeDateSection()" type="button">  <!-- disabled="disabled"-->
-              <strong>&#8722</strong> &nbsp Remove a Time Interval
+            <button class="addminus minus" onclick="removeDateSection()" type="button" disabled>  <!-- disabled="disabled"-->
+              <strong> &#8722 </strong> &nbsp Remove a Time Interval
             </button>
           </div>
           
-          <span class="form-subtitle"
+          <p class="form-subtitle"
+            > Please indicate if you have already obtained your Indefinite Leave to Remain.
+          </p> 
+
+          <div
+            class="wrap-input validateInput flex-checkbox"
+            invalid-input-message="Valid ILR date obtained is required to be at least 5 years after BNO start date"
+          >
+            <input type="checkbox" id="ilr-obtained-checkbox" name="ilr-obtained-checkbox">
+            <label for="ilr-obtained-checkbox" class="label-input checkbox-label"> Check to indicate "Yes" </label>
+          </div>
+
+          
+          
+          <p class="form-subtitle"
+            > If "yes" was indicated above, please also enter the date you obtained it.
+          </p> 
+          <div
+            class="wrap-input validateInput"
+            invalid-input-message="Valid ILR date obtained is required to be at least 5 years after BNO start date"
+          >
+            <p class="label-input">Indefinite Leave to Remain date obtained</p>
+              <input id="ilr-obtained-datefield" class="input" type="date" name="ilr-obtained-datefield" max="9999-12-31" disabled/>
+              <div class="error"></div>
+          </div>
+          
+          <p class="form-subtitle"
             >Optional: 
             Please enter a date on which you want to check your remaining whole day absences.
-            <span class="form-subsubtitle">
+            <p class="form-subsubtitle">
               (Checks against indefinite leave to remain and British citizenship requirements)
-            </span>  
-          </span> 
-          
+            </p>  
+          </p> 
+
           <div
             class="wrap-input validateInput"
             invalid-input-message="Valid projection date is required to be after BNO start date"
           >
-            <span class="label-input">Projection date (optional)</span>
+            <p class="label-input">Projection date (optional)</p>
             <input id="projection" class="input" type="date" name="projection" max="9999-12-31"/>
             <div class="error"></div>
           </div>
+
+          
           
           <div id="submitsection">
             <button class="submit" id="submit-button" type="submit">Submit</button>
