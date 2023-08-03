@@ -9,10 +9,10 @@ const ilrObtainedDateField = document.getElementById("ilr-obtained-datefield");
 
 ilrObtainedCheckbox.addEventListener("change", (event) => {
     if (ilrObtainedCheckbox.checked) {
-        ilrObtainedDateField.setAttribute('required', '');
+        // ilrObtainedDateField.setAttribute('required', '');
         ilrObtainedDateField.removeAttribute('disabled', '');
     } else {
-        ilrObtainedDateField.removeAttribute('required', '');
+        // ilrObtainedDateField.removeAttribute('required', '');
         ilrObtainedDateField.setAttribute('disabled', '');
     }
 });

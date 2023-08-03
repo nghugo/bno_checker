@@ -6,7 +6,9 @@ export function updateDisplaySection(
   bnoStartValue,
   projectionValue,
   absentStartCollectionValues,
-  absentEndCollectionValues
+  absentEndCollectionValues,
+  ilrObtainedCheckboxChecked,
+  ilrObtainedDateFieldValue,
 ) {
   function addPNode(textMessage) {
     const para = document.createElement("p");

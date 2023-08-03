@@ -1,10 +1,14 @@
+import {indexAdd5Years} from "./computeHelper.js"
+
 export function setInputValidationMessages(
   // inject CSS classes via setError vs setSuccess to each input field, depending on validation
   // return boolean indicator of whether all inputs are valid
   bnoStart,
   projection,
   absentStartCollection,
-  absentEndCollection
+  absentEndCollection,
+  ilrObtainedCheckbox,
+  ilrObtainedDateField
 ) {
   const bnoStartValue = bnoStart.value;
   const projectionValue = projection.value;
@@ -14,15 +18,45 @@ export function setInputValidationMessages(
   const absentEndCollectionValues = Array.from(absentEndCollection).map(
     (element) => element.value
   );
+  const ilrObtainedCheckboxChecked = ilrObtainedCheckbox.checked;
+  const ilrObtainedDateFieldValue = ilrObtainedDateField.value;
 
   // These each return bool and inject CSS class to the input fields (via setError or setSuccess)
   const start_bool = bnoStartDateExists(bnoStart, bnoStartValue);
-  const proj_bool = bnoProjectionDateInRangeIfExists(projection, bnoStartValue, projectionValue);
-  const startAbs_bool = absentStartDateExistsAllIntervals(absentStartCollection, absentStartCollectionValues);
-  const endAbs_bool = absentEndDateExistsAllIntervalsAndAfterStart(absentEndCollection, absentStartCollectionValues, absentEndCollectionValues);
-  const startEndAbs_bool = absendStartEndDateIntervalsNoOverlap(absentStartCollection, absentEndCollection, absentStartCollectionValues, absentEndCollectionValues);
-  
-  const validInputs = start_bool && proj_bool && startAbs_bool && endAbs_bool && startEndAbs_bool;
+  const proj_bool = bnoProjectionDateInRangeIfExists(
+    projection,
+    bnoStartValue,
+    projectionValue
+  );
+  const startAbs_bool = absentStartDateExistsAllIntervals(
+    absentStartCollection,
+    absentStartCollectionValues
+  );
+  const endAbs_bool = absentEndDateExistsAllIntervalsAndAfterStart(
+    absentEndCollection,
+    absentStartCollectionValues,
+    absentEndCollectionValues
+  );
+  const startEndAbs_bool = absendStartEndDateIntervalsNoOverlap(
+    absentStartCollection,
+    absentEndCollection,
+    absentStartCollectionValues,
+    absentEndCollectionValues
+  );
+  const ilrDate_bool = ilrObtainedDateProvidedAnd5YearsAfterStart(
+    ilrObtainedDateField,
+    ilrObtainedCheckboxChecked,
+    ilrObtainedDateFieldValue, 
+    bnoStartValue
+  );
+
+  const validInputs =
+    start_bool &&
+    proj_bool &&
+    startAbs_bool &&
+    endAbs_bool &&
+    startEndAbs_bool &&
+    ilrDate_bool;
 
   return [
     validInputs,
@@ -30,6 +64,8 @@ export function setInputValidationMessages(
     projectionValue,
     absentStartCollectionValues,
     absentEndCollectionValues,
+    ilrObtainedCheckboxChecked,
+    ilrObtainedDateFieldValue,
   ];
 }
 
@@ -40,16 +76,25 @@ function setError(element, message) {
   errorDisplay.innerText = message;
   validateInput.classList.add("error");
   validateInput.classList.remove("success");
-};
+}
 
-function setSuccess(element)  {
+function setSuccess(element) {
   // setSuccess: add success CSS class to input field
   const validateInput = element.parentElement;
   const errorDisplay = validateInput.querySelector(".error");
   errorDisplay.innerText = "";
   validateInput.classList.add("success");
   validateInput.classList.remove("error");
-};
+}
+
+function setNone(element) {
+  // setNone: remove both error and success CSS class from input field
+  const validateInput = element.parentElement;
+  const errorDisplay = validateInput.querySelector(".error");
+  errorDisplay.innerText = "";
+  validateInput.classList.remove("success");
+  validateInput.classList.remove("error");
+}
 
 function bnoStartDateExists(bnoStart, bnoStartValue) {
   // validate BNO start date exists and in range
@@ -199,3 +244,34 @@ function absendStartEndDateIntervalsNoOverlap(
   }
   return res;
 }
+
+function ilrObtainedDateProvidedAnd5YearsAfterStart(
+  ilrObtainedDateField,
+  ilrObtainedCheckboxChecked,
+  ilrObtainedDateFieldValue,
+  bnoStartValue
+) {
+  // validate ILR obtained date is provided if the checkbox is checked
+  var res = true;
+  if (ilrObtainedCheckboxChecked === true) {
+    if (ilrObtainedDateFieldValue == "") {
+      setError(
+        ilrObtainedDateField,
+        'Since you have indicated "yes" above, the date you obtained ILR is required.'
+      );
+      res = false;
+    } else if (new Date(ilrObtainedDateFieldValue).getTime() <= indexAdd5Years(new Date(bnoStartValue).getTime())) {
+      setError(
+        ilrObtainedDateField,
+        'The date you obtained ILR must be at least 5 years after BNO start date'
+      );
+      res = false;
+    } else {
+      setSuccess(ilrObtainedDateField);
+    }
+  } else {
+    setNone(ilrObtainedDateField);
+  }
+  return res;
+}
+""

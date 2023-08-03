@@ -18,8 +18,8 @@
     
     <script defer src="assets/dynamicDateSection.js"></script>
     <script defer src="assets/dynamicCheckbox.js"></script>
-    <!-- <script defer src="assets/main.js" type="module"></script>
-    <script defer src="assets/compute.js" type="module"></script> -->
+    <script defer src="assets/main.js" type="module"></script>
+    <!-- <script defer src="assets/compute.js" type="module"></script> -->
     
   </head>
   <body>
@@ -75,7 +75,6 @@
 
           <div
             class="wrap-input validateInput flex-checkbox"
-            invalid-input-message="Valid ILR date obtained is required to be at least 5 years after BNO start date"
           >
             <input type="checkbox" id="ilr-obtained-checkbox" name="ilr-obtained-checkbox">
             <label for="ilr-obtained-checkbox" class="label-input checkbox-label"> Check to indicate "Yes" </label>
@@ -91,8 +90,8 @@
             invalid-input-message="Valid ILR date obtained is required to be at least 5 years after BNO start date"
           >
             <p class="label-input">Indefinite Leave to Remain date obtained</p>
-              <input id="ilr-obtained-datefield" class="input" type="date" name="ilr-obtained-datefield" max="9999-12-31" disabled/>
-              <div class="error"></div>
+            <input id="ilr-obtained-datefield" class="input" type="date" name="ilr-obtained-datefield" max="9999-12-31" disabled/>
+            <div class="error"></div>
           </div>
           
           <p class="form-subtitle"
