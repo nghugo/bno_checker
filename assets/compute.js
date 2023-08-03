@@ -59,22 +59,28 @@
 // const bnoStartValue = "2020-11-18";
 // const projectionValue = "2024-05-27";
 
-// test case 7 for citizenship
-const absentStartCollectionValues = ["2023-01-20"];
-const absentEndCollectionValues = ["2024-04-16"];
-const bnoStartValue = "2020-01-18";
-const projectionValue = "2024-04-17";
+// // test case 7 for citizenship
+// const absentStartCollectionValues = ["2023-01-20"];
+// const absentEndCollectionValues = ["2024-04-16"];
+// const bnoStartValue = "2020-01-18";
+// const projectionValue = "2024-04-17";
 
-const constrainedStartDateMockValue = "2020-01-18";
-const constrainedStartIndex = new Date(constrainedStartDateMockValue).getTime();
+// const constrainedStartDateMockValue = "2020-01-18";
+// const constrainedStartIndex = new Date(constrainedStartDateMockValue).getTime();
 
-const bnoStartIndex = new Date(bnoStartValue).getTime();
-const projectionIndex = new Date(projectionValue).getTime();
-console.log(
-  `projectionIndex            is ${projectionIndex} ie ${new Date(
-    projectionIndex
-  )}`
-);
+// const bnoStartIndex = new Date(bnoStartValue).getTime();
+// const projectionIndex = new Date(projectionValue).getTime();
+// console.log(
+//   `projectionIndex            is ${projectionIndex} ie ${new Date(
+//     projectionIndex
+//   )}`
+// );
+
+// const isAbsent = isAbsentFactory(
+//   absentStartCollectionValues,
+//   absentEndCollectionValues
+// );
+
 // **** **** **** **** **** **** **** **** **** **** **** **** ****
 
 // all indices are taken as the millisecond count since the epoch
@@ -88,12 +94,7 @@ import {
   indexMinus1Year,
 } from "./computeHelper.js";
 
-const isAbsent = isAbsentFactory(
-  absentStartCollectionValues,
-  absentEndCollectionValues
-);
-
-function earliestValidILRPeriod(bnoStartIndex) {
+export function earliestValidILRPeriod(bnoStartIndex) {
   // given a bno start date represented in millisecond index since the epoch,
   // and also the days of absences using the closure isAbsent
   // returns the earliest valid ILR qualification period
@@ -172,7 +173,7 @@ function earliestValidILRPeriod(bnoStartIndex) {
   return [earliestValidILRStartIndex, earliestValidILREndIndex];
 }
 
-function projectRemainingILR(
+export function projectRemainingILR(
   projectionIndex,
   earliestValidILRStartIndex,
   earliestValidILREndIndex
@@ -255,7 +256,7 @@ function projectRemainingILR(
   return (yearWindowRightIndex - (projectionIndex - DAY)) / DAY;
 }
 
-function earliestCitizenshipPeriod(constrainedStartIndex) {
+export function earliestCitizenshipPeriod(constrainedStartIndex) {
   var candidateL = constrainedStartIndex;
   var candidateR = indexAdd5Years(constrainedStartIndex);
 
@@ -298,7 +299,7 @@ function earliestCitizenshipPeriod(constrainedStartIndex) {
   return [earliestCitizenshipStartIndex, earliestCitizenshipEndIndex];
 }
 
-function projectRemainingCitizenship(
+export function projectRemainingCitizenship(
   projectionIndex,
   earliestValidCitizenshipStartIndex,
   earliestValidCitizenshipEndIndex
@@ -331,56 +332,56 @@ function projectRemainingCitizenship(
   return remainingCount;
 }
 
-// **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
-// TESTING OUTPUT
-console.log(`bnoStartIndex is ${bnoStartIndex}`);
-console.log(
-  `earliestValidILRPeriod(bnoStartIndex) is ${earliestValidILRPeriod(
-    bnoStartIndex
-  )}`
-);
+// // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+// // TESTING OUTPUT
+// console.log(`bnoStartIndex is ${bnoStartIndex}`);
+// console.log(
+//   `earliestValidILRPeriod(bnoStartIndex) is ${earliestValidILRPeriod(
+//     bnoStartIndex
+//   )}`
+// );
 
-const arr = earliestValidILRPeriod(bnoStartIndex);
-const earliestValidILRStartIndex = arr[0];
-const earliestValidILREndIndex = arr[1];
-console.log(
-  `earliestValidILRStartIndex is ${earliestValidILRStartIndex} ie ${new Date(
-    earliestValidILRStartIndex
-  )}`
-);
-console.log(
-  `earliestValidILREndIndex   is ${earliestValidILREndIndex} ie ${new Date(
-    earliestValidILREndIndex
-  )}`
-);
+// const arr = earliestValidILRPeriod(bnoStartIndex);
+// const earliestValidILRStartIndex = arr[0];
+// const earliestValidILREndIndex = arr[1];
+// console.log(
+//   `earliestValidILRStartIndex is ${earliestValidILRStartIndex} ie ${new Date(
+//     earliestValidILRStartIndex
+//   )}`
+// );
+// console.log(
+//   `earliestValidILREndIndex   is ${earliestValidILREndIndex} ie ${new Date(
+//     earliestValidILREndIndex
+//   )}`
+// );
 
-const remain = projectRemainingILR(
-  projectionIndex,
-  earliestValidILRStartIndex,
-  earliestValidILREndIndex
-);
-console.log(`remain is ${remain}`);
+// const remain = projectRemainingILR(
+//   projectionIndex,
+//   earliestValidILRStartIndex,
+//   earliestValidILREndIndex
+// );
+// console.log(`remain is ${remain}`);
 
-const arr2 = earliestCitizenshipPeriod(constrainedStartIndex);
-const earliestValidCitizenshipStartIndex = arr2[0];
-const earliestValidCitizenshipEndIndex = arr2[1];
-console.log(
-  `earliestValidCitizenshipStartIndex is ${earliestValidCitizenshipStartIndex} ie ${new Date(
-    earliestValidCitizenshipStartIndex
-  )}`
-);
-console.log(
-  `earliestValidCitizenshipEndIndex   is ${earliestValidCitizenshipEndIndex} ie ${new Date(
-    earliestValidCitizenshipEndIndex
-  )}`
-);
+// const arr2 = earliestCitizenshipPeriod(constrainedStartIndex);
+// const earliestValidCitizenshipStartIndex = arr2[0];
+// const earliestValidCitizenshipEndIndex = arr2[1];
+// console.log(
+//   `earliestValidCitizenshipStartIndex is ${earliestValidCitizenshipStartIndex} ie ${new Date(
+//     earliestValidCitizenshipStartIndex
+//   )}`
+// );
+// console.log(
+//   `earliestValidCitizenshipEndIndex   is ${earliestValidCitizenshipEndIndex} ie ${new Date(
+//     earliestValidCitizenshipEndIndex
+//   )}`
+// );
 
-console.log(
-  `citizenship absences remaining on projection date is ${projectRemainingCitizenship(
-    projectionIndex,
-    earliestValidCitizenshipStartIndex,
-    earliestValidCitizenshipEndIndex
-  )} out of 450`
-);
+// console.log(
+//   `citizenship absences remaining on projection date is ${projectRemainingCitizenship(
+//     projectionIndex,
+//     earliestValidCitizenshipStartIndex,
+//     earliestValidCitizenshipEndIndex
+//   )} out of 450`
+// );
 
-// **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+// // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****

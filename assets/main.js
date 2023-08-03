@@ -1,5 +1,5 @@
 import { setInputValidationMessages } from "./inputValidationMessages.js";
-// import { updateDisplaySection } from "./displaySection.js";
+import { updateDisplaySection } from "./displaySection.js";
 
 const form = document.getElementById("form");
 
@@ -32,14 +32,14 @@ form.addEventListener("submit", (event) => {
   const ilrObtainedCheckboxChecked = res[5];
   const ilrObtainedDateFieldValue = res[6];
 
-  // // add text to display section for user feedback
-  // updateDisplaySection(
-  //   validInputs_bool,
-  //   bnoStartValue,
-  //   projectionValue,
-  //   absentStartCollectionValues,
-  //   absentEndCollectionValues,
-  //   ilrObtainedCheckboxChecked,
-  //   ilrObtainedDateFieldValue,
-  // );
+  // add text to display section for user feedback
+  updateDisplaySection(
+    validInputs_bool,
+    bnoStartValue,
+    projectionValue,
+    absentStartCollectionValues,
+    absentEndCollectionValues,
+    ilrObtainedCheckboxChecked,
+    ilrObtainedDateFieldValue,
+  );
 });

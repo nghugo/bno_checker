@@ -1,6 +1,10 @@
-import { getArrays } from "./compute.js";
-import { validBNO } from "./compute.js";
- 
+import {
+  earliestValidILRPeriod,
+  projectRemainingILR,
+  earliestCitizenshipPeriod,
+  projectRemainingCitizenship,
+} from "./compute.js";
+
 export function updateDisplaySection(
   validInputs_bool,
   bnoStartValue,
@@ -8,65 +12,38 @@ export function updateDisplaySection(
   absentStartCollectionValues,
   absentEndCollectionValues,
   ilrObtainedCheckboxChecked,
-  ilrObtainedDateFieldValue,
+  ilrObtainedDateFieldValue
 ) {
-  function addPNode(textMessage) {
-    const para = document.createElement("p");
-    const text = document.createTextNode(textMessage);
-    para.appendChild(text);
+  function addDivNode(title, message) {
+    const titleNode = document.createTextNode(title);
+    const messageNode = document.createTextNode(message);
+    
+    const div = document.createElement("div")
+    const h4 = document.createElement("h4")
+    const p = document.createElement("p");
+    
+    h4.appendChild(titleNode)
+    p.appendChild(messageNode)
+    div.appendChild(h4);
+    div.appendChild(p);
     const displaySection = document.getElementById("displaySection");
-    displaySection.append(para);
+    displaySection.append(div);
   }
 
-  // step 1: clear display section first
+  // step 1: clear display section
   const displaySection = document.getElementById("displaySection");
   displaySection.innerHTML = "";
 
+
   // step 2: add messages to display section
   if (!validInputs_bool) {
-    addPNode(`Please submit again with valid input values.`);
+    addDivNode("Invalid Input", "Please re-submit with valid input values.");
   } else {
-    const res = getArrays(
-      bnoStartValue,
-      absentStartCollectionValues,
-      absentEndCollectionValues
-    );
-    const inUK = res[0];
-    const isFeb29 = res[1];
-
-    const res2 = validBNO(inUK, isFeb29, bnoStartValue, projectionValue);
-    const validPeriod = res2[0];
-    const firstInvalid = res2[1];
-    const earliestRestartDate = res2[2];
-    const remainingAbsences = res2[3];
-
-    if (validPeriod) {
-      addPNode(
-        `Your 5-year qualifying period towards Indefinite Leave to Remain is valid.`
-      );
-
-      if (projectionValue != "") {
-        const projectionDate = new Date(projectionValue);
-        addPNode(
-          `On projection date ${projectionDate.toDateString()}, you have ${remainingAbsences} remaining whole day absence(s).`
-        );
-      } else {
-        addPNode(
-          `Since you have not provided a projection date, no remaining whole day absences calculation was carried out.`
-        );
-      }
-    } else {
-      addPNode(
-        `Your 5-year qualifying period towards Indefinite Leave to Remain is invalid, hence remaining absences cannot be computed.`
-      );
-      addPNode(
-        `According to your specified whole day absences, the earliest date you can restart another 5-year qualifying period towards a valid Indefinite Leave To Remain is ${earliestRestartDate.toDateString()}. You can check for the the new qualifying period to BNO by entering the new start date in the above form.`
-      );
-    }
+    // valid inputs, so show the results
   }
 
-  // step 3: if display section is still empty, show alt message
+  // step 3: if display section is empty (nothing done in step 2), show initial message
   if (displaySection.innerHTML === "") {
-    addPNode("Please fill out the form and press submit");
+    addDivNode("Not Yet Submitted", "Please fill out the form and press submit.");
   }
 }

@@ -406,14 +406,18 @@ textarea.input {
   margin: auto;
   margin-top: 40px;
   border-radius: 5px;
-  padding: 10px
+  padding: 10px;
+  font-family: Raleway-SemiBold;
 }
 
 #displayContainer p {
-  font-family: Raleway-SemiBold;
-  font-size:20px;
+  font-size:18px;
   color: black;
-  margin: 5px;
+}
+
+#displayContainer > h3 {
+  text-decoration:underline;
+  margin-bottom:16px;
 }
 
 p.resultParagraph {
