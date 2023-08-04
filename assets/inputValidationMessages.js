@@ -137,7 +137,7 @@ function bnoProjectionDateInRangeIfExists(
     } else if (new Date(projectionValue) < new Date(bnoStartValue)) {
       setError(
         projection,
-        "Projection date must be within 5-years after BNO start date"
+        "Projection date must be after BNO start date"
       );
       res = false;
     } else {
