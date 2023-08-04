@@ -84,9 +84,10 @@ export function updateDisplaySection(
     );
 
     // part 2C: projection if user has entered projection date
-    
-    // part 2C-1: indefinite leave to remain projection
+
     if (projectionIndex) {
+      
+      // part 2C-1: indefinite leave to remain projection
       if (!ilrObtainedCheckboxChecked) {
         // if indefinite leave to remain not yet obtained
         const [continuousAbsences, boundednessILR] = projectRemainingILR(
@@ -99,12 +100,14 @@ export function updateDisplaySection(
         var ilrProjectionMessage;
         if (boundednessILR === "out of bounds") {
           if (continuousAbsences === -1) {
-            ilrProjectionMessage =
-              `Your projection date ${new Date(projectionValue).toDateString()} is out of bounds to the left of your earliest ILR qualifying period.`;
+            ilrProjectionMessage = `Your projection date ${new Date(
+              projectionValue
+            ).toDateString()} is out of bounds to the left of your earliest ILR qualifying period.`;
           } else {
             // continuousAbsences === -2
-            ilrProjectionMessage =
-              `Your projection date ${new Date(projectionValue).toDateString()} is out of bounds to the right of your earliest ILR qualifying period.`;
+            ilrProjectionMessage = `Your projection date ${new Date(
+              projectionValue
+            ).toDateString()} is out of bounds to the right of your earliest ILR qualifying period.`;
           }
         } else {
           // boundednessILR === "in bound"
@@ -114,37 +117,44 @@ export function updateDisplaySection(
         }
         addDivNode("Remaining Absences on Your Projection Date for ILR", ilrProjectionMessage);
       }
-    }
 
-    // part 2C-2: citizenship projection
-    // ["out of bounds", "in RHS bound", "in FULL bound"]
-    const [remainingCountFULL, remainingCountRHS, boundednessCITIZENSHIP] = projectRemainingCitizenship(
-      projectionIndex, earliestValidCitizenshipStartIndex, earliestValidCitizenshipMidIndex,
-      earliestValidCitizenshipEndIndex, isAbsent
-    );
-    var citizenshipProjectionMessage;
-    if (boundednessCITIZENSHIP === "out of bounds") {
-      if (remainingCountFULL === -1) {
-        citizenshipProjectionMessage = `Your projection date ${new Date(projectionValue).toDateString()} is out of bounds to the left of your earliest citizenship qualifying period.`;
+      // part 2C-2: citizenship projection
+      // ["out of bounds", "in RHS bound", "in FULL bound"]
+      const [remainingCountFULL, remainingCountRHS, boundednessCITIZENSHIP] = projectRemainingCitizenship(
+        projectionIndex,
+        earliestValidCitizenshipStartIndex,
+        earliestValidCitizenshipMidIndex,
+        earliestValidCitizenshipEndIndex,
+        isAbsent
+      );
+      var citizenshipProjectionMessage;
+      if (boundednessCITIZENSHIP === "out of bounds") {
+        if (remainingCountFULL === -1) {
+          citizenshipProjectionMessage = `Your projection date ${new Date(
+            projectionValue
+          ).toDateString()} is out of bounds to the left of your earliest citizenship qualifying period.`;
+        } else {
+          citizenshipProjectionMessage = `Your projection date ${new Date(
+            projectionValue
+          ).toDateString()} is out of bounds to the right of your earliest citizenship qualifying period.`;
+        }
       } else {
-        citizenshipProjectionMessage = `Your projection date ${new Date(projectionValue).toDateString()} is out of bounds to the right of your earliest citizenship qualifying period.`;
+        if (boundednessCITIZENSHIP === "in RHS bound") {
+          citizenshipProjectionMessage = `Your specified projection date ${new Date(
+            projectionValue
+          ).toDateString()} falls into the last 1 year of your earliest citizenship qualifying period. You have ${remainingCountRHS} out of 90 absences remaining.`;
+        } else {
+          // boundednessCITIZENSHIP === "in FULL bound"
+          citizenshipProjectionMessage = `Your specified projection date ${new Date(
+            projectionValue
+          ).toDateString()} falls into the first 4 years of your earliest citizenship qualifying period. You have ${remainingCountFULL} out of 450 absences remaining for the full qualifying period, and ${Math.min(
+            remainingCountFULL,
+            90
+          )} out of 90 absences remaining for the last year of the qualifying period.`;
+        }
       }
-
-    } else {
-      if (boundednessCITIZENSHIP === "in RHS bound") {
-        citizenshipProjectionMessage = `Your specified projection date ${new Date(projectionValue).toDateString()} falls into the last 1 year of your earliest citizenship qualifying period. You have ${remainingCountRHS} out of 90 absences remaining.`
-      } else {
-        // boundednessCITIZENSHIP === "in FULL bound"
-        citizenshipProjectionMessage = `Your specified projection date ${new Date(projectionValue).toDateString()} falls into the first 4 years of your earliest citizenship qualifying period. You have ${remainingCountFULL} out of 450 absences remaining for the full qualifying period, and ${Math.min(remainingCountFULL, 90)} out of 90 absences remaining for the last year of the qualifying period.`
-      }
+      addDivNode("Remaining Absences on Your Projection Date for Citizenship", citizenshipProjectionMessage);
     }
-    addDivNode("Remaining Absences on Your Projection Date for Citizenship", citizenshipProjectionMessage);
-
-
-
-
-
-    
   }
 
   // step 3: if display section is empty (nothing done in step 2), show initial message
