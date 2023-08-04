@@ -156,7 +156,9 @@ export function projectRemainingILR(projectionIndex, earliestValidILRStartIndex,
     // adjust for Feb29 about to enter from the RHS (correct dates and -1 correct -> see test case 3, 4)
     if (isFeb29(yearWindowRightIndex + DAY)) {
       yearWindowLeftIndex -= DAY; // cancel out window increment below
-      remainingCount -= 1; // represents adding a day of continuous absence starting from the projection date
+      
+      // amend: delete the following line of code, since it duplicates minus remaining
+      // remainingCount -= 1; // represents adding a day of continuous absence starting from the projection date
     }
 
     // console.log(`left ${new Date(yearWindowLeftIndex)} right ${new Date(yearWindowRightIndex + DAY)}, ${(yearWindowRightIndex - (projectionIndex - DAY)) / DAY}, ${remainingCount}`)
