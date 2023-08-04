@@ -62,7 +62,7 @@ export function updateDisplaySection(
       [earliestValidILRStartIndex, earliestValidILREndIndex] = getEarliestValidILRPeriod(bnoStartIndex, isAbsent);
       addDivNode(
         "Earliest Valid ILR Qualifying Period",
-        `The earliest 5-year period during which you can qualify for Indefinite Leave to Remain is from 
+        `From 
         ${new Date(earliestValidILRStartIndex).toDateString()} to ${new Date(earliestValidILREndIndex).toDateString()}.`
       );
     }
@@ -77,7 +77,7 @@ export function updateDisplaySection(
       getEarliestCitizenshipPeriod(citizenshipConstrainedEarliestStartIndex, isAbsent);
     addDivNode(
       "Earliest Valid Citizenship Qualifying Period",
-      `The earliest 5-year period during which you can qualify for British Citizenship is from 
+      `From 
         ${new Date(earliestValidCitizenshipStartIndex).toDateString()} to ${new Date(
         earliestValidCitizenshipEndIndex
       ).toDateString()}.`
@@ -102,12 +102,12 @@ export function updateDisplaySection(
           if (continuousAbsences === -1) {
             ilrProjectionMessage = `Your projection date ${new Date(
               projectionValue
-            ).toDateString()} is out of bounds to the left of your earliest ILR qualifying period.`;
+            ).toDateString()} is too early relative to your earliest valid ILR qualifying period. (Out of bounds to the left.)`;
           } else {
             // continuousAbsences === -2
             ilrProjectionMessage = `Your projection date ${new Date(
               projectionValue
-            ).toDateString()} is out of bounds to the right of your earliest ILR qualifying period.`;
+            ).toDateString()} is too late relative to your earliest valid ILR qualifying period. (Out of bounds to the right.)`;
           }
         } else {
           // boundednessILR === "in bound"
@@ -132,11 +132,11 @@ export function updateDisplaySection(
         if (remainingCountFULL === -1) {
           citizenshipProjectionMessage = `Your projection date ${new Date(
             projectionValue
-          ).toDateString()} is out of bounds to the left of your earliest citizenship qualifying period.`;
+          ).toDateString()} is too early relative to your earliest valid citizenship qualifying period. (Out of bounds to the left.)`;
         } else {
           citizenshipProjectionMessage = `Your projection date ${new Date(
             projectionValue
-          ).toDateString()} is out of bounds to the right of your earliest citizenship qualifying period.`;
+          ).toDateString()} is too late relative to your earliest valid citizenship qualifying period.  (Out of bounds to the right.)`;
         }
       } else {
         if (boundednessCITIZENSHIP === "in RHS bound") {
