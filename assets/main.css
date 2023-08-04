@@ -415,8 +415,27 @@ textarea.input {
   color: black;
 }
 
-#displayContainer > h3 {
+
+#displayContainer div {
+  margin-bottom: 10px;
+}
+
+
+#displaySection h1,
+#displaySection h2,
+#displaySection h3,
+#displaySection h4,
+#displaySection h5,
+#displaySection h6 {
   text-decoration:underline;
+  margin-bottom: 5px;
+}
+
+#displayHeader {
+  text-align: center;
+}
+
+#displayHeader h3 {
   margin-bottom:16px;
 }
 
