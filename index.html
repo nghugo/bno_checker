@@ -4,13 +4,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>BNO 5+1 Checker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-     
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/png" href="images/check-square.png" sizes="256x256" />
-
     <link rel="stylesheet" href="./assets/main.css" />
-    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,700,1,0">
     <script src="https://kit.fontawesome.com/8341241341.js" crossorigin="anonymous"></script>
+
     <script defer src="assets/dynamicDateSection.js"></script>
     <script defer src="assets/dynamicCheckbox.js"></script>
     <script defer src="assets/main.js" type="module"></script>
@@ -20,10 +19,10 @@
     <div class="container">
       <div class="wrap">
         <form id="form" class="form validate-form">
-          <h1 class="form-title">ILR and Citizenship (BNO 5+1) Validity Checker</h1>
+          <h1 class="title">Calculator: ILR and Citizenship (BNO 5+1) Validity</h1>
 
           
-          <p class="form-subtitle">
+          <p class="subtitle">
             Please enter the start date of your BNO visa.
           </p>
 
@@ -42,7 +41,7 @@
             <div class="error"></div>
           </div>
           
-          <p class="form-subtitle"> 
+          <p class="subtitle"> 
             Please enter all time intervals of your whole day absences from the UK&nbsp
             <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/939345/calculating-continuous-period-v22.0ext.pdf#page=9&zoom=100,93,728" target="_blank">
               (see definition)
@@ -61,7 +60,7 @@
             </button>
           </div>
           
-          <p class="form-subtitle"> 
+          <p class="subtitle"> 
             Please indicate if you have already obtained your Indefinite Leave to Remain.
           </p> 
 
@@ -72,7 +71,7 @@
 
           
           
-          <p class="form-subtitle"
+          <p class="subtitle"
             > If "yes" was indicated above, please also enter the date you obtained it.
           </p> 
           <div
@@ -84,10 +83,10 @@
             <div class="error"></div>
           </div>
           
-          <p class="form-subtitle">
+          <p class="subtitle">
             Optional: 
             Please enter a date on which you want to check your remaining whole day absences.
-            <span class="form-subsubtitle">
+            <span class="subsubtitle">
               This checks against indefinite leave to remain (if not already obtained) and British citizenship requirements
             </span>  
           </p> 
@@ -125,7 +124,22 @@
         
         <div id="footer">
           <section>
-            <h2 class="form-subtitle">Get in touch</h2>
+            <h2 class="subtitle">Explained: How this calculator works, Constraints for ILR and Citizenship Applications, etc</h2>
+            <div class="arrow-link-container style3">
+            <a href="info.html" target="_blank">
+                <div class="overlay-cover style3"></div>
+                <div class="overlay-text">
+                  <p>See Explanation</p>
+                  <div class="arrow">
+                    <span class="material-symbols-rounded">&thinsp;arrow_right_alt</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="subtitle">Get in touch</h2>
             <ul class="icons">
               <li>
                 <a href="https://github.com/nghugo/bno_checker" class="icon brands style2 fa-github"><span class="label">GitHub</span></a>
