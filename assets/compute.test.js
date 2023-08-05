@@ -152,20 +152,7 @@ describe("#Check citizenship 451 day absence projection", () => {
     isAbsent
   );
 
-  it("returns 2 days of absence remaining", () => {
-    projectionIndex = new Date("2029-05-09").getTime();
-    expect(
-      projectRemainingCitizenship(
-        projectionIndex,
-        earliestValidCitizenshipStartIndex,
-        earliestValidCitizenshipMidIndex,
-        earliestValidCitizenshipEndIndex,
-        isAbsent
-      )
-    ).toStrictEqual([2, null, "in FULL bound"]);
-  });
-
-  it("returns 1 day of absence remaining", () => {
+  it("returns out of bounds to the left", () => {
     projectionIndex = new Date("2029-05-10").getTime();
     expect(
       projectRemainingCitizenship(
@@ -175,10 +162,10 @@ describe("#Check citizenship 451 day absence projection", () => {
         earliestValidCitizenshipEndIndex,
         isAbsent
       )
-    ).toStrictEqual([1, null, "in FULL bound"]);
+    ).toStrictEqual([-1, -1, "out of bounds"]);
   });
 
-  it("returns 0 days of absence remaining", () => {
+  it("returns 450 days of absence remaining", () => {
     projectionIndex = new Date("2029-05-11").getTime();
     expect(
       projectRemainingCitizenship(
@@ -188,6 +175,6 @@ describe("#Check citizenship 451 day absence projection", () => {
         earliestValidCitizenshipEndIndex,
         isAbsent
       )
-    ).toStrictEqual([0, null, "in FULL bound"]);
+    ).toStrictEqual([450, null, "in FULL bound"]);
   });
 });

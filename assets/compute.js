@@ -188,6 +188,13 @@ export function getCitizenshipConstrainedEarliestStartIndex(
 }
 
 export function getEarliestCitizenshipPeriod(citizenshipConstrainedEarliestStartIndex, isAbsent) {
+  // shift window until 3 requirements are satisfied
+  // they are:
+  // 1. absentCountFULL <= 450 
+  // 2. absentCountRHS <= 90 
+  // 3. !isAbsent(candidateL)
+  // then return the 2 window pointers (which indicate the earliest period one can qualify for british citizenship)
+
   var candidateL = citizenshipConstrainedEarliestStartIndex; // candidateL is an inclusive left bound for FULL
   var candidateM = indexAdd4Years(citizenshipConstrainedEarliestStartIndex); // candidateM is an inclusive left bound for RHS
   var candidateR = indexAdd5YearsMinus1Day(citizenshipConstrainedEarliestStartIndex); // candidateR is an inclusive right bound for both FULL and RHS
@@ -223,8 +230,8 @@ export function getEarliestCitizenshipPeriod(citizenshipConstrainedEarliestStart
   //   absentCountRHS
   // );
 
-  // shift the 2 windows, and adjusting for Feb29
-  while (absentCountFULL > 450 || absentCountRHS > 90) {
+  // shift the 2 windows, and adjusting for Feb29, and make sure first day is NOT absent
+  while (absentCountFULL > 450 || absentCountRHS > 90  || isAbsent(candidateL)) {
     if (isFeb29(candidateR + DAY)) {
       // add DAY -> a new Day entering from the right of window
       if (isAbsent(candidateR + DAY)) {
