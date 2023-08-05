@@ -62,7 +62,7 @@ p {
 }
 
 section * {
-  padding-bottom: 0.25em;
+  padding-bottom: 0.3em;
 }
 
 section ol, section ul {
@@ -258,6 +258,9 @@ iframe {
   text-align: left;
   padding-bottom: 8px;
   padding-top: 1em;
+}
+section .subtitle {
+  text-transform: capitalize;
 }
 .subsubtitle {
   display: block;

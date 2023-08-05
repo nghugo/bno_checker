@@ -78,33 +78,40 @@
           </section>
           
           <section>
-            <p class="subtitle">Absences Are Tricky, But Make or Break Applications</p>
-            <p>It is vital to keep track of one's absences during qualifying periods with precision. If any constraint is violated, the current application becomes invalidated. At best, this results in slight delays. At worst, this can completely wipe your progress of close to 5 years.
+            <p class="subtitle">Absences Are Tricky, But They Make Or Break Applications</p>
+            <p>It is vital to keep track of your absences during qualifying periods with precision. If any constraint is violated, the current application becomes invalidated. At best, this results in slight delays. At worst, this can completely wipe your progress of close to 5 years.
               When absences are abundant and scattered, they can become exceedingly difficult to keep track of. This calculator helps you understand the distribution of the your absences, and make adjustments accordingly to acheive succesful applications.</p>
 
           </section>
           <section>
             <p class="subtitle">What the Calculator Computes</p>
-            <p>The objective of the calculator is to inform the user whether the whole day absences from the UK they have taken (and/or plan to take) satisfy the requirements of their indefinite leave to remain and British citizenship applications. </p>
+            <p>The objective of the calculator is to inform the user whether the whole day absences from the UK they have taken (and/or plan to take) satisfy the requirements of their indefinite leave to remain and British citizenship applications (*).</p>
               
-            <p style="color: red; outline: 2px solid red;">Yes vs No scenario and output</p>
+            <p>The calculator performs computations once the form is filled out and submitted. The results can be found in the green display section near the bottom of the page.</p>
 
-
-            <p>compute the earliest time period during which the user can qualify for indefinite leave to remain and citizenship respectively. </p>
-
-              
-              
-              
-              
-              
-            <p style="color: red; outline: 2px solid red;">A secondary objective, the user can </p>
-            <p>In order to perform this calculation, information such as BNO start date, periods of whole day absences, and the day of interest for projection are requested from the user.</p>
-
+            <p>The main results to look for are the earliest valid indefinite leave to remain qualifying period, and the earliest valid indefinite leave to remain citizenship qualifying period. These indicate the earliest 5 year periods during which all constraints are satisfied. Their end points indicate when the user is expected to obtain their indefinite leave to remain and British citizenship respectively.</p>
+            <p>More results are displayed if the user specified an optional parameter called the "projection date". This is a date which the user would like to understand their remaining absences. Calculation is carried out for both indefinite leave to remain and British citizenship applications. There are 3 possible results for each of these 2 projections:</p>
+            <ul>
+              <li><p>The projection date is within bounds of the earliest valid qualifying period, so the remaining absences on that day is computed and displayed.</p></li>
+              <li><p>The projection date is too late and falls outside of the right bound of the earliest valid qualifying period.</p></li>
+              <li><p>The projection date is too early and falls outside of the left bound of the earliest valid qualifying period.</p></li>
+            </ul>
+            <p>When the projection date is out of bounds, remaining absences has no meaning and hence no computation can be carried out.</p>
+            <p>(*) Note that if the user specifies that indefinite leave to remain has already been obtained, then only computation relevant to citizenship application is performed.</p>
           </section>
 
           <section>
             <p class="subtitle">How the Calculator Works</p>
-            <p style="outline:2px solid red; color: red;">UNFIN UNFIN UNFIN UNFIN UNFIN</p>
+            <p>The first process that occurs after the user submits the form is data validation. A set of checks are performed to ensure that the user has entered valid data. These are some examples of invalid inputs:</p>
+            <ul>
+              <li><p>An absence interval is missing a start date or an end date.</p></li>
+              <li><p>An absence interval has an end date earlier than start date.</p></li>
+              <li><p>Indefinite leave to remain is indicated as already obtained, but no relevant date is provided.</p></li>
+            </ul>
+            <p>Once all inputs pass the validation test, an algorithm (sliding window) runs through the dates to see when the earliest qualifying periods for indefinite leave to remain and British citizenship can be satisfied respectively (*). The algorithm inspects different 5-year windows of time, and keeps track of the distribution of absences within them. Whenever a violation of constraint is detected, it moves on to the next window. This process is repeated until there is no violation. At the end, 2 windows are obtained as the earliest valid qualification periods for the 2 types of applications. Based on a very similar algorithm, the number of remaining absences on a day can also be computed. A tricky edge case that needs to be handled is the presence or absence of the day Feburary 29 in each year, which alters the number of days in a year. Hence, the size of the window needs to be adjusted on the fly.</p>
+            <p>The final process is to display the results. The output is taken from the algorithm, and added the page for the user to view.</p>
+            <p>If you would like to view the source code, <a href="https://github.com/nghugo/bno_checker">click here</a> or the GitHub icon at the footer.</p>
+            <p>(*) Note that if the user specifies that indefinite leave to remain has already been obtained, then only computation relevant to citizenship application is performed.</p>
           </section>
 
           <section>
@@ -129,7 +136,7 @@
           </section>
 
           <div>
-            <p class="subtitle">See the calculator in action</p>
+            <p class="subtitle">See The Calculator In Action</p>
             <div class="arrow-link-container style3">
               <a href="index.html">
                 <div class="overlay-cover style3"></div>
@@ -146,7 +153,7 @@
 
         <div id="footer">
           <div>
-            <p class="subtitle">Get in touch</p>
+            <p class="subtitle">Get In Touch</p>
             <ul class="icons">
               <li>
                 <a href="https://github.com/nghugo/bno_checker" class="icon brands style2 fa-github"
