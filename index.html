@@ -2,34 +2,26 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Check BNO 5+1</title>
+    <title>BNO 5+1 Checker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
      
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
     <link rel="stylesheet" href="./assets/main.css" />
-    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
     
-    <script src="./assets/jquery-3.2.1.min.js"></script>
-    <script src="./assets/iframeResizer.contentWindow.min.js"></script>
-    
+    <script src="https://kit.fontawesome.com/8341241341.js" crossorigin="anonymous"></script>
     <script defer src="assets/dynamicDateSection.js"></script>
     <script defer src="assets/dynamicCheckbox.js"></script>
     <script defer src="assets/main.js" type="module"></script>
-    <!-- <script defer src="assets/compute.js" type="module"></script> -->
     
   </head>
   <body>
-    <div
-      class="container"
-      
-    >
+    <div class="container">
       <div class="wrap">
         <form id="form" class="form validate-form">
-          <h1 class="form-title">Indefinite Leave to Remain and British Citizenship (BNO 5+1) Validity Checker</h1>
+          <h1 class="form-title">ILR and Citizenship (BNO 5+1) Validity Checker</h1>
 
           
           <p class="form-subtitle">
@@ -70,13 +62,11 @@
             </button>
           </div>
           
-          <p class="form-subtitle"
-            > Please indicate if you have already obtained your Indefinite Leave to Remain.
+          <p class="form-subtitle"> 
+            Please indicate if you have already obtained your Indefinite Leave to Remain.
           </p> 
 
-          <div
-            class="wrap-input validateInput flex-checkbox"
-          >
+          <div class="wrap-input validateInput flex-checkbox">
             <input type="checkbox" id="ilr-obtained-checkbox" name="ilr-obtained-checkbox">
             <label for="ilr-obtained-checkbox" class="label-input checkbox-label"> Check to indicate "yes" </label>
           </div>
@@ -95,8 +85,8 @@
             <div class="error"></div>
           </div>
           
-          <p class="form-subtitle"
-            >Optional: 
+          <p class="form-subtitle">
+            Optional: 
             Please enter a date on which you want to check your remaining whole day absences.
             <span class="form-subsubtitle">
               This checks against indefinite leave to remain (if not already obtained) and British citizenship requirements
@@ -133,7 +123,23 @@
           </div>
         </div>
         
-
+        
+        <div id="footer">
+          <section>
+            <h2 class="form-subtitle">Get in touch</h2>
+            <ul class="icons">
+              <li>
+                <a href="https://github.com/nghugo/bno_checker" class="icon brands style2 fa-github"><span class="label">GitHub</span></a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/hugo-ryan-ng-312730197/" class="icon brands style2 fa-linkedin"><span class="label">LinkedIn</span></a>
+              </li>
+              <li>
+                <a href="mailto:hugornprojects@gmail.com" class="icon solid style2 fa-envelope"><span class="label">Email</span></a>
+              </li>
+            </ul>
+          </section>
+        </div>
       </div>
     </div>
 

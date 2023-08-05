@@ -184,18 +184,25 @@ iframe {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 15px;
+  padding: 30px;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
 }
 .wrap {
   max-width: 960px;
+  min-height: calc(100vh - 60px);
   background: #fff;
   border-radius: 5px;
-  padding: 66px 115px 59px;
+  padding: 30px 115px 30px;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
+.wrap #content {
+  flex: 1
+}
+
 .form {
   width: 100%;
   display: -webkit-box;
@@ -470,3 +477,91 @@ input[type=date]:disabled {
   color: transparent;
   opacity: 1;
 }
+
+/* Icons */
+ul.icons {
+  cursor: default;
+  list-style: none;
+  padding-left: 0;
+  margin: -1em 0 2em -1em;
+}
+
+ul.icons li {
+  display: inline-block;
+  padding: 1em 0 0 1em;
+}
+
+#footer {
+  margin-top: 50px;
+}
+
+/* Icon */
+
+.icon {
+  text-decoration: none;
+  border-bottom: none;
+  position: relative;
+}
+
+.icon:before {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+  text-transform: none !important;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 400;
+}
+
+.icon > .label {
+  display: none;
+}
+
+.icon:before {
+  line-height: inherit;
+}
+
+.icon.solid:before {
+  font-weight: 900;
+}
+
+.icon.brands:before {
+  font-family: "Font Awesome 5 Brands";
+}
+
+.icon.style2 {
+  -moz-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out;
+  -webkit-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out;
+  -ms-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out;
+  background-color: transparent;
+  border: solid 1px #c9c9c9;
+  border-radius: 4px;
+  width: 2.65em;
+  height: 2.65em;
+  display: inline-block;
+  text-align: center;
+  line-height: 2.65em;
+  color: inherit;
+}
+
+.icon.style2:before {
+  font-size: 1.1em;
+}
+
+.icon.style2:hover {
+  color: rgb(30, 227, 184);
+  border-color: rgb(30, 227, 184);
+}
+
+.icon.style2:active {
+  background-color: rgba(242, 132, 158, 0.1);
+}
+

@@ -1,7 +1,6 @@
 import {
   DAY,
   isFeb29,
-  isAbsentFactory,
   indexAdd5YearsMinus1Day,
   indexMinus1YearAdd1Day,
   indexMinus4YearsAdd1Day,
