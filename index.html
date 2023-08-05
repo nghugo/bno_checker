@@ -2,18 +2,23 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>BNO 5+1 Checker</title>
+    <title>BNO 5+1 Calculator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
     <link rel="icon" type="image/png" href="images/check-square.png" sizes="256x256" />
     <link rel="stylesheet" href="./assets/main.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,700,1,0">
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,700,1,0"
+    />
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
     <script src="https://kit.fontawesome.com/8341241341.js" crossorigin="anonymous"></script>
 
     <script defer src="assets/dynamicDateSection.js"></script>
     <script defer src="assets/dynamicCheckbox.js"></script>
     <script defer src="assets/main.js" type="module"></script>
-    
   </head>
   <body>
     <div class="container">
@@ -21,92 +26,89 @@
         <form id="form" class="form validate-form">
           <h1 class="title">Calculator: ILR and Citizenship (BNO 5+1) Validity</h1>
 
-          
-          <p class="subtitle">
-            Please enter the start date of your BNO visa.
-          </p>
+          <p class="subtitle">Please enter the start date of your BNO visa.</p>
 
-          <div
-            class="wrap-input validateInput"
-            invalid-input-message="Valid BNO start date is required"
-          >
+          <div class="wrap-input validateInput" invalid-input-message="Valid BNO start date is required">
             <p class="label-input">BNO start date</p>
-            <input
-              id="bnoStart"
-              class="input" 
-              type="date" 
-              name="bnoStart"
-              max="9999-12-31"
-            />
+            <input id="bnoStart" class="input" type="date" name="bnoStart" max="9999-12-31" />
             <div class="error"></div>
           </div>
-          
-          <p class="subtitle"> 
-            Please enter all time intervals of your whole day absences from the UK&nbsp
-            <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/939345/calculating-continuous-period-v22.0ext.pdf#page=9&zoom=100,93,728" target="_blank">
-              (see definition)
-            </a> on or after BNO start date, if any.
-            </p>
 
-            <!-- hidden element-->
-            <p id="myPlaceholder" style="display:none; outline:4px solid red; width:100%">PLACEHOLDER</p>  
-                    
+          <p class="subtitle">
+            Please enter all time intervals of your whole day absences from the UK&nbsp
+            <a
+              href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/939345/calculating-continuous-period-v22.0ext.pdf#page=9&zoom=100,93,728"
+              target="_blank"
+            >
+              (see definition)
+            </a>
+            on or after BNO start date, if any.
+          </p>
+
+          <!-- hidden element-->
+          <p id="myPlaceholder" style="display: none; outline: 4px solid red; width: 100%">PLACEHOLDER</p>
+
           <div class="addminus-button-group">
             <button class="addminus add" onclick="addDateSection()" type="button">
-              <strong> &#43 </strong> &nbsp Add a Time Interval
+              <span class="material-symbols-outlined">
+                add
+              </span> &nbsp; Add a Time Interval
             </button>
-            <button class="addminus minus" onclick="removeDateSection()" type="button" disabled>  <!-- disabled="disabled"-->
-              <strong> &#8722 </strong> &nbsp Remove a Time Interval
+
+            <button class="addminus minus" onclick="removeDateSection()" type="button" disabled>
+              <!-- disabled="disabled"-->
+              <span class="material-symbols-outlined">
+                remove
+              </span> &nbsp; Remove a Time Interval
             </button>
           </div>
-          
-          <p class="subtitle"> 
-            Please indicate if you have already obtained your Indefinite Leave to Remain.
-          </p> 
+
+          <p class="subtitle">Please indicate if you have already obtained your Indefinite Leave to Remain.</p>
 
           <div class="wrap-input validateInput flex-checkbox">
-            <input type="checkbox" id="ilr-obtained-checkbox" name="ilr-obtained-checkbox">
+            <input type="checkbox" id="ilr-obtained-checkbox" name="ilr-obtained-checkbox" />
             <label for="ilr-obtained-checkbox" class="label-input checkbox-label"> Check to indicate "yes" </label>
           </div>
 
-          
-          
-          <p class="subtitle"
-            > If "yes" was indicated above, please also enter the date you obtained it.
-          </p> 
+          <p class="subtitle">If "yes" was indicated above, please also enter the date you obtained it.</p>
           <div
             class="wrap-input validateInput"
             invalid-input-message="Valid ILR date obtained is required to be at least 5 years after BNO start date"
           >
             <p class="label-input">Indefinite Leave to Remain date obtained</p>
-            <input id="ilr-obtained-datefield" class="input" type="date" name="ilr-obtained-datefield" max="9999-12-31" disabled/>
+            <input
+              id="ilr-obtained-datefield"
+              class="input"
+              type="date"
+              name="ilr-obtained-datefield"
+              max="9999-12-31"
+              disabled
+            />
             <div class="error"></div>
           </div>
-          
+
           <p class="subtitle">
-            Optional: 
-            Please enter a date on which you want to check your remaining whole day absences.
+            Optional: Please enter a date on which you want to check your remaining whole day absences.
             <span class="subsubtitle">
-              This checks against indefinite leave to remain (if not already obtained) and British citizenship requirements
-            </span>  
-          </p> 
+              This checks against indefinite leave to remain (if not already obtained) and British citizenship
+              requirements
+            </span>
+          </p>
 
           <div
             class="wrap-input validateInput"
             invalid-input-message="Valid projection date is required to be after BNO start date"
           >
             <p class="label-input">Projection date (optional)</p>
-            <input id="projection" class="input" type="date" name="projection" max="9999-12-31"/>
+            <input id="projection" class="input" type="date" name="projection" max="9999-12-31" />
             <div class="error"></div>
           </div>
 
-          
-          
           <div id="submitsection">
             <button class="submit" id="submit-button" type="submit">Submit</button>
           </div>
         </form>
-        
+
         <div id="displayContainer">
           <div id="displayHeader">
             <h3>Results</h3>
@@ -116,17 +118,16 @@
               <h4>Not Yet Submitted</h4>
               <p>Please fill out the form and press submit.</p>
             </div>
-
-
           </div>
         </div>
-        
-        
+
         <div id="footer">
           <section>
-            <h2 class="subtitle">Explained: How this calculator works, Constraints for ILR and Citizenship Applications, etc</h2>
+            <h2 class="subtitle">
+              Explained: How this calculator works, Constraints for ILR and Citizenship Applications, etc
+            </h2>
             <div class="arrow-link-container style3">
-            <a href="info.html" target="_blank">
+              <a href="info.html" target="_blank">
                 <div class="overlay-cover style3"></div>
                 <div class="overlay-text">
                   <p>See Explanation</p>
@@ -142,19 +143,24 @@
             <h2 class="subtitle">Get in touch</h2>
             <ul class="icons">
               <li>
-                <a href="https://github.com/nghugo/bno_checker" class="icon brands style2 fa-github"><span class="label">GitHub</span></a>
+                <a href="https://github.com/nghugo/bno_checker" class="icon brands style2 fa-github"
+                  ><span class="label">GitHub</span></a
+                >
               </li>
               <li>
-                <a href="https://www.linkedin.com/in/hugo-ryan-ng-312730197/" class="icon brands style2 fa-linkedin"><span class="label">LinkedIn</span></a>
+                <a href="https://www.linkedin.com/in/hugo-ryan-ng-312730197/" class="icon brands style2 fa-linkedin"
+                  ><span class="label">LinkedIn</span></a
+                >
               </li>
               <li>
-                <a href="mailto:hugornprojects@gmail.com" class="icon solid style2 fa-envelope"><span class="label">Email</span></a>
+                <a href="mailto:hugornprojects@gmail.com" class="icon solid style2 fa-envelope"
+                  ><span class="label">Email</span></a
+                >
               </li>
             </ul>
           </section>
         </div>
       </div>
     </div>
-
   </body>
 </html>

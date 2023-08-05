@@ -134,8 +134,10 @@ button:disabled {
 }
 
 button.addminus{
-  display:block;
+  display:flex;
   text-align:left;
+  align-items: center;
+  /* vertical-align: middle; */
   width: 100%;
   padding:10px;
   margin-bottom:6px;
@@ -149,9 +151,6 @@ button.addminus{
 button.addminus img{
   width:8%;
   vertical-align: middle;
-}
-button.addminus strong{
-  font-size:large;
 }
 div.addminus-button-group {
   margin-bottom: 35px;

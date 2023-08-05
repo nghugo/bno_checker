@@ -26,7 +26,7 @@ function addDateSection() {
     invalid-input-message="First day outside of the UK is required and needs to be after BNO start date"
   >
     <span class="label-input"
-      >First day outside of the UK (interval ${counter}) *</span
+      >First day outside of the UK (interval ${counter})</span
     >
     <input class="input absentStart" type="date" name='absentStart${counter}' max="9999-12-31"/>
     <div class="error"></div>
@@ -37,7 +37,7 @@ function addDateSection() {
     invalid-input-message="Last day outside of the UK is required and needs to be after 1. BNO start date and 2. first day outside of the UK"
   >
     <span class="label-input"
-      >Last day outside of the UK (interval ${counter}) *</span
+      >Last day outside of the UK (interval ${counter})</span
     >
     <input class="input absentEnd" type="date" name='absentEnd${counter}' max="9999-12-31"/>
     <div class="error"></div>
