@@ -1,14 +1,18 @@
 @font-face {
-  font-family: Raleway-Black;
-  src: url(../fonts/raleway/Raleway-Black.ttf);
+  font-family: Roboto-Black;
+  src: url(../fonts/Roboto/Roboto-Black.ttf);
 }
 @font-face {
-  font-family: Raleway-SemiBold;
-  src: url(../fonts/raleway/Raleway-SemiBold.ttf);
+  font-family: Roboto-Bold;
+  src: url(../fonts/Roboto/Roboto-Bold.ttf);
 }
 @font-face {
-  font-family: Raleway-Bold;
-  src: url(../fonts/raleway/Raleway-Bold.ttf);
+  font-family: Roboto-Medium;
+  src: url(../fonts/Roboto/Roboto-Medium.ttf);
+}
+@font-face {
+  font-family: Roboto-Regular;
+  src: url(../fonts/Roboto/Roboto-Regular.ttf);
 }
 * {
   margin: 0;
@@ -21,10 +25,10 @@ body {
 body,
 html {
   height: 100%;
-  font-family: Raleway-SemiBold, sans-serif;
+  font-family: Roboto-Regular, sans-serif;
 }
 a {
-  font-family: Raleway-SemiBold;
+  font-family: Roboto-Regular;
   font-size: 16px;
   line-height: 1.7;
   color: #666;
@@ -49,17 +53,26 @@ h6 {
   margin: 0;
 }
 p {
-  font-family: Raleway-SemiBold;
+  font-family: Roboto-Regular;
   font-size: 16px;
   line-height: 1.7;
   color: #666;
   margin: 0;
 }
-ul,
+
+/* ul,
 li {
   margin: 0;
   list-style-type: none;
+} */
+ul {
+  padding-left: 1em;
+  padding-bottom: 0.5em;
 }
+li {
+  margin-top: 0;
+}
+
 input {
   outline: none;
   border: none;
@@ -141,7 +154,7 @@ button.addminus{
   width: 100%;
   padding:10px;
   margin-bottom:6px;
-  font-family: "Raleway-Bold";
+  font-family: "Roboto-Bold";
   font-size:16px;
   color: #fff;
   background-color: #000000; /* default to be overridden */
@@ -215,7 +228,7 @@ iframe {
 .title {
   display: block;
   width: 100%;
-  font-family: Raleway-Black;
+  font-family: Roboto-Black;
   font-size: 30px;
   font-weight: bold;
   color: #333;
@@ -226,17 +239,17 @@ iframe {
 .subtitle {
   display: block;
   width: 100%;
-  font-family: Raleway-SemiBold;
+  font-family: Roboto-Medium;
   font-size: 18px;
   color: #333;
   line-height: 1.2;
   text-align: left;
-  padding-bottom: 16px;
+  padding-bottom: 8px;
 }
 .subsubtitle {
   display: block;
   width: 100%;
-  font-family: Raleway-SemiBold;
+  font-family: Roboto-Regular;
   font-size: 14px;
   color: #333;
   line-height: 1.2;
@@ -253,7 +266,7 @@ iframe {
   width: calc((100% - 30px) / 2);
 }
 .label-input {
-  font-family: Raleway-SemiBold;
+  font-family: Roboto-Regular;
   font-size: 16px;
   color: #555;
   line-height: 1.5;
@@ -263,7 +276,7 @@ iframe {
   width: 100%;
   background: #f2f2f2;
   border-radius: 5px;
-  font-family: Raleway-SemiBold;
+  font-family: Roboto-Regular;
   font-size: 20px;
   color: #686868;
   line-height: 1.2;
@@ -353,7 +366,7 @@ textarea.input {
   padding: 0 20px;
   min-width: 150px;
   height: 62px;
-  font-family: Raleway-Bold;
+  font-family: Roboto-Bold;
   font-size: 16px;
   color: #fff;
   line-height: 1.2;
@@ -377,7 +390,7 @@ textarea.input {
   padding: 0 20px;
   min-width: 150px;
   height: 62px;
-  font-family: Raleway-SemiBold;
+  font-family: Roboto-Regular;
   font-size: 16px;
   color: #fff;
   line-height: 1.2;
@@ -413,7 +426,7 @@ textarea.input {
   margin-top: 40px;
   border-radius: 5px;
   padding: 10px;
-  font-family: Raleway-SemiBold;
+  font-family: Roboto-Regular;
 }
 
 #displayContainer p {
@@ -594,7 +607,7 @@ ul.icons li {
   margin: 0;
   color: white !important;
   font-weight: 900;
-  font-family: Raleway-SemiBold;
+  font-family: Roboto-Regular;
   font-size: 18px;
 }
 

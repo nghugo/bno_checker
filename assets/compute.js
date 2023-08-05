@@ -34,7 +34,7 @@ import {
 export function getEarliestValidILRPeriod(bnoStartIndex, isAbsent) {
   // given a bno start date represented in millisecond index since the epoch,
   // and also the days of absences using the closure isAbsent
-  // returns the earliest valid ILR qualification period
+  // returns the earliest valid ILR qualifying period
   // note, this makes user of the function isFeb29 as well
   var candidateILRStartIndex = bnoStartIndex;
   var candidateILREndIndex = indexAdd5YearsMinus1Day(candidateILRStartIndex);
@@ -178,8 +178,8 @@ export function getCitizenshipConstrainedEarliestStartIndex(
   earliestValidILREndIndex
 ) {
   // citizenship process is 5 years and must end at least 1 year after obtaining ILR
-  // ILR qualification period is 5 years
-  // thus, earliest start date for citizenship qualification period = backtrack 4 years from the point of obtaining ILR
+  // ILR qualifying period is 5 years
+  // thus, earliest start date for citizenship qualifying period = backtrack 4 years from the point of obtaining ILR
   // add 1 day to account for inclusive start and end (eg a 4 year period starting on 2024-Jun-28 ends on 2028-Jun-27)
   if (ilrObtainedCheckboxChecked) {
     return indexMinus4YearsAdd1Day(ilrObtainedDateFieldIndex);

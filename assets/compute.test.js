@@ -10,7 +10,7 @@ import { isAbsentFactory } from "./computeHelper";
 
 describe("#Check ILR absence projection", () => {
   // Recall that the objective is to find the longest consecutive absence possible starting from projection date,
-  // but without breaking the 180 day limit and thus invalidating the ILR qualification period.
+  // but without breaking the 180 day limit and thus invalidating the ILR qualifying period.
   // This means exactly using up the 180 day limit
 
   it("returns 104 consecutive days remaining for indefinite leave to remain", () => {
@@ -50,7 +50,7 @@ describe("#Check ILR absence projection", () => {
 });
 
 describe("#Check citizenship 90 day absence projection", () => {
-  //   Check against the number of remaining absences remaining (90) for the citizenship qualification period
+  //   Check against the number of remaining absences remaining (90) for the citizenship qualifying period
 
   const isAbsent = isAbsentFactory(["2028-02-15"], ["2028-05-14"]); // 90 day absence
   var projectionIndex;
@@ -102,7 +102,7 @@ describe("#Check citizenship 90 day absence projection", () => {
 });
 
 describe("#Check citizenship 450 day absence projection", () => {
-  // Check against the number of remaining absences remaining (450) for the citizenship qualification period
+  // Check against the number of remaining absences remaining (450) for the citizenship qualifying period
   // 449 days after 2028-02-15 = 9 May 2029 (ie total 450 days)
   // Earliest start on 9 feb 2025 (4 years + 89 days before 2029-05-09)
   const isAbsent = isAbsentFactory(["2028-02-15"], ["2029-05-09"]); // 450 day absence
@@ -141,7 +141,7 @@ describe("#Check citizenship 450 day absence projection", () => {
 });
 
 describe("#Check citizenship 451 day absence projection", () => {
-  // Check against the number of remaining absences remaining (451) for the citizenship qualification period
+  // Check against the number of remaining absences remaining (451) for the citizenship qualifying period
   // 450 days after 2028-02-15 = 10 May 2029 (ie total 451 days)
   // Earliest start on 9 feb 2025 (4 years + 90 days before 2029-05-10)
   const isAbsent = isAbsentFactory(["2028-02-15"], ["2029-05-10"]); // 451 day absence
