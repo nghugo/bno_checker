@@ -61,11 +61,7 @@ p {
   margin-bottom: 1.5px;
 }
 
-/* ul,
-li {
-  margin: 0;
-  list-style-type: none;
-} */
+
 ol, ul {
   padding-left: 1em;
   padding-bottom: 0.5em;
@@ -235,8 +231,7 @@ iframe {
   color: #333;
   line-height: 1.2;
   text-align: left;
-  padding-top: 32px;
-  padding-bottom: 32px;
+  margin-bottom: 32px;
 }
 .subtitle {
   display: block;
@@ -381,7 +376,6 @@ textarea.input {
 #form #submitsection {
   width:100%;
   text-align:center;
-  padding-top: 18px;
   padding-bottom: 18px;
 }
 #form #submit-button {
@@ -428,10 +422,11 @@ textarea.input {
   background-color: rgba(30, 227, 184, 0.246);
   width: 100%;
   margin: auto;
-  margin-top: 40px;
+  margin-top: 1em;
   border-radius: 5px;
   padding: 10px;
   font-family: Roboto-Regular;
+  margin-bottom: 1em;
 }
 
 #displayContainer p {
@@ -480,6 +475,10 @@ p.resultParagraph {
 @media (max-width: 576px) {
   .wrap {
     padding: 66px 10px 59px;
+    border-radius: 0;
+  }
+  .container {
+    padding: 0;
   }
 }
 
@@ -499,17 +498,17 @@ input[type=date]:disabled {
 ul.icons {
   cursor: default;
   list-style: none;
-  padding-left: 0;
-  margin: -1em 0 0 -1em;
+  padding-left: 0em;
+  margin-left: 0;
 }
 
 ul.icons li {
   display: inline-block;
-  padding: 1em 0 0 0.5em;
+  padding-right: 0.5em;
 }
 
 #footer {
-  margin-top: 50px;
+  margin-top: 1em;
 }
 
 /* Icon */
@@ -589,7 +588,7 @@ ul.icons li {
   position: relative;
   background-color: dodgerblue;
   border-radius: 5px;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
   margin-right: 1em;
 }
 
@@ -669,4 +668,8 @@ ul.icons li {
   .arrow-link-container {
     width: 100%;
   }  
+}
+
+section {
+  margin-bottom: 1em;
 }
