@@ -71,10 +71,13 @@
               <li><p>The qualifying period for British citizenship must end, at the earliest, 1 year after obtaining ILR.</p></li>
             </ul>
             <p>This is a pictorial illustration of an ideal timeline:</p>
-            <h1 style="color: red; outline: 2px solid red;">INSERT PICTURE</h1>
+            <!-- <h1 style="color: red; outline: 2px solid red;">INSERT PICTURE</h1> -->
+            <img src="images/ideal-timeline.png" alt="illustration of ideal timeline" style="width:100%; height:auto;">
 
             <p>This is a pictorial illustration of a less-than-ideal timeline:</p>
-            <h1 style="color: red; outline: 2px solid red;">INSERT PICTURE</h1>
+            <!-- <h1 style="color: red; outline: 2px solid red;">INSERT PICTURE</h1> -->
+            <img src="images/unideal-timeline.png" alt="illustration of less than ideal timeline" style=" width:100%; height:auto;">
+            
           </section>
           
           <section>
@@ -102,13 +105,13 @@
 
           <section>
             <p class="subtitle">How the Calculator Works</p>
-            <p>The first process that occurs after the user submits the form is data validation. A set of checks are performed to ensure that the user has entered valid data. These are some examples of invalid inputs:</p>
+            <p>When the user submits the form, the data undergoes a validation process. The submission is rejected if any invalid input is detected. These are some examples of invalid inputs:</p>
             <ul>
               <li><p>An absence interval is missing a start date or an end date.</p></li>
               <li><p>An absence interval has an end date earlier than start date.</p></li>
               <li><p>Indefinite leave to remain is indicated as already obtained, but no relevant date is provided.</p></li>
             </ul>
-            <p>Once all inputs pass the validation test, an algorithm (sliding window) runs through the dates to see when the earliest qualifying periods for indefinite leave to remain and British citizenship can be satisfied respectively (*). The algorithm inspects different 5-year windows of time, and keeps track of the distribution of absences within them. Whenever a violation of constraint is detected, it moves on to the next window. This process is repeated until there is no violation. At the end, 2 windows are obtained as the earliest valid qualification periods for the 2 types of applications. Based on a very similar algorithm, the number of remaining absences on a day can also be computed. A tricky edge case that needs to be handled is the presence or absence of the day Feburary 29 in each year, which alters the number of days in a year. Hence, the size of the window needs to be adjusted on the fly.</p>
+            <p>Once all inputs pass the validation tests, an algorithm (sliding window) runs through the dates to see when the earliest qualifying periods for indefinite leave to remain and British citizenship can be satisfied respectively (*). The algorithm inspects different 5-year windows of time, and keeps track of the distribution of absences within them. Whenever a violation of constraint is detected, it moves on to the next window. This process is repeated until there is no violation. At the end, 2 windows are obtained as the earliest valid qualification periods for the 2 types of applications. Based on a very similar algorithm, the number of remaining absences on a day can also be computed. A tricky edge case that needs to be handled is the presence or absence of the day Feburary 29 in each year, which alters the number of days in a year. Hence, the size of the window needs to be adjusted on the fly.</p>
             <p>The final process is to display the results. The output is taken from the algorithm, and added the page for the user to view.</p>
             <p>If you would like to view the source code, <a href="https://github.com/nghugo/bno_checker">click here</a> or the GitHub icon at the footer.</p>
             <p>(*) Note that if the user specifies that indefinite leave to remain has already been obtained, then only computation relevant to citizenship application is performed.</p>
