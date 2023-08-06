@@ -207,18 +207,16 @@ iframe {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 30px 10px;
+  padding: 30px 4em;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
 }
 .wrap {
-  min-width: 70%;
-  max-width: 960px;
   min-height: calc(100vh - 60px);
   background: #fff;
   border-radius: 5px;
-  padding: 30px 115px 30px;
+  padding: 30px 4em;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -480,9 +478,12 @@ p.resultParagraph {
   color: red;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1400px) {
   .wrap {
-    padding: 40px 10px 30px;
+    padding: 30px 2em;
+  }
+  .container {
+    padding: 30px 2em;
   }
 }
 @media (max-width: 768px) {
@@ -493,6 +494,7 @@ p.resultParagraph {
 @media (max-width: 576px) {
   .wrap {
     border-radius: 0;
+    padding: 0.5em;
   }
   .container {
     padding: 0;
