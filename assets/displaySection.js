@@ -113,7 +113,7 @@ export function updateDisplaySection(
           // boundednessILR === "in bound"
           ilrProjectionMessage = `Starting from and including your specified projection date of ${new Date(
             projectionValue
-          ).toDateString()}, you can be continuously absent for at most ${continuousAbsences} days without violating the 180/year constraint of your earliest indefinite leave to remain qualifying period.`;
+          ).toDateString()}, you can be continuously absent for at most ${continuousAbsences} days without violating the 180 day / year constraint of your earliest indefinite leave to remain qualifying period.`;
         }
         addDivNode("Remaining Absences on Your Projection Date for ILR", ilrProjectionMessage);
       }
