@@ -245,6 +245,7 @@ iframe {
   line-height: 1.2;
   text-align: left;
   margin-bottom: 32px;
+  margin-top: 0.5em;
 }
 .subtitle {
   display: block;
@@ -529,6 +530,7 @@ ul.icons li {
 
 #footer {
   margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 /* Icon */
