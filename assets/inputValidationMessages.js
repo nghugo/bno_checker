@@ -58,15 +58,7 @@ export function setInputValidationMessages(
     startEndAbs_bool &&
     ilrDate_bool;
 
-  return [
-    validInputs,
-    bnoStartValue,
-    projectionValue,
-    absentStartCollectionValues,
-    absentEndCollectionValues,
-    ilrObtainedCheckboxChecked,
-    ilrObtainedDateFieldValue,
-  ];
+  return validInputs;
 }
 
 function setError(element, message) {

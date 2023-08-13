@@ -15,7 +15,7 @@ form.addEventListener("submit", (event) => {
 
   // add validation messages to input fields by injecting CSS classes
   // and return boolean validInputs_bool indicator
-  const res = setInputValidationMessages(
+  const validInputs_bool = setInputValidationMessages(
     bnoStart,
     projection,
     absentStartCollection,
@@ -24,22 +24,15 @@ form.addEventListener("submit", (event) => {
     ilrObtainedDateField,
   );
 
-  const validInputs_bool = res[0];
-  const bnoStartValue = res[1];
-  const projectionValue = res[2];
-  const absentStartCollectionValues = res[3];
-  const absentEndCollectionValues = res[4];
-  const ilrObtainedCheckboxChecked = res[5];
-  const ilrObtainedDateFieldValue = res[6];
-
-  // add text to display section for user feedback
+  
+  // add text to display section for user feedback    
   updateDisplaySection(
     validInputs_bool,
-    bnoStartValue,
-    projectionValue,
-    absentStartCollectionValues,
-    absentEndCollectionValues,
-    ilrObtainedCheckboxChecked,
-    ilrObtainedDateFieldValue,
+    bnoStart.value,
+    projection.value,
+    Array.from(absentStartCollection).map((element) => element.value),
+    Array.from(absentEndCollection).map((element) => element.value),
+    ilrObtainedCheckbox.checked,
+    ilrObtainedDateField.value,
   );
 });
