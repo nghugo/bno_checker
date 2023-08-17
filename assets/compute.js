@@ -32,10 +32,10 @@ import {
 // all indices are taken as the millisecond count since the epoch
 
 export function getEarliestValidILRPeriod(bnoStartIndex, isAbsent) {
-  // given a bno start date represented in millisecond index since the epoch,
-  // and also the days of absences using the closure isAbsent
-  // returns the earliest valid ILR qualifying period
-  // note, this makes user of the function isFeb29 as well
+  /** given a bno start date represented in millisecond index since the epoch,
+      and also the days of absences using the closure isAbsent
+      returns the earliest valid ILR qualifying period
+      note, this makes user of the function isFeb29 as well */
   var candidateILRStartIndex = bnoStartIndex;
   var candidateILREndIndex = indexAdd5YearsMinus1Day(candidateILRStartIndex);
 
@@ -100,9 +100,9 @@ export function getEarliestValidILRPeriod(bnoStartIndex, isAbsent) {
 }
 
 export function projectRemainingILR(projectionIndex, earliestValidILRStartIndex, earliestValidILREndIndex, isAbsent) {
-  // returns the number of continuous absences available starting from the projection day without violating earliest ILR
-  // special case: if return -1, then projection is out of bounds to the left
-  // special case: if return -2, then projection is out of bounds to the right
+  /** returns the number of continuous absences available starting from the projection day without violating earliest ILR
+      special case: if return -1, then projection is out of bounds to the left
+      special case: if return -2, then projection is out of bounds to the right*/ 
 
   // case 1: projection is out of bounds (before start)
   if (projectionIndex < earliestValidILRStartIndex) {
@@ -177,10 +177,10 @@ export function getCitizenshipConstrainedEarliestStartIndex(
   ilrObtainedDateFieldIndex,
   earliestValidILREndIndex
 ) {
-  // citizenship process is 5 years and must end at least 1 year after obtaining ILR
-  // ILR qualifying period is 5 years
-  // thus, earliest start date for citizenship qualifying period = backtrack 4 years from the point of obtaining ILR
-  // add 1 day to account for inclusive start and end (eg a 4 year period starting on 2024-Jun-28 ends on 2028-Jun-27)
+  /** citizenship process is 5 years and must end at least 1 year after obtaining ILR
+      ILR qualifying period is 5 years
+      thus, earliest start date for citizenship qualifying period = backtrack 4 years from the point of obtaining ILR
+      add 1 day to account for inclusive start and end (eg a 4 year period starting on 2024-Jun-28 ends on 2028-Jun-27) */
   if (ilrObtainedCheckboxChecked) {
     return indexMinus4YearsAdd1Day(ilrObtainedDateFieldIndex);
   }
@@ -188,18 +188,17 @@ export function getCitizenshipConstrainedEarliestStartIndex(
 }
 
 export function getEarliestCitizenshipPeriod(citizenshipConstrainedEarliestStartIndex, isAbsent) {
-  // shift window until 3 requirements are satisfied
-  // they are:
-  // 1. absentCountFULL <= 450 
-  // 2. absentCountRHS <= 90 
-  // 3. !isAbsent(candidateL)
-  // then return the 2 window pointers (which indicate the earliest period one can qualify for british citizenship)
+  /** shift window until 3 requirements are satisfied
+      they are:
+      1. absentCountFULL <= 450 
+      2. absentCountRHS <= 90 
+      3. !isAbsent(candidateL)
+      then return the 2 window pointers (which indicate the earliest period one can qualify for british citizenship) */
 
   var candidateL = citizenshipConstrainedEarliestStartIndex; // candidateL is an inclusive left bound for FULL
   var candidateM = indexAdd4Years(citizenshipConstrainedEarliestStartIndex); // candidateM is an inclusive left bound for RHS
   var candidateR = indexAdd5YearsMinus1Day(citizenshipConstrainedEarliestStartIndex); // candidateR is an inclusive right bound for both FULL and RHS
-
-  // ie,
+  
   // the range {candidateL , ..., candidateR} inclusive belongs to FULL
   // the range {candidateM , ..., candidateR} inclusive belongs to RHS
 
