@@ -1,35 +1,8 @@
-import {
-  DAY,
-  isFeb29,
-  indexAdd5YearsMinus1Day,
-  indexMinus1YearAdd1Day,
-  indexMinus4YearsAdd1Day,
-  indexAdd4Years,
-} from "./computeHelper.js";
+import { DAY, isFeb29, indexAdd5YearsMinus1Day, indexMinus1YearAdd1Day, indexMinus4YearsAdd1Day, indexAdd4Years } from "./computeHelper.js";
 
-// // **** **** **** **** **** **** **** **** **** **** **** **** ****
-
-// const mockDateValue = "2024-02-01"; // use this to mock the constrainedStartIndex
-
-// // // test case 9 for citizenship (cts 450 day test -> split 360 and 90) (pass)
-// // 450 days after 2028-02-15 = 10 May 2029 (ie total 451 days)
-// // expect to start 1 day after 2028-02-15 ie 2028-02-16 (yes indeed)
-// const bnoStartValue = "2024-03-19"; // ignore this
-// const absentStartCollectionValues = ["2028-02-15"];
-// const absentEndCollectionValues = ["2029-05-10"];
-// const projectionValue = "2029-05-09"; // 2, null expected
-// // const projectionValue = "2029-05-10"; // 1, null expected
-// //const projectionValue = "2029-05-11"; // 0, null expected
-
-// const bnoStartIndex = new Date(bnoStartValue).getTime();
-// const projectionIndex = new Date(projectionValue).getTime();
-// console.log(`projectionIndex            is ${projectionIndex} ie ${new Date(projectionIndex)}`);
-
-// const isAbsent = isAbsentFactory(absentStartCollectionValues, absentEndCollectionValues);
-
-// // **** **** **** **** **** **** **** **** **** **** **** **** ****
-
-// all indices are taken as the millisecond count since the epoch
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+// * all indices are taken as the millisecond count since the epoch  *
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 export function getEarliestValidILRPeriod(bnoStartIndex, isAbsent) {
   /** given a bno start date represented in millisecond index since the epoch,
@@ -102,7 +75,7 @@ export function getEarliestValidILRPeriod(bnoStartIndex, isAbsent) {
 export function projectRemainingILR(projectionIndex, earliestValidILRStartIndex, earliestValidILREndIndex, isAbsent) {
   /** returns the number of continuous absences available starting from the projection day without violating earliest ILR
       special case: if return -1, then projection is out of bounds to the left
-      special case: if return -2, then projection is out of bounds to the right*/ 
+      special case: if return -2, then projection is out of bounds to the right*/
 
   // case 1: projection is out of bounds (before start)
   if (projectionIndex < earliestValidILRStartIndex) {
@@ -120,21 +93,12 @@ export function projectRemainingILR(projectionIndex, earliestValidILRStartIndex,
 
   // phase 1: get initial absentCount
   var absentCount = 0;
-  // console.log(Math.max(indexMinus1YearAdd1Day(projectionIndex), earliestValidILRStartIndex))
-  // console.log(projectionIndex - DAY)
-  // console.log(indexMinus1YearAdd1Day(projectionIndex))
-  // console.log(earliestValidILRStartIndex)
-  for (
-    let i = Math.max(indexMinus1YearAdd1Day(projectionIndex), earliestValidILRStartIndex);
-    i <= projectionIndex - DAY;
-    i += DAY
-  ) {
+  for (let i = Math.max(indexMinus1YearAdd1Day(projectionIndex), earliestValidILRStartIndex); i <= projectionIndex - DAY; i += DAY) {
     if (isAbsent(i)) {
       absentCount += 1;
     }
   }
   var remainingCount = 180 - absentCount;
-  // console.log(`initial remainingCount is ${remainingCount}`)
 
   // phase 2: shift window to the right, adjusting for Feb29
   var yearWindowLeftIndex = indexMinus1YearAdd1Day(projectionIndex);
@@ -155,12 +119,10 @@ export function projectRemainingILR(projectionIndex, earliestValidILRStartIndex,
     // adjust for Feb29 about to enter from the RHS (correct dates and -1 correct -> see test case 3, 4)
     if (isFeb29(yearWindowRightIndex + DAY)) {
       yearWindowLeftIndex -= DAY; // cancel out window increment below
-      
+
       // amend: delete the following line of code, since it duplicates minus remaining
       // remainingCount -= 1; // represents adding a day of continuous absence starting from the projection date
     }
-
-    // console.log(`left ${new Date(yearWindowLeftIndex)} right ${new Date(yearWindowRightIndex + DAY)}, ${(yearWindowRightIndex - (projectionIndex - DAY)) / DAY}, ${remainingCount}`)
 
     // increment window
     yearWindowLeftIndex += DAY;
@@ -168,15 +130,11 @@ export function projectRemainingILR(projectionIndex, earliestValidILRStartIndex,
     remainingCount -= 1; // represents adding a day of continuous absence starting from the projection date
   }
 
-  const continuousAbsences = (yearWindowRightIndex - (projectionIndex - DAY)) / DAY
+  const continuousAbsences = (yearWindowRightIndex - (projectionIndex - DAY)) / DAY;
   return [continuousAbsences, "in bound"];
 }
 
-export function getCitizenshipConstrainedEarliestStartIndex(
-  ilrObtainedCheckboxChecked,
-  ilrObtainedDateFieldIndex,
-  earliestValidILREndIndex
-) {
+export function getCitizenshipConstrainedEarliestStartIndex(ilrObtainedCheckboxChecked, ilrObtainedDateFieldIndex, earliestValidILREndIndex) {
   /** citizenship process is 5 years and must end at least 1 year after obtaining ILR
       ILR qualifying period is 5 years
       thus, earliest start date for citizenship qualifying period = backtrack 4 years from the point of obtaining ILR
@@ -198,7 +156,7 @@ export function getEarliestCitizenshipPeriod(citizenshipConstrainedEarliestStart
   var candidateL = citizenshipConstrainedEarliestStartIndex; // candidateL is an inclusive left bound for FULL
   var candidateM = indexAdd4Years(citizenshipConstrainedEarliestStartIndex); // candidateM is an inclusive left bound for RHS
   var candidateR = indexAdd5YearsMinus1Day(citizenshipConstrainedEarliestStartIndex); // candidateR is an inclusive right bound for both FULL and RHS
-  
+
   // the range {candidateL , ..., candidateR} inclusive belongs to FULL
   // the range {candidateM , ..., candidateR} inclusive belongs to RHS
 
@@ -216,21 +174,8 @@ export function getEarliestCitizenshipPeriod(citizenshipConstrainedEarliestStart
     }
   }
 
-  // console.log("*********************");
-  // console.log(
-  //   new Date(candidateL).toDateString(),
-  //   ",",
-  //   new Date(candidateR).toDateString(),
-  //   " FULL | RHS ",
-  //   new Date(candidateM).toDateString(),
-  //   ",",
-  //   new Date(candidateR).toDateString(),
-  //   absentCountFULL,
-  //   absentCountRHS
-  // );
-
   // shift the 2 windows, and adjusting for Feb29, and make sure first day is NOT absent
-  while (absentCountFULL > 450 || absentCountRHS > 90  || isAbsent(candidateL)) {
+  while (absentCountFULL > 450 || absentCountRHS > 90 || isAbsent(candidateL)) {
     if (isFeb29(candidateR + DAY)) {
       // add DAY -> a new Day entering from the right of window
       if (isAbsent(candidateR + DAY)) {
@@ -271,24 +216,10 @@ export function getEarliestCitizenshipPeriod(citizenshipConstrainedEarliestStart
       // do not add DAY -> an old Day exiting from the left of window
       absentCountRHS--;
     }
-
     candidateL += DAY;
     candidateM += DAY;
     candidateR += DAY;
-
-    //   console.log(
-    //     new Date(candidateL).toDateString(),
-    //     ",",
-    //     new Date(candidateR).toDateString(),
-    //     " FULL | RHS ",
-    //     new Date(candidateM).toDateString(),
-    //     ",",
-    //     new Date(candidateR).toDateString(),
-    //     absentCountFULL,
-    //     absentCountRHS
-    //   );
   }
-  // console.log("*********************");
 
   const earliestValidCitizenshipStartIndex = candidateL;
   const earliestValidCitizenshipMidIndex = candidateM;
@@ -297,13 +228,7 @@ export function getEarliestCitizenshipPeriod(citizenshipConstrainedEarliestStart
   return [earliestValidCitizenshipStartIndex, earliestValidCitizenshipMidIndex, earliestValidCitizenshipEndIndex];
 }
 
-export function projectRemainingCitizenship(
-  projectionIndex,
-  earliestValidCitizenshipStartIndex,
-  earliestValidCitizenshipMidIndex,
-  earliestValidCitizenshipEndIndex,
-  isAbsent
-) {
+export function projectRemainingCitizenship(projectionIndex, earliestValidCitizenshipStartIndex, earliestValidCitizenshipMidIndex, earliestValidCitizenshipEndIndex, isAbsent) {
   // returns the number of absences available starting from the projection day without violating earliest Citizenship
   // special case: if return -1, then projection is out of bounds to the left
   // special case: if return -2, then projection is out of bounds to the right
@@ -324,15 +249,12 @@ export function projectRemainingCitizenship(
   // hence, init remainingCountFULL = 450, and init remainingCountRHS = null (or 90)
 
   var remainingCountFULL = 450;
-  // console.log(`new Date(earliestValidCitizenshipStartIndex) is ${new Date(earliestValidCitizenshipStartIndex)}`);
-  // console.log(`new Date(projectionIndex) is ${new Date(projectionIndex)}`);
 
   for (
     let i = earliestValidCitizenshipStartIndex;
     i < projectionIndex; // do not count projection index
     i += DAY
   ) {
-    // console.log(isAbsent(i), new Date(i))
     if (isAbsent(i)) {
       remainingCountFULL--;
     }
@@ -354,48 +276,3 @@ export function projectRemainingCitizenship(
   }
   return [remainingCountFULL, remainingCountRHS, "in FULL bound"]; // case 3A
 }
-
-// // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
-// // TESTING OUTPUT
-// console.log(`bnoStartIndex is ${bnoStartIndex}`);
-// console.log(`getEarliestValidILRPeriod(bnoStartIndex) is ${getEarliestValidILRPeriod(bnoStartIndex, isAbsent)}`);
-
-// const arr = getEarliestValidILRPeriod(bnoStartIndex, isAbsent);
-// const earliestValidILRStartIndex = arr[0];
-// const earliestValidILREndIndex = arr[1];
-// console.log(`earliestValidILRStartIndex is ${earliestValidILRStartIndex} ie ${new Date(earliestValidILRStartIndex)}`);
-// console.log(`earliestValidILREndIndex   is ${earliestValidILREndIndex} ie ${new Date(earliestValidILREndIndex)}`);
-
-// const ilrAbsencesRemaining = projectRemainingILR(projectionIndex, earliestValidILRStartIndex, earliestValidILREndIndex, isAbsent);
-// console.log(`ilr absences remaining is ${ilrAbsencesRemaining}`);
-
-// // mock input **** **** **** **** **** **** ****
-// // const ilrObtainedCheckboxChecked = false;
-// // const ilrObtainedDateFieldIndex = null;
-// // const citizenshipConstrainedEarliestStartIndex =
-// //   getCitizenshipConstrainedEarliestStartIndex(
-// //     ilrObtainedCheckboxChecked,
-// //     ilrObtainedDateFieldIndex,
-// //     earliestValidILREndIndex
-// //   );
-
-// const citizenshipConstrainedEarliestStartIndex = new Date(mockDateValue).getTime();
-// //  **** **** **** **** **** **** **** **** ****
-
-// const arr2 = getEarliestCitizenshipPeriod(citizenshipConstrainedEarliestStartIndex, isAbsent);
-// const earliestValidCitizenshipStartIndex = arr2[0];
-// const earliestValidCitizenshipMidIndex = arr2[1];
-// const earliestValidCitizenshipEndIndex = arr2[2];
-// console.log(`earliestValidCitizenshipStartIndex is ${earliestValidCitizenshipStartIndex} ie ${new Date(earliestValidCitizenshipStartIndex)}`);
-// console.log(`earliestValidCitizenshipEndIndex   is ${earliestValidCitizenshipEndIndex} ie ${new Date(earliestValidCitizenshipEndIndex)}`);
-
-// const arr3 = projectRemainingCitizenship(
-//   projectionIndex,
-//   earliestValidCitizenshipStartIndex,
-//   earliestValidCitizenshipMidIndex,
-//   earliestValidCitizenshipEndIndex,
-//   isAbsent
-// );
-// console.log(`citizenship absences remaining on projection date is ${arr3}`);
-
-// // **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****

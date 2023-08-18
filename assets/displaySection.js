@@ -73,20 +73,19 @@ export function updateDisplaySection(
       ilrObtainedDateFieldIndex,
       earliestValidILREndIndex
     );
-    [earliestValidCitizenshipStartIndex, earliestValidCitizenshipMidIndex, earliestValidCitizenshipEndIndex] =
-      getEarliestCitizenshipPeriod(citizenshipConstrainedEarliestStartIndex, isAbsent);
+    [earliestValidCitizenshipStartIndex, earliestValidCitizenshipMidIndex, earliestValidCitizenshipEndIndex] = getEarliestCitizenshipPeriod(
+      citizenshipConstrainedEarliestStartIndex,
+      isAbsent
+    );
     addDivNode(
       "Earliest Valid Citizenship Qualifying Period",
       `From 
-        ${new Date(earliestValidCitizenshipStartIndex).toDateString()} to ${new Date(
-        earliestValidCitizenshipEndIndex
-      ).toDateString()}.`
+        ${new Date(earliestValidCitizenshipStartIndex).toDateString()} to ${new Date(earliestValidCitizenshipEndIndex).toDateString()}.`
     );
 
     // part 2C: projection if user has entered projection date
 
     if (projectionIndex) {
-      
       // part 2C-1: indefinite leave to remain projection
       if (!ilrObtainedCheckboxChecked) {
         // if indefinite leave to remain not yet obtained
@@ -113,7 +112,7 @@ export function updateDisplaySection(
           // boundednessILR === "in bound"
           ilrProjectionMessage = `Starting from and including your specified projection date of ${new Date(
             projectionValue
-          ).toDateString()}, you can be continuously absent for at most ${continuousAbsences} days without violating the 180 day / year constraint of your earliest indefinite leave to remain qualifying period.`;
+          ).toDateString()}, you can be continuously absent for at most ${continuousAbsences} day(s) without violating the 180 day / year constraint of your earliest indefinite leave to remain qualifying period.`;
         }
         addDivNode("Remaining Absences on Your Projection Date for ILR", ilrProjectionMessage);
       }
